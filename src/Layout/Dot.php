@@ -7,19 +7,59 @@ use Innmind\Graphviz\{
     Node,
     Edge
 };
-use Innmind\Immutable\Str;
+use Innmind\Immutable\{
+    Str,
+    Set
+};
 
 final class Dot
 {
+    private $size;
+    private $rendered;
+
+    public function __construct(Size $size = null)
+    {
+        $this->size = $size;
+    }
+
     public function __invoke(Node $node): Str
     {
-        return $this
-            ->visit($node, new Str("digraph G {\n"))
-            ->append('}');
+        $output = new Str("digraph G {\n");
+
+        if ($this->size) {
+            $output = $output
+                ->append(sprintf(
+                    '    size = "%s,%s";',
+                    $this->size->width(),
+                    $this->size->height()
+                ))
+                ->append("\n");
+        }
+
+        $this->rendered = new Set(Node::class);
+
+        try {
+            $output = $this
+                ->visit($node, $output)
+                ->append('}');
+        } finally {
+            $this->rendered = null;
+        }
+
+        return $output;
     }
 
     private function visit(Node $node, Str $output): Str
     {
+        if (
+            $node->edges()->size() === 0 &&
+            !$this->rendered->contains($node)
+        ) {
+            return $output
+                ->append('    '.$node->name())
+                ->append(";\n");
+        }
+
         $output = $node
             ->edges()
             ->reduce(
@@ -39,6 +79,7 @@ final class Dot
                     return $output->append(";\n");
                 }
             );
+        $this->rendered = $this->rendered->add($node);
 
         return $node
             ->edges()
@@ -50,6 +91,9 @@ final class Dot
                 }
 
                 return $edge;
+            })
+            ->foreach(function(Edge $edge): void {
+                $this->rendered = $this->rendered->add($edge->to());
             })
             ->reduce(
                 $output,

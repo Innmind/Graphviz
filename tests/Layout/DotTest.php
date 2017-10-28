@@ -5,6 +5,7 @@ namespace Tests\Innmind\Graphviz\Layout;
 
 use Innmind\Graphviz\{
     Layout\Dot,
+    Layout\Size,
     Node\Node
 };
 use Innmind\Immutable\Str;
@@ -52,6 +53,21 @@ digraph G {
 DOT;
 
         $this->assertInstanceOf(Str::class, $output);
+        $this->assertSame($expected, (string) $output);
+    }
+
+    public function testSize()
+    {
+        $dot = new Dot(new Size(2, 4));
+
+        $output = $dot(new Node('main'));
+        $expected = <<<DOT
+digraph G {
+    size = "2,4";
+    main;
+}
+DOT;
+
         $this->assertSame($expected, (string) $output);
     }
 }
