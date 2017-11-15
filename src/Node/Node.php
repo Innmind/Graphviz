@@ -8,20 +8,25 @@ use Innmind\Graphviz\{
     Edge,
     Exception\DomainException
 };
+use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     SetInterface,
-    Set
+    Set,
+    MapInterface,
+    Map
 };
 
 final class Node implements NodeInterface
 {
     private $name;
     private $edges;
+    private $attributes;
 
     public function __construct(Name $name)
     {
         $this->name = $name;
         $this->edges = new Set(Edge::class);
+        $this->attributes = new Map('string', 'mixed');
     }
 
     public function name(): Name
@@ -43,5 +48,27 @@ final class Node implements NodeInterface
         $this->edges = $this->edges->add($edge);
 
         return $edge;
+    }
+
+    public function target(UrlInterface $url): self
+    {
+        $this->attributes = $this->attributes->put('target', $url);
+
+        return $this;
+    }
+
+    public function displayAs(string $label): self
+    {
+        $this->attributes = $this->attributes->put('label', $label);
+
+        return $this;
+    }
+
+    /**
+     * @return MapInterface<string, mixed>
+     */
+    public function attributes(): MapInterface
+    {
+        return $this->attributes;
     }
 }

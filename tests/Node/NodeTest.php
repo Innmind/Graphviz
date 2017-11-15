@@ -9,7 +9,11 @@ use Innmind\Graphviz\{
     Node as NodeInterface,
     Edge
 };
-use Innmind\Immutable\SetInterface;
+use Innmind\Url\Url;
+use Innmind\Immutable\{
+    SetInterface,
+    MapInterface
+};
 use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase
@@ -47,5 +51,33 @@ class NodeTest extends TestCase
         $this->assertSame($to, $edge->to());
         $this->assertCount(1, $node->edges());
         $this->assertCount(0, $to->edges());
+    }
+
+    public function testAttributes()
+    {
+        $node = new Node(new Name('foo'));
+
+        $this->assertInstanceOf(MapInterface::class, $node->attributes());
+        $this->assertSame('string', (string) $node->attributes()->keyType());
+        $this->assertSame('mixed', (string) $node->attributes()->valueType());
+        $this->assertCount(0, $node->attributes());
+    }
+
+    public function testTarget()
+    {
+        $node = new Node(new Name('foo'));
+
+        $this->assertSame($node, $node->target($url = Url::fromString('example.com')));
+        $this->assertCount(1, $node->attributes());
+        $this->assertSame($url, $node->attributes()->get('target'));
+    }
+
+    public function testLabel()
+    {
+        $node = new Node(new Name('foo'));
+
+        $this->assertSame($node, $node->displayAs('watev'));
+        $this->assertCount(1, $node->attributes());
+        $this->assertSame('watev', $node->attributes()->get('label'));
     }
 }
