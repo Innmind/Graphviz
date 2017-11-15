@@ -6,7 +6,8 @@ namespace Tests\Innmind\Graphviz\Layout;
 use Innmind\Graphviz\{
     Layout\Dot,
     Layout\Size,
-    Node\Node
+    Node\Node,
+    Node\Name
 };
 use Innmind\Immutable\Str;
 use PHPUnit\Framework\TestCase;
@@ -19,14 +20,14 @@ class DotTest extends TestCase
     public function testFigure2()
     {
         $layout = new Dot;
-        $main = new Node('main');
-        $parse = new Node('parse');
-        $execute = new Node('execute');
-        $makeString = new Node('make_string');
-        $compare = new Node('compare');
-        $printf = new Node('printf');
-        $init = new Node('init');
-        $cleanup = new Node('cleanup');
+        $main = new Node(new Name('main'));
+        $parse = new Node(new Name('parse'));
+        $execute = new Node(new Name('execute'));
+        $makeString = new Node(new Name('make_string'));
+        $compare = new Node(new Name('compare'));
+        $printf = new Node(new Name('printf'));
+        $init = new Node(new Name('init'));
+        $cleanup = new Node(new Name('cleanup'));
 
         $parse->linkedTo($execute);
         $main->linkedTo($parse);
@@ -60,7 +61,7 @@ DOT;
     {
         $dot = new Dot(new Size(2, 4));
 
-        $output = $dot(new Node('main'));
+        $output = $dot(new Node(new Name('main')));
         $expected = <<<DOT
 digraph G {
     size = "2,4";

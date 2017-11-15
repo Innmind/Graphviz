@@ -3,11 +3,12 @@ declare(strict_types = 1);
 
 namespace Innmind\Graphviz;
 
+use Innmind\Graphviz\Node\Name;
 use Innmind\Immutable\SetInterface;
 
 interface Node
 {
-    public function name(): string;
+    public function name(): Name;
 
     /**
      * @return SetInterface<Edge>

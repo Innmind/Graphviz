@@ -18,17 +18,13 @@ final class Node implements NodeInterface
     private $name;
     private $edges;
 
-    public function __construct(string $name)
+    public function __construct(Name $name)
     {
-        if (strlen($name) === 0) {
-            throw new DomainException;
-        }
-
         $this->name = $name;
         $this->edges = new Set(Edge::class);
     }
 
-    public function name(): string
+    public function name(): Name
     {
         return $this->name;
     }

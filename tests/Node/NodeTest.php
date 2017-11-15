@@ -5,6 +5,7 @@ namespace Tests\Innmind\Graphviz\Node;
 
 use Innmind\Graphviz\{
     Node\Node,
+    Node\Name,
     Node as NodeInterface,
     Edge
 };
@@ -17,27 +18,23 @@ class NodeTest extends TestCase
     {
         $this->assertInstanceOf(
             NodeInterface::class,
-            new Node('foo')
+            new Node(new Name('foo'))
         );
     }
 
     public function testName()
     {
-        $this->assertSame('foo', (new Node('foo'))->name());
-    }
-
-    /**
-     * @expectedException Innmind\Graphviz\Exception\DomainException
-     */
-    public function testThrowWhenEmptyName()
-    {
-        new Node('');
+        $name = new Name('foo');
+        $this->assertSame(
+            $name,
+            (new Node($name))->name()
+        );
     }
 
     public function testEdges()
     {
-        $node = new Node('foo');
-        $to = new Node('bar');
+        $node = new Node(new Name('foo'));
+        $to = new Node(new Name('bar'));
 
         $this->assertInstanceOf(SetInterface::class, $node->edges());
         $this->assertSame(Edge::class, (string) $node->edges()->type());
