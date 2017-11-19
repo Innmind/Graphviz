@@ -114,7 +114,7 @@ digraph G {
     execute -> printf;
     execute -> compare;
 
-    main [shape=circle, label="Main Node", target="example.com"];
+    main [shape="circle", label="Main Node", target="example.com"];
     parse [label="Parse"];
 }
 DOT;

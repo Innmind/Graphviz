@@ -206,7 +206,7 @@ final class Shape
         return (string) $this
             ->attributes
             ->map(static function(string $name, string $value): string {
-                return sprintf('%s=%s', $name, $value);
+                return sprintf('%s="%s"', $name, $value);
             })
             ->join(', ');
     }
