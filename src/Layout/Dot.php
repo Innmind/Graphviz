@@ -9,7 +9,8 @@ use Innmind\Graphviz\{
 };
 use Innmind\Immutable\{
     Str,
-    Set
+    Set,
+    Sequence
 };
 
 final class Dot
@@ -39,14 +40,19 @@ final class Dot
         $this->rendered = new Set(Node::class);
 
         try {
-            $output = $this
-                ->visit($node, $output)
-                ->append('}');
+            $output = $this->visit($node, $output);
+            $attributes = $this->attributes($node, new Str(''));
+
+            if ($attributes->length() > 0) {
+                $output = $output
+                    ->append("\n")
+                    ->append((string) $attributes);
+            }
         } finally {
             $this->rendered = null;
         }
 
-        return $output;
+        return $output->append('}');
     }
 
     private function visit(Node $node, Str $output): Str
@@ -99,6 +105,47 @@ final class Dot
                 $output,
                 function(Str $output, Edge $edge): Str {
                     return $this->visit($edge->to(), $output);
+                }
+            );
+    }
+
+    private function attributes(Node $node, Str $output): Str
+    {
+        $attributes = new Sequence;
+
+        if ($node->hasCustomShape()) {
+            $attributes = $attributes->add((string) $node->shape());
+        }
+
+        if ($node->hasAttributes()) {
+            $attributes = $attributes->add(
+                (string) $node
+                    ->attributes()
+                    ->map(static function(string $key, $value): string {
+                        return sprintf(
+                            '%s="%s"',
+                            $key,
+                            $value
+                        );
+                    })
+                    ->join(', ')
+            );
+        }
+
+        if ($attributes->size() > 0) {
+            $output = $output
+                ->append('    '.$node->name())
+                ->append(' [')
+                ->append((string) $attributes->join(', '))
+                ->append("];\n");
+        }
+
+        return $node
+            ->edges()
+            ->reduce(
+                $output,
+                function(Str $output, Edge $edge): Str {
+                    return $this->attributes($edge->to(), $output);
                 }
             );
     }

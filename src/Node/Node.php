@@ -83,6 +83,11 @@ final class Node implements NodeInterface
         return $this->shape;
     }
 
+    public function hasAttributes(): bool
+    {
+        return $this->attributes->count() > 0;
+    }
+
     /**
      * @return MapInterface<string, mixed>
      */
