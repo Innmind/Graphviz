@@ -45,13 +45,15 @@ class DotTest extends TestCase
 
         $expected = <<<DOT
 digraph G {
-    main -> parse -> execute;
-    main -> init -> make_string;
+    main -> parse;
+    main -> init;
     main -> cleanup;
     main -> printf;
+    parse -> execute;
     execute -> make_string;
     execute -> printf;
     execute -> compare;
+    init -> make_string;
 }
 DOT;
 
@@ -106,13 +108,15 @@ DOT;
 
         $expected = <<<DOT
 digraph G {
-    main -> parse -> execute;
-    main -> init -> make_string;
+    main -> parse;
+    main -> init;
     main -> cleanup;
     main -> printf;
+    parse -> execute;
     execute -> make_string;
     execute -> printf;
     execute -> compare;
+    init -> make_string;
 
     main [shape="circle", label="Main Node", target="example.com"];
     parse [label="Parse"];

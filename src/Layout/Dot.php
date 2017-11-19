@@ -71,33 +71,19 @@ final class Dot
             ->reduce(
                 $output,
                 static function(Str $output, Edge $edge): Str {
-                    $output = $output->append(sprintf(
-                        '    %s -> %s',
-                        $edge->from()->name(),
-                        $edge->to()->name()
-                    ));
-
-                    if ($edge->to()->edges()->size() === 1) {
-                        $edge->to()->edges()->rewind();
-                        $output = $output->append(' -> '.$edge->to()->edges()->current()->to()->name());
-                    }
-
-                    return $output->append(";\n");
+                    return $output
+                        ->append(sprintf(
+                            '    %s -> %s',
+                            $edge->from()->name(),
+                            $edge->to()->name()
+                        ))
+                        ->append(";\n");
                 }
             );
         $this->rendered = $this->rendered->add($node);
 
         return $node
             ->edges()
-            ->map(static function(Edge $edge): Edge {
-                if ($edge->to()->edges()->size() === 1) {
-                    $edge->to()->edges()->rewind();
-
-                    return $edge->to()->edges()->current();
-                }
-
-                return $edge;
-            })
             ->foreach(function(Edge $edge): void {
                 $this->rendered = $this->rendered->add($edge->to());
             })
