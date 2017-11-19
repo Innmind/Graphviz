@@ -52,21 +52,21 @@ final class Node implements NodeInterface
         return $edge;
     }
 
-    public function target(UrlInterface $url): self
+    public function target(UrlInterface $url): NodeInterface
     {
         $this->attributes = $this->attributes->put('target', $url);
 
         return $this;
     }
 
-    public function displayAs(string $label): self
+    public function displayAs(string $label): NodeInterface
     {
         $this->attributes = $this->attributes->put('label', $label);
 
         return $this;
     }
 
-    public function shaped(Shape $shape): self
+    public function shaped(Shape $shape): NodeInterface
     {
         $this->shape = $shape;
 
