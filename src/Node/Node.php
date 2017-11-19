@@ -21,12 +21,14 @@ final class Node implements NodeInterface
     private $name;
     private $edges;
     private $attributes;
+    private $shape;
 
     public function __construct(Name $name)
     {
         $this->name = $name;
         $this->edges = new Set(Edge::class);
         $this->attributes = new Map('string', 'mixed');
+        $this->shape = Shape::box();
     }
 
     public function name(): Name
@@ -62,6 +64,23 @@ final class Node implements NodeInterface
         $this->attributes = $this->attributes->put('label', $label);
 
         return $this;
+    }
+
+    public function shaped(Shape $shape): self
+    {
+        $this->shape = $shape;
+
+        return $this;
+    }
+
+    public function hasCustomShape(): bool
+    {
+        return (string) $this->shape !== (string) Shape::box();
+    }
+
+    public function shape(): Shape
+    {
+        return $this->shape;
     }
 
     /**

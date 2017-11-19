@@ -6,6 +6,7 @@ namespace Tests\Innmind\Graphviz\Node;
 use Innmind\Graphviz\{
     Node\Node,
     Node\Name,
+    Node\Shape,
     Node as NodeInterface,
     Edge
 };
@@ -79,5 +80,16 @@ class NodeTest extends TestCase
         $this->assertSame($node, $node->displayAs('watev'));
         $this->assertCount(1, $node->attributes());
         $this->assertSame('watev', $node->attributes()->get('label'));
+    }
+
+    public function testShape()
+    {
+        $node = new Node(new Name('foo'));
+
+        $this->assertSame('shape=box', (string) $node->shape());
+        $this->assertFalse($node->hasCustomShape());
+        $this->assertSame($node, $node->shaped($shape = Shape::ellipse()));
+        $this->assertTrue($node->hasCustomShape());
+        $this->assertSame($shape, $node->shape());
     }
 }
