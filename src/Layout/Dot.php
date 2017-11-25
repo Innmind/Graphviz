@@ -29,6 +29,7 @@ final class Dot
         $output = new Str("$type {$graph->name()} {\n");
 
         $output = $this->renderSize($output);
+        $output = $this->renderClusters($output, $graph);
         $output = $this->renderEdges($output, $graph);
         $output = $this->renderLonelyRoots($output, $graph);
         $output = $this->renderStyledNodes($output, $graph);
@@ -49,6 +50,18 @@ final class Dot
                 $this->size->height()
             ))
             ->append("\n");
+    }
+
+    private function renderClusters(Str $output, Graph $graph): Str
+    {
+        return $graph
+            ->clusters()
+            ->reduce(
+                $output,
+                function(Str $output, Graph $cluster): Str {
+                    return $this->renderCluster($output, $cluster);
+                }
+            );
     }
 
     private function renderEdges(Str $output, Graph $graph): Str
@@ -102,6 +115,33 @@ final class Dot
                     return $this->renderNodeStyle($output, $node);
                 }
             );
+    }
+
+    public function renderCluster(Str $output, Graph $cluster): Str
+    {
+        $output = $output
+            ->append('    subgraph cluster_')
+            ->append((string) $cluster->name())
+            ->append(" {\n");
+
+        $output = $cluster
+            ->attributes()
+            ->reduce(
+                $output,
+                static function(Str $output, string $key, string $value): Str {
+                    return $output->append(sprintf(
+                        "        %s=\"%s\"\n",
+                        $key,
+                        $value
+                    ));
+                }
+            );
+
+        $output = $this->renderEdges($output, $cluster);
+        $output = $this->renderLonelyRoots($output, $cluster);
+        $output = $this->renderStyledNodes($output, $cluster);
+
+        return $output->append("    }\n");
     }
 
     private function renderEdge(Str $output, Edge $edge, string $type): Str

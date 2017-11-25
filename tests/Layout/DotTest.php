@@ -12,6 +12,7 @@ use Innmind\Graphviz\{
     Graph
 };
 use Innmind\Url\Url;
+use Innmind\Colour\Colour;
 use Innmind\Immutable\Str;
 use PHPUnit\Framework\TestCase;
 
@@ -183,6 +184,70 @@ DOT;
         $expected = <<<DOT
 digraph foo {
     main;
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
+
+    public function testRenderClusters()
+    {
+        $root = Graph::directed();
+        $firstCluster = Graph::directed('first')
+            ->displayAs('First')
+            ->fillWithColor(Colour::fromString('yellow'))
+            ->colorizeBorderWith(Colour::fromString('green'));
+        $secondCluster = Graph::directed('second');
+        $thirdCluster = Graph::directed('third');
+
+        $start = Node::named('start');
+        $first = Node::named('first');
+        $second = Node::named('second');
+        $third = Node::named('third');
+
+        $start->linkedTo($first);
+        $start->linkedTo($second);
+        $first->linkedTo($third);
+        $second->linkedTo($third);
+
+        $root
+            ->add($start)
+            ->cluster($firstCluster)
+            ->cluster($secondCluster)
+            ->cluster($thirdCluster);
+
+        $first = Node::named('first');
+        $second = Node::named('second');
+        $third = Node::named('third');
+        $first->linkedTo(Node::named('first_inner'));
+        $second->linkedTo(Node::named('second_inner'));
+        $third->linkedTo(Node::named('third_inner'));
+
+        $firstCluster->add($first);
+        $secondCluster->add($second);
+        $thirdCluster->add($third);
+
+        $output = (new Dot)($root);
+
+        $expected = <<<DOT
+digraph G {
+    subgraph cluster_first {
+        label="First"
+        style="filled"
+        fillcolor="#ffff00"
+        color="#008000"
+    first -> first_inner;
+    }
+    subgraph cluster_second {
+    second -> second_inner;
+    }
+    subgraph cluster_third {
+    third -> third_inner;
+    }
+    start -> first;
+    start -> second;
+    first -> third;
+    second -> third;
 }
 DOT;
 
