@@ -125,4 +125,30 @@ DOT;
 
         $this->assertSame($expected, (string) $output);
     }
+
+    public function testEdgeAttributes()
+    {
+        $dot = new Dot;
+
+        $main = new Node(new Name('main'));
+        $second = new Node(new Name('second'));
+        $third = new Node(new Name('third'));
+        $main
+            ->linkedTo($second)
+            ->displayAs('watev');
+        $main
+            ->linkedTo($third)
+            ->asBidirectional();
+
+        $output = $dot($main);
+
+        $expected = <<<DOT
+digraph G {
+    main -> second [label="watev"];
+    main -> third [dir="both"];
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
 }

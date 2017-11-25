@@ -71,12 +71,32 @@ final class Dot
             ->reduce(
                 $output,
                 static function(Str $output, Edge $edge): Str {
+                    $attributes = '';
+
+                    if ($edge->hasAttributes()) {
+                        $attributes = (string) $edge
+                            ->attributes()
+                            ->reduce(
+                                new Str(''),
+                                static function(Str $attributes, string $key, string $value): Str {
+                                    return $attributes->append(sprintf(
+                                        '%s="%s"',
+                                        $key,
+                                        $value
+                                    ));
+                                }
+                            )
+                            ->prepend(' [')
+                            ->append(']');
+                    }
+
                     return $output
                         ->append(sprintf(
                             '    %s -> %s',
                             $edge->from()->name(),
                             $edge->to()->name()
                         ))
+                        ->append($attributes)
                         ->append(";\n");
                 }
             );
