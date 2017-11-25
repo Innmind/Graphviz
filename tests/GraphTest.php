@@ -53,4 +53,26 @@ class GraphTest extends TestCase
         $this->assertCount(3, $graph->nodes());
         $this->assertSame([$main, $second, $third], $graph->nodes()->toPrimitive());
     }
+
+    /**
+     * @expectedException Innmind\Graphviz\Exception\MixedGraphsNotAllowed
+     */
+    public function testThrowWhenMixedGraphs()
+    {
+        Graph::directed()->cluster(Graph::undirected());
+    }
+
+    public function testCluster()
+    {
+        $root = Graph::directed();
+
+        $this->assertInstanceOf(SetInterface::class, $root->clusters());
+        $this->assertSame(Graph::class, (string) $root->clusters()->type());
+        $this->assertCount(0, $root->clusters());
+
+        $cluster = Graph::directed('foo');
+        $this->assertSame($root, $root->cluster($cluster));
+        $this->assertCount(1, $root->clusters());
+        $this->assertSame($cluster, $root->clusters()->current());
+    }
 }

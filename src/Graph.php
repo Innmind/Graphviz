@@ -3,7 +3,10 @@ declare(strict_types = 1);
 
 namespace Innmind\Graphviz;
 
-use Innmind\Graphviz\Graph\Name;
+use Innmind\Graphviz\{
+    Graph\Name,
+    Exception\MixedGraphsNotAllowed
+};
 use Innmind\Immutable\{
     SetInterface,
     Set,
@@ -15,12 +18,14 @@ final class Graph
     private $directed;
     private $name;
     private $roots;
+    private $clusters;
 
     private function __construct(bool $directed, Name $name)
     {
         $this->directed = $directed;
         $this->name = $name;
         $this->roots = new Set(Node::class);
+        $this->clusters = new Set(self::class);
     }
 
     public static function directed(string $name = 'G'): self
@@ -41,6 +46,25 @@ final class Graph
     public function name(): Name
     {
         return $this->name;
+    }
+
+    public function cluster(Graph $cluster): self
+    {
+        if ($cluster->isDirected() !== $this->directed) {
+            throw new MixedGraphsNotAllowed;
+        }
+
+        $this->clusters = $this->clusters->add($cluster);
+
+        return $this;
+    }
+
+    /**
+     * @return SetInterface<self>
+     */
+    public function clusters(): SetInterface
+    {
+        return $this->clusters;
     }
 
     public function add(Node $node): self
