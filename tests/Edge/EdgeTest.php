@@ -5,9 +5,11 @@ namespace Tests\Innmind\Graphviz\Edge;
 
 use Innmind\Graphviz\{
     Edge\Edge,
+    Edge\Shape,
     Edge as EdgeInterface,
     Node
 };
+use Innmind\Immutable\MapInterface;
 use PHPUnit\Framework\TestCase;
 
 class EdgeTest extends TestCase
@@ -16,11 +18,15 @@ class EdgeTest extends TestCase
     {
         $this->assertInstanceOf(
             EdgeInterface::class,
-            new Edge(
+            $edge = new Edge(
                 $this->createMock(Node::class),
                 $this->createMock(Node::class)
             )
         );
+        $this->assertFalse($edge->hasAttributes());
+        $this->assertInstanceOf(MapInterface::class, $edge->attributes());
+        $this->assertSame('string', (string) $edge->attributes()->keyType());
+        $this->assertSame('string', (string) $edge->attributes()->valueType());
     }
 
     public function testNodes()
@@ -32,5 +38,83 @@ class EdgeTest extends TestCase
 
         $this->assertSame($from, $edge->from());
         $this->assertSame($to, $edge->to());
+    }
+
+    public function testAsBidirectional()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->asBidirectional();
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('both', $edge->attributes()->get('dir'));
+    }
+
+    public function testWithoutDirection()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->withoutDirection();
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('none', $edge->attributes()->get('dir'));
+    }
+
+    public function testShaped()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->shaped(
+            Shape::box(),
+            Shape::vee(),
+            Shape::tee(),
+            Shape::dot()
+        );
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead'));
+    }
+
+    public function testShapedWhenBidirectional()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge
+            ->asBidirectional()
+            ->shaped(
+                Shape::box(),
+                Shape::vee(),
+                Shape::tee(),
+                Shape::dot()
+            );
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(3, $edge->attributes());
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowtail'));
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead'));
+    }
+
+    public function testDisplayAs()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->displayAs('foo');
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('foo', $edge->attributes()->get('label'));
     }
 }
