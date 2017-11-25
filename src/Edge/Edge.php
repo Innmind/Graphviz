@@ -90,7 +90,7 @@ final class Edge implements EdgeInterface
     }
 
     /**
-     * @return MapInterface<string, string>
+     * {@inheritdoc}
      */
     public function attributes(): MapInterface
     {

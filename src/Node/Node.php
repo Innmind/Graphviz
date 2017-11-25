@@ -94,7 +94,7 @@ final class Node implements NodeInterface
     }
 
     /**
-     * @return MapInterface<string, mixed>
+     * {@inheritdoc}
      */
     public function attributes(): MapInterface
     {
