@@ -25,8 +25,6 @@ interface Node
     public function target(UrlInterface $url): self;
     public function displayAs(string $label): self;
     public function shaped(Shape $shape): self;
-    public function hasCustomShape(): bool;
-    public function shape(): Shape;
     public function hasAttributes(): bool;
 
     /**

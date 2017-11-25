@@ -4,7 +4,10 @@ declare(strict_types = 1);
 namespace Innmind\Graphviz\Node;
 
 use Innmind\Colour\RGBA;
-use Innmind\Immutable\Map;
+use Innmind\Immutable\{
+    MapInterface,
+    Map
+};
 
 final class Shape
 {
@@ -201,13 +204,11 @@ final class Shape
         return $self;
     }
 
-    public function __toString(): string
+    /**
+     * @return MapInterface<string, string>
+     */
+    public function attributes(): MapInterface
     {
-        return (string) $this
-            ->attributes
-            ->map(static function(string $name, string $value): string {
-                return sprintf('%s="%s"', $name, $value);
-            })
-            ->join(', ');
+        return $this->attributes;
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Innmind\Graphviz\Node;
 
 use Innmind\Graphviz\Node\Shape;
 use Innmind\Colour\Colour;
+use Innmind\Immutable\MapInterface;
 use PHPUnit\Framework\TestCase;
 
 class ShapeTest extends TestCase
@@ -12,165 +13,230 @@ class ShapeTest extends TestCase
     public function testBox()
     {
         $this->assertInstanceOf(Shape::class, Shape::box());
-        $this->assertSame('shape="box"', (string) Shape::box());
+        $this->assertInstanceOf(MapInterface::class, Shape::box()->attributes());
+        $this->assertSame('string', (string) Shape::box()->attributes()->keyType());
+        $this->assertSame('string', (string) Shape::box()->attributes()->valueType());
+        $this->assertCount(1, Shape::box()->attributes());
+        $this->assertSame('box', Shape::box()->attributes()->get('shape'));
     }
 
     public function testPolygon()
     {
         $this->assertInstanceOf(Shape::class, Shape::polygon());
-        $this->assertSame('shape="polygon"', (string) Shape::polygon());
-        $this->assertSame(
-            'shape="polygon", sides="5", peripheries="3", distortion="0.7", skew="-0.1"',
-            (string) Shape::polygon(5, 3, 0.74, -0.15)
-        );
+
+        $shape = Shape::polygon();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('polygon', $shape->attributes()->get('shape'));
+
+        $shape = Shape::polygon(5, 3, 0.74, -0.15);
+        $this->assertCount(5, $shape->attributes());
+        $this->assertSame('polygon', $shape->attributes()->get('shape'));
+        $this->assertSame('5', $shape->attributes()->get('sides'));
+        $this->assertSame('3', $shape->attributes()->get('peripheries'));
+        $this->assertSame('0.7', $shape->attributes()->get('distortion'));
+        $this->assertSame('-0.1', $shape->attributes()->get('skew'));
     }
 
     public function testEllipse()
     {
         $this->assertInstanceOf(Shape::class, Shape::ellipse());
-        $this->assertSame('shape="ellipse", width="0.75", height="0.5"', (string) Shape::ellipse());
-        $this->assertSame(
-            'shape="ellipse", width="0.2", height="2"',
-            (string) Shape::ellipse(.2, 2)
-        );
+
+        $shape = Shape::ellipse();
+        $this->assertCount(3, $shape->attributes());
+        $this->assertSame('ellipse', $shape->attributes()->get('shape'));
+        $this->assertSame('0.75', $shape->attributes()->get('width'));
+        $this->assertSame('0.5', $shape->attributes()->get('height'));
+
+
+        $shape = Shape::ellipse(.2, 2);
+        $this->assertCount(3, $shape->attributes());
+        $this->assertSame('ellipse', $shape->attributes()->get('shape'));
+        $this->assertSame('0.2', $shape->attributes()->get('width'));
+        $this->assertSame('2', $shape->attributes()->get('height'));
     }
 
     public function testCircle()
     {
         $this->assertInstanceOf(Shape::class, Shape::circle());
-        $this->assertSame('shape="circle"', (string) Shape::circle());
+        $shape = Shape::circle();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('circle', $shape->attributes()->get('shape'));
     }
 
     public function testPoint()
     {
         $this->assertInstanceOf(Shape::class, Shape::point());
-        $this->assertSame('shape="point"', (string) Shape::point());
+        $shape = Shape::point();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('point', $shape->attributes()->get('shape'));
     }
 
     public function testEgg()
     {
         $this->assertInstanceOf(Shape::class, Shape::egg());
-        $this->assertSame('shape="egg"', (string) Shape::egg());
+        $shape = Shape::egg();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('egg', $shape->attributes()->get('shape'));
     }
 
     public function testTriangle()
     {
         $this->assertInstanceOf(Shape::class, Shape::triangle());
-        $this->assertSame('shape="triangle"', (string) Shape::triangle());
+        $shape = Shape::triangle();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('triangle', $shape->attributes()->get('shape'));
     }
 
     public function testPlaintext()
     {
         $this->assertInstanceOf(Shape::class, Shape::plaintext());
-        $this->assertSame('shape="plaintext"', (string) Shape::plaintext());
+        $shape = Shape::plaintext();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('plaintext', $shape->attributes()->get('shape'));
     }
 
     public function testDiamond()
     {
         $this->assertInstanceOf(Shape::class, Shape::diamond());
-        $this->assertSame('shape="diamond"', (string) Shape::diamond());
+        $shape = Shape::diamond();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('diamond', $shape->attributes()->get('shape'));
     }
 
     public function testTrapezium()
     {
         $this->assertInstanceOf(Shape::class, Shape::trapezium());
-        $this->assertSame('shape="trapezium"', (string) Shape::trapezium());
+        $shape = Shape::trapezium();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('trapezium', $shape->attributes()->get('shape'));
     }
 
     public function testParallelogram()
     {
         $this->assertInstanceOf(Shape::class, Shape::parallelogram());
-        $this->assertSame('shape="parallelogram"', (string) Shape::parallelogram());
+        $shape = Shape::parallelogram();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('parallelogram', $shape->attributes()->get('shape'));
     }
 
     public function testHouse()
     {
         $this->assertInstanceOf(Shape::class, Shape::house());
-        $this->assertSame('shape="house"', (string) Shape::house());
+        $shape = Shape::house();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('house', $shape->attributes()->get('shape'));
     }
 
     public function testHexagon()
     {
         $this->assertInstanceOf(Shape::class, Shape::hexagon());
-        $this->assertSame('shape="hexagon"', (string) Shape::hexagon());
+        $shape = Shape::hexagon();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('hexagon', $shape->attributes()->get('shape'));
     }
 
     public function testOctagon()
     {
         $this->assertInstanceOf(Shape::class, Shape::octagon());
-        $this->assertSame('shape="octagon"', (string) Shape::octagon());
+        $shape = Shape::octagon();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('octagon', $shape->attributes()->get('shape'));
     }
 
     public function testDoublecircle()
     {
         $this->assertInstanceOf(Shape::class, Shape::doublecircle());
-        $this->assertSame('shape="doublecircle"', (string) Shape::doublecircle());
+        $shape = Shape::doublecircle();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('doublecircle', $shape->attributes()->get('shape'));
     }
 
     public function testDoubleoctagon()
     {
         $this->assertInstanceOf(Shape::class, Shape::doubleoctagon());
-        $this->assertSame('shape="doubleoctagon"', (string) Shape::doubleoctagon());
+        $shape = Shape::doubleoctagon();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('doubleoctagon', $shape->attributes()->get('shape'));
     }
 
     public function testTripleoctagon()
     {
         $this->assertInstanceOf(Shape::class, Shape::tripleoctagon());
-        $this->assertSame('shape="tripleoctagon"', (string) Shape::tripleoctagon());
+        $shape = Shape::tripleoctagon();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('tripleoctagon', $shape->attributes()->get('shape'));
     }
 
     public function testInvtriangle()
     {
         $this->assertInstanceOf(Shape::class, Shape::invtriangle());
-        $this->assertSame('shape="invtriangle"', (string) Shape::invtriangle());
+        $shape = Shape::invtriangle();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('invtriangle', $shape->attributes()->get('shape'));
     }
 
     public function testInvtrapezium()
     {
         $this->assertInstanceOf(Shape::class, Shape::invtrapezium());
-        $this->assertSame('shape="invtrapezium"', (string) Shape::invtrapezium());
+        $shape = Shape::invtrapezium();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('invtrapezium', $shape->attributes()->get('shape'));
     }
 
     public function testInvhouse()
     {
         $this->assertInstanceOf(Shape::class, Shape::invhouse());
-        $this->assertSame('shape="invhouse"', (string) Shape::invhouse());
+        $shape = Shape::invhouse();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('invhouse', $shape->attributes()->get('shape'));
     }
 
     public function testMdiamond()
     {
         $this->assertInstanceOf(Shape::class, Shape::Mdiamond());
-        $this->assertSame('shape="Mdiamond"', (string) Shape::Mdiamond());
+        $shape = Shape::Mdiamond();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('Mdiamond', $shape->attributes()->get('shape'));
     }
 
     public function testMsquare()
     {
         $this->assertInstanceOf(Shape::class, Shape::Msquare());
-        $this->assertSame('shape="Msquare"', (string) Shape::Msquare());
+        $shape = Shape::Msquare();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('Msquare', $shape->attributes()->get('shape'));
     }
 
     public function testMcircle()
     {
         $this->assertInstanceOf(Shape::class, Shape::Mcircle());
-        $this->assertSame('shape="Mcircle"', (string) Shape::Mcircle());
+        $shape = Shape::Mcircle();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('Mcircle', $shape->attributes()->get('shape'));
     }
 
     public function testNone()
     {
         $this->assertInstanceOf(Shape::class, Shape::none());
-        $this->assertSame('shape="none"', (string) Shape::none());
+        $shape = Shape::none();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('none', $shape->attributes()->get('shape'));
     }
 
     public function testRecord()
     {
         $this->assertInstanceOf(Shape::class, Shape::record());
-        $this->assertSame('shape="record"', (string) Shape::record());
+        $shape = Shape::record();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('record', $shape->attributes()->get('shape'));
     }
 
     public function testMrecord()
     {
         $this->assertInstanceOf(Shape::class, Shape::Mrecord());
-        $this->assertSame('shape="Mrecord"', (string) Shape::Mrecord());
+        $shape = Shape::Mrecord();
+        $this->assertCount(1, $shape->attributes());
+        $this->assertSame('Mrecord', $shape->attributes()->get('shape'));
     }
 
     public function testWithColor()
@@ -180,8 +246,9 @@ class ShapeTest extends TestCase
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);
-        $this->assertSame('shape="box"', (string) $shape);
-        $this->assertSame('shape="box", color="#0000ff"', (string) $shape2);
+        $this->assertCount(1, $shape->attributes());
+        $this->assertCount(2, $shape2->attributes());
+        $this->assertSame('#0000ff', $shape2->attributes()->get('color'));
     }
 
     public function testFillWithColor()
@@ -191,7 +258,9 @@ class ShapeTest extends TestCase
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);
-        $this->assertSame('shape="box"', (string) $shape);
-        $this->assertSame('shape="box", style="filled", fillcolor="#0000ff"', (string) $shape2);
+        $this->assertCount(1, $shape->attributes());
+        $this->assertCount(3, $shape2->attributes());
+        $this->assertSame('#0000ff', $shape2->attributes()->get('fillcolor'));
+        $this->assertSame('filled', $shape2->attributes()->get('style'));
     }
 }

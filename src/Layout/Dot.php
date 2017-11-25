@@ -117,33 +117,24 @@ final class Dot
 
     private function attributes(Node $node, Str $output): Str
     {
-        $attributes = new Sequence;
-
-        if ($node->hasCustomShape()) {
-            $attributes = $attributes->add((string) $node->shape());
-        }
-
         if ($node->hasAttributes()) {
-            $attributes = $attributes->add(
-                (string) $node
-                    ->attributes()
-                    ->map(static function(string $key, $value): string {
-                        return sprintf(
-                            '%s="%s"',
-                            $key,
-                            $value
-                        );
-                    })
-                    ->join(', ')
-            );
-        }
+            $attributes = (string) $node
+                ->attributes()
+                ->map(static function(string $key, string $value): string {
+                    return sprintf(
+                        '%s="%s"',
+                        $key,
+                        $value
+                    );
+                })
+                ->join(', ')
+                ->prepend(' [')
+                ->append(']');
 
-        if ($attributes->size() > 0) {
             $output = $output
                 ->append('    '.$node->name())
-                ->append(' [')
-                ->append((string) $attributes->join(', '))
-                ->append("];\n");
+                ->append($attributes)
+                ->append(";\n");
         }
 
         return $node

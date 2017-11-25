@@ -95,10 +95,8 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame('shape="box"', (string) $node->shape());
-        $this->assertFalse($node->hasCustomShape());
         $this->assertSame($node, $node->shaped($shape = Shape::ellipse()));
-        $this->assertTrue($node->hasCustomShape());
-        $this->assertSame($shape, $node->shape());
+        $this->assertTrue($node->hasAttributes());
+        $this->assertSame('ellipse', $node->attributes()->get('shape'));
     }
 }

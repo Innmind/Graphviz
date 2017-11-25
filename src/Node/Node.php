@@ -28,7 +28,6 @@ final class Node implements NodeInterface
         $this->name = $name;
         $this->edges = new Set(Edge::class);
         $this->attributes = new Map('string', 'string');
-        $this->shape = Shape::box();
     }
 
     public static function named(string $name): self
@@ -78,18 +77,12 @@ final class Node implements NodeInterface
         return $this;
     }
 
-    public function hasCustomShape(): bool
-    {
-        return (string) $this->shape !== (string) Shape::box();
-    }
-
-    public function shape(): Shape
-    {
-        return $this->shape;
-    }
-
     public function hasAttributes(): bool
     {
+        if ($this->shape instanceof Shape) {
+            return true;
+        }
+
         return $this->attributes->count() > 0;
     }
 
@@ -98,6 +91,12 @@ final class Node implements NodeInterface
      */
     public function attributes(): MapInterface
     {
-        return $this->attributes;
+        $attributes = $this->attributes;
+
+        if ($this->shape instanceof Shape) {
+            $attributes = $this->shape->attributes()->merge($attributes);
+        }
+
+        return $attributes;
     }
 }
