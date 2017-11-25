@@ -12,12 +12,12 @@ use Innmind\Immutable\{
 final class Graph
 {
     private $directed;
-    private $nodes;
+    private $roots;
 
     private function __construct(bool $directed)
     {
         $this->directed = $directed;
-        $this->nodes = new Set(Node::class);
+        $this->roots = new Set(Node::class);
     }
 
     public static function directed(): self
@@ -37,7 +37,7 @@ final class Graph
 
     public function add(Node $node): self
     {
-        $this->nodes = $this->nodes->add($node);
+        $this->roots = $this->roots->add($node);
 
         return $this;
     }
@@ -45,9 +45,17 @@ final class Graph
     /**
      * @return SetInterface<Node>
      */
+    public function roots(): SetInterface
+    {
+        return $this->roots;
+    }
+
+    /**
+     * @return SetInterface<Node>
+     */
     public function nodes(): SetInterface
     {
-        $map = $this->nodes->reduce(
+        $map = $this->roots->reduce(
             new Map('string', Node::class),
             function(Map $nodes, Node $node): Map {
                 return $this->accumulateNodes($nodes, $node);

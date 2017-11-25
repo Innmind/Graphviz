@@ -24,6 +24,9 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
+        $this->assertInstanceOf(SetInterface::class, $graph->roots());
+        $this->assertSame(Node::class, (string) $graph->roots()->type());
+        $this->assertCount(0, $graph->roots());
         $this->assertInstanceOf(SetInterface::class, $graph->nodes());
         $this->assertSame(Node::class, (string) $graph->nodes()->type());
         $this->assertCount(0, $graph->nodes());
@@ -36,6 +39,8 @@ class GraphTest extends TestCase
 
 
         $this->assertSame($graph, $graph->add($root));
+        $this->assertCount(1, $graph->roots());
+        $this->assertSame($root, $graph->roots()->current());
         $this->assertCount(3, $graph->nodes());
         $this->assertSame([$main, $second, $third], $graph->nodes()->toPrimitive());
     }
