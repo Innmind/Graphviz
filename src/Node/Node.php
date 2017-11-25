@@ -27,7 +27,7 @@ final class Node implements NodeInterface
     {
         $this->name = $name;
         $this->edges = new Set(Edge::class);
-        $this->attributes = new Map('string', 'mixed');
+        $this->attributes = new Map('string', 'string');
         $this->shape = Shape::box();
     }
 
@@ -59,7 +59,7 @@ final class Node implements NodeInterface
 
     public function target(UrlInterface $url): NodeInterface
     {
-        $this->attributes = $this->attributes->put('target', $url);
+        $this->attributes = $this->attributes->put('target', (string) $url);
 
         return $this;
     }

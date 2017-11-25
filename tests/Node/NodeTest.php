@@ -69,7 +69,7 @@ class NodeTest extends TestCase
 
         $this->assertInstanceOf(MapInterface::class, $node->attributes());
         $this->assertSame('string', (string) $node->attributes()->keyType());
-        $this->assertSame('mixed', (string) $node->attributes()->valueType());
+        $this->assertSame('string', (string) $node->attributes()->valueType());
         $this->assertCount(0, $node->attributes());
     }
 
@@ -79,7 +79,7 @@ class NodeTest extends TestCase
 
         $this->assertSame($node, $node->target($url = Url::fromString('example.com')));
         $this->assertCount(1, $node->attributes());
-        $this->assertSame($url, $node->attributes()->get('target'));
+        $this->assertSame((string) $url, $node->attributes()->get('target'));
     }
 
     public function testLabel()
