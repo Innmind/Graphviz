@@ -27,6 +27,15 @@ class NodeTest extends TestCase
         );
     }
 
+    public function testNamed()
+    {
+        $node = Node::named('foo');
+
+        $this->assertInstanceOf(Node::class, $node);
+        $this->assertInstanceOf(Name::class, $node->name());
+        $this->assertSame('foo', (string) $node->name());
+    }
+
     public function testName()
     {
         $name = new Name('foo');

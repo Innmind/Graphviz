@@ -31,6 +31,11 @@ final class Node implements NodeInterface
         $this->shape = Shape::box();
     }
 
+    public static function named(string $name): self
+    {
+        return new self(new Name($name));
+    }
+
     public function name(): Name
     {
         return $this->name;
