@@ -109,16 +109,14 @@ final class Dot
         if ($edge->hasAttributes()) {
             $attributes = (string) $edge
                 ->attributes()
-                ->reduce(
-                    new Str(''),
-                    static function(Str $attributes, string $key, string $value): Str {
-                        return $attributes->append(sprintf(
-                            '%s="%s"',
-                            $key,
-                            $value
-                        ));
-                    }
-                )
+                ->map(static function(string $key, string $value): string {
+                    return sprintf(
+                        '%s="%s"',
+                        $key,
+                        $value
+                    );
+                })
+                ->join(', ')
                 ->prepend(' [')
                 ->append(']');
         }

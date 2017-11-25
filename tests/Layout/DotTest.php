@@ -135,7 +135,8 @@ DOT;
         $third = new Node(new Name('third'));
         $main
             ->linkedTo($second)
-            ->displayAs('watev');
+            ->displayAs('watev')
+            ->withoutDirection();
         $main
             ->linkedTo($third)
             ->asBidirectional();
@@ -144,7 +145,7 @@ DOT;
 
         $expected = <<<DOT
 digraph G {
-    main -> second [label="watev"];
+    main -> second [label="watev", dir="none"];
     main -> third [dir="both"];
 }
 DOT;
