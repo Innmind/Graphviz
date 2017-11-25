@@ -58,7 +58,7 @@ final class Node implements NodeInterface
 
     public function target(UrlInterface $url): NodeInterface
     {
-        $this->attributes = $this->attributes->put('target', (string) $url);
+        $this->attributes = $this->attributes->put('URL', (string) $url);
 
         return $this;
     }

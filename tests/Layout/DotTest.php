@@ -119,7 +119,7 @@ digraph G {
     execute -> printf;
     execute -> compare;
     init -> make_string;
-    main [shape="circle", label="Main Node", target="example.com"];
+    main [shape="circle", label="Main Node", URL="example.com"];
     parse [label="Parse"];
 }
 DOT;

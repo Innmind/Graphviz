@@ -79,7 +79,7 @@ class NodeTest extends TestCase
 
         $this->assertSame($node, $node->target($url = Url::fromString('example.com')));
         $this->assertCount(1, $node->attributes());
-        $this->assertSame((string) $url, $node->attributes()->get('target'));
+        $this->assertSame((string) $url, $node->attributes()->get('URL'));
     }
 
     public function testLabel()
