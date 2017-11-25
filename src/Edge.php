@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\Edge\Shape;
+use Innmind\Colour\RGBA;
 use Innmind\Immutable\MapInterface;
 
 interface Edge
@@ -19,6 +20,7 @@ interface Edge
         Shape $shape4 = null
     ): self;
     public function displayAs(string $label): self;
+    public function useColor(RGBA $color): self;
     public function hasAttributes(): bool;
 
     /**

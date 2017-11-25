@@ -7,6 +7,7 @@ use Innmind\Graphviz\{
     Edge as EdgeInterface,
     Node
 };
+use Innmind\Colour\RGBA;
 use Innmind\Immutable\{
     MapInterface,
     Map
@@ -72,6 +73,13 @@ final class Edge implements EdgeInterface
     public function displayAs(string $label): EdgeInterface
     {
         $this->attributes = $this->attributes->put('label', $label);
+
+        return $this;
+    }
+
+    public function useColor(RGBA $color): EdgeInterface
+    {
+        $this->attributes = $this->attributes->put('color', (string) $color);
 
         return $this;
     }

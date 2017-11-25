@@ -9,6 +9,7 @@ use Innmind\Graphviz\{
     Edge as EdgeInterface,
     Node
 };
+use Innmind\Colour\Colour;
 use Innmind\Immutable\MapInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -116,5 +117,18 @@ class EdgeTest extends TestCase
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('foo', $edge->attributes()->get('label'));
+    }
+
+    public function testUseColor()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->useColor(Colour::fromString('red'));
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('#ff0000', $edge->attributes()->get('color'));
     }
 }
