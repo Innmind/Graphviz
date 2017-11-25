@@ -7,9 +7,11 @@ use Innmind\Graphviz\{
     Graph\Name,
     Exception\MixedGraphsNotAllowed
 };
+use Innmind\Colour\RGBA;
 use Innmind\Immutable\{
     SetInterface,
     Set,
+    MapInterface,
     Map
 };
 
@@ -19,6 +21,7 @@ final class Graph
     private $name;
     private $roots;
     private $clusters;
+    private $attributes;
 
     private function __construct(bool $directed, Name $name)
     {
@@ -26,6 +29,7 @@ final class Graph
         $this->name = $name;
         $this->roots = new Set(Node::class);
         $this->clusters = new Set(self::class);
+        $this->attributes = new Map('string', 'string');
     }
 
     public static function directed(string $name = 'G'): self
@@ -95,6 +99,38 @@ final class Graph
         );
 
         return Set::of(Node::class, ...$map->values());
+    }
+
+    public function displayAs(string $label): self
+    {
+        $this->attributes = $this->attributes->put('label', $label);
+
+        return $this;
+    }
+
+    public function fillWithColor(RGBA $color): self
+    {
+        $this->attributes = $this
+            ->attributes
+            ->put('style', 'filled')
+            ->put('fillcolor', (string) $color);
+
+        return $this;
+    }
+
+    public function colorizeBorderWith(RGBA $color): self
+    {
+        $this->attributes = $this->attributes->put('color', (string) $color);
+
+        return $this;
+    }
+
+    /**
+     * @return MapInterface<string, string>
+     */
+    public function attributes(): MapInterface
+    {
+        return $this->attributes;
     }
 
     private function accumulateNodes(Map $nodes, Node $node): Map

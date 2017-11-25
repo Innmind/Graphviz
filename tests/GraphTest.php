@@ -8,7 +8,11 @@ use Innmind\Graphviz\{
     Graph\Name,
     Node
 };
-use Innmind\Immutable\SetInterface;
+use Innmind\Colour\Colour;
+use Innmind\Immutable\{
+    SetInterface,
+    MapInterface
+};
 use PHPUnit\Framework\TestCase;
 
 class GraphTest extends TestCase
@@ -74,5 +78,43 @@ class GraphTest extends TestCase
         $this->assertSame($root, $root->cluster($cluster));
         $this->assertCount(1, $root->clusters());
         $this->assertSame($cluster, $root->clusters()->current());
+    }
+
+    public function testAttributes()
+    {
+        $graph = Graph::directed();
+
+        $this->assertInstanceOf(MapInterface::class, $graph->attributes());
+        $this->assertSame('string', (string) $graph->attributes()->keyType());
+        $this->assertSame('string', (string) $graph->attributes()->valueType());
+        $this->assertCount(0, $graph->attributes());
+    }
+
+    public function testDisplayAs()
+    {
+        $graph = Graph::directed();
+
+        $this->assertSame($graph, $graph->displayAs('watev'));
+        $this->assertCount(1, $graph->attributes());
+        $this->assertSame('watev', $graph->attributes()->get('label'));
+    }
+
+    public function testFillWithColor()
+    {
+        $graph = Graph::directed();
+
+        $this->assertSame($graph, $graph->fillWithColor(Colour::fromString('red')));
+        $this->assertCount(2, $graph->attributes());
+        $this->assertSame('filled', $graph->attributes()->get('style'));
+        $this->assertSame('#ff0000', $graph->attributes()->get('fillcolor'));
+    }
+
+    public function testColorizeBorderWith()
+    {
+        $graph = Graph::directed();
+
+        $this->assertSame($graph, $graph->colorizeBorderWith(Colour::fromString('red')));
+        $this->assertCount(1, $graph->attributes());
+        $this->assertSame('#ff0000', $graph->attributes()->get('color'));
     }
 }
