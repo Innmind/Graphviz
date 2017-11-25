@@ -26,7 +26,7 @@ final class Dot
     public function __invoke(Graph $graph): Str
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
-        $output = new Str("$type G {\n");
+        $output = new Str("$type {$graph->name()} {\n");
 
         $output = $this->renderSize($output);
         $output = $this->renderEdges($output, $graph);

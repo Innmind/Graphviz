@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Innmind\Graphviz;
 
+use Innmind\Graphviz\Graph\Name;
 use Innmind\Immutable\{
     SetInterface,
     Set,
@@ -12,27 +13,34 @@ use Innmind\Immutable\{
 final class Graph
 {
     private $directed;
+    private $name;
     private $roots;
 
-    private function __construct(bool $directed)
+    private function __construct(bool $directed, Name $name)
     {
         $this->directed = $directed;
+        $this->name = $name;
         $this->roots = new Set(Node::class);
     }
 
-    public static function directed(): self
+    public static function directed(string $name = 'G'): self
     {
-        return new self(true);
+        return new self(true, new Name($name));
     }
 
-    public static function undirected(): self
+    public static function undirected(string $name = 'G'): self
     {
-        return new self(false);
+        return new self(false, new Name($name));
     }
 
     public function isDirected(): bool
     {
         return $this->directed;
+    }
+
+    public function name(): Name
+    {
+        return $this->name;
     }
 
     public function add(Node $node): self

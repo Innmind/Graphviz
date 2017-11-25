@@ -5,6 +5,7 @@ namespace Tests\Innmind\Graphviz;
 
 use Innmind\Graphviz\{
     Graph,
+    Graph\Name,
     Node
 };
 use Innmind\Immutable\SetInterface;
@@ -18,6 +19,14 @@ class GraphTest extends TestCase
         $this->assertInstanceOf(Graph::class, Graph::undirected());
         $this->assertTrue(Graph::directed()->isDirected());
         $this->assertFalse(Graph::undirected()->isDirected());
+    }
+
+    public function testName()
+    {
+        $this->assertInstanceOf(Name::class, Graph::directed('foo')->name());
+        $this->assertInstanceOf(Name::class, Graph::undirected('foo')->name());
+        $this->assertSame('foo', (string) Graph::directed('foo')->name());
+        $this->assertSame('foo', (string) Graph::undirected('foo')->name());
     }
 
     public function testAdd()

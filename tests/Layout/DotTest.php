@@ -171,4 +171,21 @@ DOT;
 
         $this->assertSame($expected, (string) $output);
     }
+
+    public function testNamedGraph()
+    {
+        $dot = new Dot;
+
+        $output = $dot(
+            Graph::directed('foo')->add(Node::named('main'))
+        );
+
+        $expected = <<<DOT
+digraph foo {
+    main;
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
 }
