@@ -152,4 +152,23 @@ DOT;
 
         $this->assertSame($expected, (string) $output);
     }
+
+    public function testUndirectedGraph()
+    {
+        $dot = new Dot;
+        $main = Node::named('main');
+        $main->linkedTo(Node::named('second'));
+
+        $output = $dot(
+            Graph::undirected()->add($main)
+        );
+
+        $expected = <<<DOT
+graph G {
+    main -- second;
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
 }

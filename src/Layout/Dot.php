@@ -53,6 +53,8 @@ final class Dot
 
     private function renderEdges(Str $output, Graph $graph): Str
     {
+        $type = $graph->isDirected() ? '->' : '--';
+
         return $graph
             ->nodes()
             ->reduce(
@@ -63,8 +65,8 @@ final class Dot
             )
             ->reduce(
                 $output,
-                function(Str $output, Edge $edge): Str {
-                    return $this->renderEdge($output, $edge);
+                function(Str $output, Edge $edge) use ($type): Str {
+                    return $this->renderEdge($output, $edge, $type);
                 }
             );
     }
@@ -102,7 +104,7 @@ final class Dot
             );
     }
 
-    private function renderEdge(Str $output, Edge $edge): Str
+    private function renderEdge(Str $output, Edge $edge, string $type): Str
     {
         $attributes = '';
 
@@ -123,8 +125,9 @@ final class Dot
 
         return $output
             ->append(sprintf(
-                '    %s -> %s',
+                '    %s %s %s',
                 $edge->from()->name(),
+                $type,
                 $edge->to()->name()
             ))
             ->append($attributes)
