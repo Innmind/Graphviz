@@ -28,17 +28,32 @@ final class Dot
         $type = $graph->isDirected() ? 'digraph' : 'graph';
         $output = new Str("$type G {\n");
 
-        if ($this->size) {
-            $output = $output
-                ->append(sprintf(
-                    '    size = "%s,%s";',
-                    $this->size->width(),
-                    $this->size->height()
-                ))
-                ->append("\n");
+        $output = $this->renderSize($output);
+        $output = $this->renderEdges($output, $graph);
+        $output = $this->renderLonelyRoots($output, $graph);
+        $output = $this->renderStyledNodes($output, $graph);
+
+        return $output->append('}');
+    }
+
+    private function renderSize(Str $output): Str
+    {
+        if (!$this->size instanceof Size) {
+            return $output;
         }
 
-        $output = $graph
+        return $output
+            ->append(sprintf(
+                '    size = "%s,%s";',
+                $this->size->width(),
+                $this->size->height()
+            ))
+            ->append("\n");
+    }
+
+    private function renderEdges(Str $output, Graph $graph): Str
+    {
+        return $graph
             ->nodes()
             ->reduce(
                 new Set(Edge::class),
@@ -52,7 +67,11 @@ final class Dot
                     return $this->renderEdge($output, $edge);
                 }
             );
-        $output = $graph
+    }
+
+    private function renderLonelyRoots(Str $output, Graph $graph): Str
+    {
+        return $graph
             ->roots()
             ->filter(static function(Node $node): bool {
                 //styled nodes are rendered below
@@ -66,7 +85,11 @@ final class Dot
                         ->append(";\n");
                 }
             );
-        $output = $graph
+    }
+
+    private function renderStyledNodes(Str $output, Graph $graph): Str
+    {
+        return $graph
             ->nodes()
             ->filter(static function(Node $node): bool {
                 return $node->hasAttributes();
@@ -77,8 +100,6 @@ final class Dot
                     return $this->renderNodeStyle($output, $node);
                 }
             );
-
-        return $output->append('}');
     }
 
     private function renderEdge(Str $output, Edge $edge): Str
