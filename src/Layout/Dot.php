@@ -5,7 +5,8 @@ namespace Innmind\Graphviz\Layout;
 
 use Innmind\Graphviz\{
     Node,
-    Edge
+    Edge,
+    Graph
 };
 use Innmind\Immutable\{
     Str,
@@ -16,16 +17,16 @@ use Innmind\Immutable\{
 final class Dot
 {
     private $size;
-    private $rendered;
 
     public function __construct(Size $size = null)
     {
         $this->size = $size;
     }
 
-    public function __invoke(Node $node): Str
+    public function __invoke(Graph $graph): Str
     {
-        $output = new Str("digraph G {\n");
+        $type = $graph->isDirected() ? 'digraph' : 'graph';
+        $output = new Str("$type G {\n");
 
         if ($this->size) {
             $output = $output
@@ -37,113 +38,98 @@ final class Dot
                 ->append("\n");
         }
 
-        $this->rendered = new Set(Node::class);
-
-        try {
-            $output = $this->visit($node, $output);
-            $attributes = $this->attributes($node, new Str(''));
-
-            if ($attributes->length() > 0) {
-                $output = $output
-                    ->append("\n")
-                    ->append((string) $attributes);
-            }
-        } finally {
-            $this->rendered = null;
-        }
+        $output = $graph
+            ->nodes()
+            ->reduce(
+                new Set(Edge::class),
+                static function(Set $edges, Node $node): Set {
+                    return $edges->merge($node->edges());
+                }
+            )
+            ->reduce(
+                $output,
+                function(Str $output, Edge $edge): Str {
+                    return $this->renderEdge($output, $edge);
+                }
+            );
+        $output = $graph
+            ->roots()
+            ->filter(static function(Node $node): bool {
+                //styled nodes are rendered below
+                return !$node->hasAttributes() && $node->edges()->size() === 0;
+            })
+            ->reduce(
+                $output,
+                static function(Str $output, Node $node): Str {
+                    return $output
+                        ->append('    '.$node->name())
+                        ->append(";\n");
+                }
+            );
+        $output = $graph
+            ->nodes()
+            ->filter(static function(Node $node): bool {
+                return $node->hasAttributes();
+            })
+            ->reduce(
+                $output,
+                function(Str $output, Node $node): Str {
+                    return $this->renderNodeStyle($output, $node);
+                }
+            );
 
         return $output->append('}');
     }
 
-    private function visit(Node $node, Str $output): Str
+    private function renderEdge(Str $output, Edge $edge): Str
     {
-        if (
-            $node->edges()->size() === 0 &&
-            !$this->rendered->contains($node)
-        ) {
-            return $output
-                ->append('    '.$node->name())
-                ->append(";\n");
-        }
+        $attributes = '';
 
-        $output = $node
-            ->edges()
-            ->reduce(
-                $output,
-                static function(Str $output, Edge $edge): Str {
-                    $attributes = '';
-
-                    if ($edge->hasAttributes()) {
-                        $attributes = (string) $edge
-                            ->attributes()
-                            ->reduce(
-                                new Str(''),
-                                static function(Str $attributes, string $key, string $value): Str {
-                                    return $attributes->append(sprintf(
-                                        '%s="%s"',
-                                        $key,
-                                        $value
-                                    ));
-                                }
-                            )
-                            ->prepend(' [')
-                            ->append(']');
-                    }
-
-                    return $output
-                        ->append(sprintf(
-                            '    %s -> %s',
-                            $edge->from()->name(),
-                            $edge->to()->name()
-                        ))
-                        ->append($attributes)
-                        ->append(";\n");
-                }
-            );
-        $this->rendered = $this->rendered->add($node);
-
-        return $node
-            ->edges()
-            ->foreach(function(Edge $edge): void {
-                $this->rendered = $this->rendered->add($edge->to());
-            })
-            ->reduce(
-                $output,
-                function(Str $output, Edge $edge): Str {
-                    return $this->visit($edge->to(), $output);
-                }
-            );
-    }
-
-    private function attributes(Node $node, Str $output): Str
-    {
-        if ($node->hasAttributes()) {
-            $attributes = (string) $node
+        if ($edge->hasAttributes()) {
+            $attributes = (string) $edge
                 ->attributes()
-                ->map(static function(string $key, string $value): string {
-                    return sprintf(
-                        '%s="%s"',
-                        $key,
-                        $value
-                    );
-                })
-                ->join(', ')
+                ->reduce(
+                    new Str(''),
+                    static function(Str $attributes, string $key, string $value): Str {
+                        return $attributes->append(sprintf(
+                            '%s="%s"',
+                            $key,
+                            $value
+                        ));
+                    }
+                )
                 ->prepend(' [')
                 ->append(']');
-
-            $output = $output
-                ->append('    '.$node->name())
-                ->append($attributes)
-                ->append(";\n");
         }
 
-        return $node
-            ->edges()
-            ->reduce(
-                $output,
-                function(Str $output, Edge $edge): Str {
-                    return $this->attributes($edge->to(), $output);
-                }
-            );
+        return $output
+            ->append(sprintf(
+                '    %s -> %s',
+                $edge->from()->name(),
+                $edge->to()->name()
+            ))
+            ->append($attributes)
+            ->append(";\n");
+    }
+
+    private function renderNodeStyle(Str $output, Node $node): Str
+    {
+        $attributes = (string) $node
+            ->attributes()
+            ->map(static function(string $key, string $value): string {
+                return sprintf(
+                    '%s="%s"',
+                    $key,
+                    $value
+                );
+            })
+            ->join(', ')
+            ->prepend(' [')
+            ->append(']');
+
+        return $output
+            ->append('    '.$node->name())
+            ->append($attributes)
+            ->append(";\n");
     }
 }

@@ -8,7 +8,8 @@ use Innmind\Graphviz\{
     Layout\Size,
     Node\Node,
     Node\Shape,
-    Node\Name
+    Node\Name,
+    Graph
 };
 use Innmind\Url\Url;
 use Innmind\Immutable\Str;
@@ -41,7 +42,7 @@ class DotTest extends TestCase
         $main->linkedTo($printf);
         $execute->linkedTo($compare);
 
-        $output = $layout($main);
+        $output = $layout(Graph::directed()->add($main));
 
         $expected = <<<DOT
 digraph G {
@@ -65,7 +66,7 @@ DOT;
     {
         $dot = new Dot(new Size(2, 4));
 
-        $output = $dot(new Node(new Name('main')));
+        $output = $dot(Graph::directed()->add(new Node(new Name('main'))));
         $expected = <<<DOT
 digraph G {
     size = "2,4";
@@ -104,7 +105,7 @@ DOT;
             ->target(Url::fromString('example.com'));
         $parse->displayAs('Parse');
 
-        $output = $dot($main);
+        $output = $dot(Graph::directed()->add($main));
 
         $expected = <<<DOT
 digraph G {
@@ -117,7 +118,6 @@ digraph G {
     execute -> printf;
     execute -> compare;
     init -> make_string;
-
     main [shape="circle", label="Main Node", target="example.com"];
     parse [label="Parse"];
 }
@@ -140,7 +140,7 @@ DOT;
             ->linkedTo($third)
             ->asBidirectional();
 
-        $output = $dot($main);
+        $output = $dot(Graph::directed()->add($main));
 
         $expected = <<<DOT
 digraph G {
