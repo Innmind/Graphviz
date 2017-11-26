@@ -48,8 +48,8 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->asBidirectional();
 
+        $this->assertSame($edge, $edge->asBidirectional());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('both', $edge->attributes()->get('dir'));
@@ -61,8 +61,8 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->withoutDirection();
 
+        $this->assertSame($edge, $edge->withoutDirection());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('none', $edge->attributes()->get('dir'));
@@ -74,13 +74,16 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->shaped(
-            Shape::box(),
-            Shape::vee(),
-            Shape::tee(),
-            Shape::dot()
-        );
 
+        $this->assertSame(
+            $edge,
+            $edge->shaped(
+                Shape::box(),
+                Shape::vee(),
+                Shape::tee(),
+                Shape::dot()
+            )
+        );
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead'));
@@ -113,8 +116,8 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->displayAs('foo');
 
+        $this->assertSame($edge, $edge->displayAs('foo'));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('foo', $edge->attributes()->get('label'));
@@ -126,8 +129,8 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->useColor(Colour::fromString('red'));
 
+        $this->assertSame($edge, $edge->useColor(Colour::fromString('red')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color'));
@@ -139,8 +142,8 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class),
             $this->createMock(Node::class)
         );
-        $edge->target(Url::fromString('example.com'));
 
+        $this->assertSame($edge, $edge->target(Url::fromString('example.com')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('example.com', $edge->attributes()->get('URL'));
