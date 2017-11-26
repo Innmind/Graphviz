@@ -29,7 +29,7 @@ interface Edge
     public function hasAttributes(): bool;
 
     /**
-     * @return MapInterface<string, mixed>
+     * @return MapInterface<string, string>
      */
     public function attributes(): MapInterface;
 }
