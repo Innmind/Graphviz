@@ -9,6 +9,7 @@ use Innmind\Graphviz\{
     Node
 };
 use Innmind\Colour\Colour;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
     SetInterface,
     MapInterface
@@ -116,5 +117,14 @@ class GraphTest extends TestCase
         $this->assertSame($graph, $graph->colorizeBorderWith(Colour::fromString('red')));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('#ff0000', $graph->attributes()->get('color'));
+    }
+
+    public function testTarget()
+    {
+        $graph = Graph::directed();
+
+        $this->assertSame($graph, $graph->target(Url::fromString('example.com')));
+        $this->assertCount(1, $graph->attributes());
+        $this->assertSame('example.com', $graph->attributes()->get('URL'));
     }
 }

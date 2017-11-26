@@ -8,6 +8,7 @@ use Innmind\Graphviz\{
     Exception\MixedGraphsNotAllowed
 };
 use Innmind\Colour\RGBA;
+use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     SetInterface,
     Set,
@@ -121,6 +122,13 @@ final class Graph
     public function colorizeBorderWith(RGBA $color): self
     {
         $this->attributes = $this->attributes->put('color', (string) $color);
+
+        return $this;
+    }
+
+    public function target(UrlInterface $url): self
+    {
+        $this->attributes = $this->attributes->put('URL', (string) $url);
 
         return $this;
     }

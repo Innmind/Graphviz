@@ -5,6 +5,7 @@ namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\Edge\Shape;
 use Innmind\Colour\RGBA;
+use Innmind\Url\UrlInterface;
 use Innmind\Immutable\MapInterface;
 
 interface Edge
@@ -21,6 +22,7 @@ interface Edge
     ): self;
     public function displayAs(string $label): self;
     public function useColor(RGBA $color): self;
+    public function target(UrlInterface $url): self;
     public function hasAttributes(): bool;
 
     /**

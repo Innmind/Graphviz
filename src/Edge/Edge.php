@@ -8,6 +8,7 @@ use Innmind\Graphviz\{
     Node
 };
 use Innmind\Colour\RGBA;
+use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     MapInterface,
     Map
@@ -80,6 +81,13 @@ final class Edge implements EdgeInterface
     public function useColor(RGBA $color): EdgeInterface
     {
         $this->attributes = $this->attributes->put('color', (string) $color);
+
+        return $this;
+    }
+
+    public function target(UrlInterface $url): EdgeInterface
+    {
+        $this->attributes = $this->attributes->put('URL', (string) $url);
 
         return $this;
     }

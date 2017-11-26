@@ -10,6 +10,7 @@ use Innmind\Graphviz\{
     Node
 };
 use Innmind\Colour\Colour;
+use Innmind\Url\Url;
 use Innmind\Immutable\MapInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -130,5 +131,18 @@ class EdgeTest extends TestCase
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color'));
+    }
+
+    public function testTarget()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+        $edge->target(Url::fromString('example.com'));
+
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('example.com', $edge->attributes()->get('URL'));
     }
 }
