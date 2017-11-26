@@ -148,4 +148,43 @@ class EdgeTest extends TestCase
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('example.com', $edge->attributes()->get('URL'));
     }
+
+    public function testDotted()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+
+        $this->assertSame($edge, $edge->dotted());
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('dotted', $edge->attributes()->get('style'));
+    }
+
+    public function testBold()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+
+        $this->assertSame($edge, $edge->bold());
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('bold', $edge->attributes()->get('style'));
+    }
+
+    public function testFilled()
+    {
+        $edge = new Edge(
+            $this->createMock(Node::class),
+            $this->createMock(Node::class)
+        );
+
+        $this->assertSame($edge, $edge->filled());
+        $this->assertTrue($edge->hasAttributes());
+        $this->assertCount(1, $edge->attributes());
+        $this->assertSame('filled', $edge->attributes()->get('style'));
+    }
 }

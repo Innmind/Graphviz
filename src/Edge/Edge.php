@@ -92,6 +92,27 @@ final class Edge implements EdgeInterface
         return $this;
     }
 
+    public function dotted(): EdgeInterface
+    {
+        $this->attributes = $this->attributes->put('style', 'dotted');
+
+        return $this;
+    }
+
+    public function bold(): EdgeInterface
+    {
+        $this->attributes = $this->attributes->put('style', 'bold');
+
+        return $this;
+    }
+
+    public function filled(): EdgeInterface
+    {
+        $this->attributes = $this->attributes->put('style', 'filled');
+
+        return $this;
+    }
+
     public function hasAttributes(): bool
     {
         return $this->attributes->size() > 0;

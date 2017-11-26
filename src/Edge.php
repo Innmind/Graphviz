@@ -23,6 +23,9 @@ interface Edge
     public function displayAs(string $label): self;
     public function useColor(RGBA $color): self;
     public function target(UrlInterface $url): self;
+    public function dotted(): self;
+    public function bold(): self;
+    public function filled(): self;
     public function hasAttributes(): bool;
 
     /**
