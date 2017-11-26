@@ -9,7 +9,7 @@ use Innmind\Graphviz\{
     Node\Node,
     Node\Shape,
     Node\Name,
-    Graph
+    Graph\Graph
 };
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;

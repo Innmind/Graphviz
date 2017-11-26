@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Tests\Innmind\Graphviz;
+namespace Tests\Innmind\Graphviz\Graph;
 
 use Innmind\Graphviz\{
-    Graph,
+    Graph\Graph,
     Graph\Name,
+    Graph as GraphInterface,
     Node
 };
 use Innmind\Colour\Colour;
@@ -18,6 +19,11 @@ use PHPUnit\Framework\TestCase;
 
 class GraphTest extends TestCase
 {
+    public function testInterface()
+    {
+        $this->assertInstanceOf(GraphInterface::class, Graph::directed());
+    }
+
     public function testDirection()
     {
         $this->assertInstanceOf(Graph::class, Graph::directed());
