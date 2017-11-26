@@ -1,0 +1,22 @@
+digraph G {
+    subgraph cluster_one {
+        URL="http://example.com/"
+        label="One"
+        style="filled"
+        fillcolor="#0000ff"
+    one;
+    }
+    subgraph cluster_two {
+        style="filled"
+        fillcolor="#ff0000"
+    two;
+    }
+    subgraph cluster_three {
+    three;
+    }
+    root -> one;
+    root -> two;
+    one -> three;
+    two -> three;
+    root [shape="house"];
+}
