@@ -5,7 +5,7 @@ namespace Tests\Innmind\Graphviz\Layout;
 
 use Innmind\Graphviz\{
     Layout\Dot,
-    Layout\Size,
+    Layout\DPI,
     Node\Node,
     Node\Shape,
     Node\Name,
@@ -63,14 +63,14 @@ DOT;
         $this->assertSame($expected, (string) $output);
     }
 
-    public function testSize()
+    public function testDPI()
     {
-        $dot = new Dot(new Size(2, 4));
+        $dot = new Dot(new DPI(200));
 
         $output = $dot(Graph::directed()->add(new Node(new Name('main'))));
         $expected = <<<DOT
 digraph G {
-    size = "2,4";
+    dpi="200";
     main;
 }
 DOT;

@@ -16,11 +16,11 @@ use Innmind\Immutable\{
 
 final class Dot
 {
-    private $size;
+    private $dpi;
 
-    public function __construct(Size $size = null)
+    public function __construct(DPI $dpi = null)
     {
-        $this->size = $size;
+        $this->dpi = $dpi;
     }
 
     public function __invoke(Graph $graph): Str
@@ -28,7 +28,7 @@ final class Dot
         $type = $graph->isDirected() ? 'digraph' : 'graph';
         $output = new Str("$type {$graph->name()} {\n");
 
-        $output = $this->renderSize($output);
+        $output = $this->renderDPI($output);
         $output = $this->renderClusters($output, $graph);
         $output = $this->renderEdges($output, $graph);
         $output = $this->renderLonelyRoots($output, $graph);
@@ -37,17 +37,16 @@ final class Dot
         return $output->append('}');
     }
 
-    private function renderSize(Str $output): Str
+    private function renderDPI(Str $output): Str
     {
-        if (!$this->size instanceof Size) {
+        if (!$this->dpi instanceof DPI) {
             return $output;
         }
 
         return $output
             ->append(sprintf(
-                '    size = "%s,%s";',
-                $this->size->width(),
-                $this->size->height()
+                '    dpi="%s";',
+                $this->dpi->toInt()
             ))
             ->append("\n");
     }
