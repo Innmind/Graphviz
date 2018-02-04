@@ -78,7 +78,7 @@ class GraphTest extends TestCase
         $root = Graph::directed();
 
         $this->assertInstanceOf(SetInterface::class, $root->clusters());
-        $this->assertSame(Graph::class, (string) $root->clusters()->type());
+        $this->assertSame(GraphInterface::class, (string) $root->clusters()->type());
         $this->assertCount(0, $root->clusters());
 
         $cluster = Graph::directed('foo');

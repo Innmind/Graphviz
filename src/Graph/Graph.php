@@ -31,7 +31,7 @@ final class Graph implements GraphInterface
         $this->directed = $directed;
         $this->name = $name;
         $this->roots = new Set(Node::class);
-        $this->clusters = new Set(self::class);
+        $this->clusters = new Set(GraphInterface::class);
         $this->attributes = new Map('string', 'string');
     }
 
