@@ -29,6 +29,7 @@ final class Dot
         $output = new Str("$type {$graph->name()} {\n");
 
         $output = $this->renderDPI($output);
+        $output = $this->renderAttributes($output, $graph);
         $output = $this->renderClusters($output, $graph);
         $output = $this->renderEdges($output, $graph);
         $output = $this->renderLonelyRoots($output, $graph);
@@ -49,6 +50,24 @@ final class Dot
                 $this->dpi->toInt()
             ))
             ->append("\n");
+    }
+
+    private function renderAttributes(Str $output, Graph $graph): Str
+    {
+        return $graph
+            ->attributes()
+            ->reduce(
+                $output,
+                static function(Str $output, string $key, string $value): Str {
+                    return $output
+                        ->append(sprintf(
+                            '    %s="%s";',
+                            $key,
+                            $value
+                        ))
+                        ->append("\n");
+                }
+            );
     }
 
     private function renderClusters(Str $output, Graph $graph): Str
