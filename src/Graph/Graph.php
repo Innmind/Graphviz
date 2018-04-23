@@ -26,23 +26,27 @@ final class Graph implements GraphInterface
     private $clusters;
     private $attributes;
 
-    private function __construct(bool $directed, Name $name)
+    private function __construct(bool $directed, Name $name, Rankdir $rankdir = null)
     {
         $this->directed = $directed;
         $this->name = $name;
         $this->roots = new Set(Node::class);
         $this->clusters = new Set(GraphInterface::class);
         $this->attributes = new Map('string', 'string');
+
+        if ($rankdir) {
+            $this->attributes = $this->attributes->put('rankdir', (string) $rankdir);
+        }
     }
 
-    public static function directed(string $name = 'G'): self
+    public static function directed(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(true, new Name($name));
+        return new self(true, new Name($name), $rankdir);
     }
 
-    public static function undirected(string $name = 'G'): self
+    public static function undirected(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(false, new Name($name));
+        return new self(false, new Name($name), $rankdir);
     }
 
     public function isDirected(): bool

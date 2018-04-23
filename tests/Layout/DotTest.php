@@ -9,7 +9,8 @@ use Innmind\Graphviz\{
     Node\Node,
     Node\Shape,
     Node\Name,
-    Graph\Graph
+    Graph\Graph,
+    Graph\Rankdir
 };
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
@@ -248,6 +249,21 @@ digraph G {
     start -> second;
     first -> third;
     second -> third;
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
+
+    public function testRenderGraphFromLeftToRight()
+    {
+        $root = Graph::directed('G', Rankdir::leftToRight());
+
+        $output = (new Dot)($root);
+
+        $expected = <<<DOT
+digraph G {
+    rankdir="LR";
 }
 DOT;
 
