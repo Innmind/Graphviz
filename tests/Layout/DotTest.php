@@ -14,7 +14,7 @@ use Innmind\Graphviz\{
 };
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
-use Innmind\Immutable\Str;
+use Innmind\Stream\Readable;
 use PHPUnit\Framework\TestCase;
 
 class DotTest extends TestCase
@@ -60,7 +60,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertInstanceOf(Str::class, $output);
+        $this->assertInstanceOf(Readable::class, $output);
         $this->assertSame($expected, (string) $output);
     }
 
