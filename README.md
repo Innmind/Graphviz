@@ -29,7 +29,6 @@ use Innmind\Server\Control\{
     ServerFactory,
     Server\Command
 };
-use Innmind\Filesystem\Stream\StringStream;
 
 $dot = new Dot;
 $graph = Graph::directed();
@@ -68,7 +67,7 @@ $output = $dot($graph);
         Command::foreground('dot')
             ->withShortOption('Tsvg')
             ->withShortOption('o', 'graph.svg')
-            ->withInput(new StringStream((string) $output))
+            ->withInput($output)
     )
     ->wait();
 ```

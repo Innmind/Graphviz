@@ -8,6 +8,7 @@ use Innmind\Graphviz\{
     Edge,
     Graph
 };
+use Innmind\Stream\Readable;
 use Innmind\Immutable\{
     Str,
     Set,
@@ -23,7 +24,7 @@ final class Dot
         $this->dpi = $dpi;
     }
 
-    public function __invoke(Graph $graph): Str
+    public function __invoke(Graph $graph): Readable
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
         $output = new Str("$type {$graph->name()} {\n");
@@ -35,7 +36,11 @@ final class Dot
         $output = $this->renderLonelyRoots($output, $graph);
         $output = $this->renderStyledNodes($output, $graph);
 
-        return $output->append('}');
+        $output = $output->append('}');
+        $stream = \fopen('php://temp', 'r+');
+        \fwrite($stream, (string) $output);
+
+        return new Readable\Stream($stream);
     }
 
     private function renderDPI(Str $output): Str
