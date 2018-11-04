@@ -269,4 +269,25 @@ DOT;
 
         $this->assertSame($expected, (string) $output);
     }
+
+    public function testRenderCyclicGraph()
+    {
+        $dot = new Dot;
+        $main = Node::named('main');
+        $main->linkedTo($second = Node::named('second'));
+        $second->linkedTo($main);
+
+        $output = $dot(
+            Graph::directed()->add($main)
+        );
+
+        $expected = <<<DOT
+digraph G {
+    main -> second;
+    second -> main;
+}
+DOT;
+
+        $this->assertSame($expected, (string) $output);
+    }
 }

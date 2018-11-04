@@ -154,6 +154,10 @@ final class Graph implements GraphInterface
             ->reduce(
                 $nodes->put((string) $node->name(), $node),
                 function(Map $nodes, Edge $edge): Map {
+                    if ($nodes->values()->contains($edge->to())) {
+                        return $nodes;
+                    }
+
                     return $this->accumulateNodes($nodes, $edge->to());
                 }
             );
