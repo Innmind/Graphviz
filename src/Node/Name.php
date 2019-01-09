@@ -14,7 +14,7 @@ final class Name
     {
         $name = new Str($name);
 
-        if ($name->length() === 0 || $name->contains('->')) {
+        if ($name->length() === 0 || $name->contains('->') || $name->contains('-')) {
             throw new DomainException;
         }
 
