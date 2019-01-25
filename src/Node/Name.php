@@ -14,7 +14,12 @@ final class Name
     {
         $name = new Str($name);
 
-        if ($name->length() === 0 || $name->contains('->') || $name->contains('-')) {
+        if (
+            $name->length() === 0 ||
+            $name->contains('->') ||
+            $name->contains('-') ||
+            $name->contains("\x00")
+        ) {
             throw new DomainException;
         }
 
