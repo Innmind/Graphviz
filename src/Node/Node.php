@@ -6,6 +6,7 @@ namespace Innmind\Graphviz\Node;
 use Innmind\Graphviz\{
     Node as NodeInterface,
     Edge,
+    Attribute\Value,
     Exception\DomainException
 };
 use Innmind\Url\UrlInterface;
@@ -58,14 +59,20 @@ final class Node implements NodeInterface
 
     public function target(UrlInterface $url): NodeInterface
     {
-        $this->attributes = $this->attributes->put('URL', (string) $url);
+        $this->attributes = $this->attributes->put(
+            'URL',
+            (string) new Value((string) $url)
+        );
 
         return $this;
     }
 
     public function displayAs(string $label): NodeInterface
     {
-        $this->attributes = $this->attributes->put('label', $label);
+        $this->attributes = $this->attributes->put(
+            'label',
+            (string) new Value($label)
+        );
 
         return $this;
     }

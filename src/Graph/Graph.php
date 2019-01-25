@@ -7,6 +7,7 @@ use Innmind\Graphviz\{
     Graph as GraphInterface,
     Node,
     Edge,
+    Attribute\Value,
     Exception\MixedGraphsNotAllowed
 };
 use Innmind\Colour\RGBA;
@@ -110,7 +111,10 @@ final class Graph implements GraphInterface
 
     public function displayAs(string $label): GraphInterface
     {
-        $this->attributes = $this->attributes->put('label', $label);
+        $this->attributes = $this->attributes->put(
+            'label',
+            (string) new Value($label)
+        );
 
         return $this;
     }
@@ -134,7 +138,10 @@ final class Graph implements GraphInterface
 
     public function target(UrlInterface $url): GraphInterface
     {
-        $this->attributes = $this->attributes->put('URL', (string) $url);
+        $this->attributes = $this->attributes->put(
+            'URL',
+            (string) new Value((string) $url)
+        );
 
         return $this;
     }

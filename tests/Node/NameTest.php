@@ -49,4 +49,11 @@ class NameTest extends TestCase
 
         new Name('-');
     }
+
+    public function testThrowWhenContainingANullCharacter()
+    {
+        $this->expectException(DomainException::class);
+
+        new Name("\x00");
+    }
 }

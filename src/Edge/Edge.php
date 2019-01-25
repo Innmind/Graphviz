@@ -5,7 +5,8 @@ namespace Innmind\Graphviz\Edge;
 
 use Innmind\Graphviz\{
     Edge as EdgeInterface,
-    Node
+    Node,
+    Attribute\Value
 };
 use Innmind\Colour\RGBA;
 use Innmind\Url\UrlInterface;
@@ -73,7 +74,10 @@ final class Edge implements EdgeInterface
 
     public function displayAs(string $label): EdgeInterface
     {
-        $this->attributes = $this->attributes->put('label', $label);
+        $this->attributes = $this->attributes->put(
+            'label',
+            (string) new Value($label)
+        );
 
         return $this;
     }
@@ -87,7 +91,10 @@ final class Edge implements EdgeInterface
 
     public function target(UrlInterface $url): EdgeInterface
     {
-        $this->attributes = $this->attributes->put('URL', (string) $url);
+        $this->attributes = $this->attributes->put(
+            'URL',
+            (string) new Value((string) $url)
+        );
 
         return $this;
     }
