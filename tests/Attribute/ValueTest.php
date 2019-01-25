@@ -10,7 +10,7 @@ use Innmind\Graphviz\{
 use PHPUnit\Framework\TestCase;
 use Eris\{
     Generator,
-    TestTrait,
+    TestTrait
 };
 
 class ValueTest extends TestCase
