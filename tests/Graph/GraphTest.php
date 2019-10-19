@@ -7,7 +7,8 @@ use Innmind\Graphviz\{
     Graph\Graph,
     Graph\Name,
     Graph as GraphInterface,
-    Node
+    Node,
+    Exception\MixedGraphsNotAllowed
 };
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
@@ -65,11 +66,10 @@ class GraphTest extends TestCase
         $this->assertSame([$main, $second, $third], $graph->nodes()->toPrimitive());
     }
 
-    /**
-     * @expectedException Innmind\Graphviz\Exception\MixedGraphsNotAllowed
-     */
     public function testThrowWhenMixedGraphs()
     {
+        $this->expectException(MixedGraphsNotAllowed::class);
+
         Graph::directed()->cluster(Graph::undirected());
     }
 
