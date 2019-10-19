@@ -18,6 +18,7 @@ final class Name
             $name->length() === 0 ||
             $name->contains('->') ||
             $name->contains('-') ||
+            $name->contains('.') ||
             $name->contains("\x00")
         ) {
             throw new DomainException;

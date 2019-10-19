@@ -22,7 +22,7 @@ class NameTest extends TestCase
         $this
             ->forAll(Generator\string())
             ->when(static function(string $string): bool {
-                return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false;
+                return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false;
             })
             ->then(function(string $string): void {
                 $this->assertSame($string, (string) new  Name($string));
@@ -48,6 +48,13 @@ class NameTest extends TestCase
         $this->expectException(DomainException::class);
 
         new Name('-');
+    }
+
+    public function testThrowWhenContainingADot()
+    {
+        $this->expectException(DomainException::class);
+
+        new Name('.');
     }
 
     public function testThrowWhenContainingANullCharacter()
