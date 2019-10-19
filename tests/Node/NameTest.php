@@ -20,6 +20,7 @@ class NameTest extends TestCase
     public function testInterface()
     {
         $this
+            ->minimumEvaluationRatio(0.4)
             ->forAll(Generator\string())
             ->when(static function(string $string): bool {
                 return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false;
