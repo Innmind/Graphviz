@@ -1,10 +1,9 @@
 # Graphviz
 
-| `master` | `develop` |
-|----------|-----------|
-| [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=develop) |
-| [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=master) | [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=develop) |
-| [![Build Status](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/build-status/master) | [![Build Status](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/build-status/develop) |
+| `develop` |
+|-----------|
+| [![codecov](https://codecov.io/gh/Innmind/Graphviz/branch/develop/graph/badge.svg)](https://codecov.io/gh/Innmind/Graphviz) |
+| [![Build Status](https://github.com/Innmind/Graphviz/workflows/CI/badge.svg)](https://github.com/Innmind/Graphviz/actions?query=workflow%3ACI) |
 
 Graphviz model to help build graphs. This model goal is to express the possibilities offered by Graphviz (though note that all features are not implemented).
 
