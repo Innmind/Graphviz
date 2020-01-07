@@ -27,7 +27,7 @@ final class Dot
     public function __invoke(Graph $graph): Readable
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
-        $output = new Str("$type {$graph->name()} {\n");
+        $output = new Str("$type {$graph->name()->toString()} {\n");
 
         $output = $this->renderDPI($output);
         $output = $this->renderAttributes($output, $graph);
@@ -119,7 +119,7 @@ final class Dot
                 $output,
                 static function(Str $output, Node $node): Str {
                     return $output
-                        ->append('    '.$node->name())
+                        ->append('    '.$node->name()->toString())
                         ->append(";\n");
                 }
             );
@@ -144,7 +144,7 @@ final class Dot
     {
         $output = $output
             ->append('    subgraph cluster_')
-            ->append((string) $cluster->name())
+            ->append($cluster->name()->toString())
             ->append(" {\n");
 
         $output = $cluster
@@ -189,9 +189,9 @@ final class Dot
         return $output
             ->append(sprintf(
                 '    %s %s %s',
-                $edge->from()->name(),
+                $edge->from()->name()->toString(),
                 $type,
-                $edge->to()->name()
+                $edge->to()->name()->toString(),
             ))
             ->append($attributes)
             ->append(";\n");
@@ -213,7 +213,7 @@ final class Dot
             ->append(']');
 
         return $output
-            ->append('    '.$node->name())
+            ->append('    '.$node->name()->toString())
             ->append($attributes)
             ->append(";\n");
     }

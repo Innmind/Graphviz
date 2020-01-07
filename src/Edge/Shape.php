@@ -93,7 +93,7 @@ final class Shape
         return $self;
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->modifier.$this->side.$this->value;
     }

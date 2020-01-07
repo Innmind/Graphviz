@@ -36,7 +36,7 @@ final class Graph implements GraphInterface
         $this->attributes = new Map('string', 'string');
 
         if ($rankdir) {
-            $this->attributes = $this->attributes->put('rankdir', (string) $rankdir);
+            $this->attributes = $this->attributes->put('rankdir', $rankdir->toString());
         }
     }
 
@@ -113,7 +113,7 @@ final class Graph implements GraphInterface
     {
         $this->attributes = $this->attributes->put(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
 
         return $this;
@@ -140,7 +140,7 @@ final class Graph implements GraphInterface
     {
         $this->attributes = $this->attributes->put(
             'URL',
-            (string) new Value((string) $url)
+            (new Value((string) $url))->toString(),
         );
 
         return $this;
@@ -159,7 +159,7 @@ final class Graph implements GraphInterface
         return $node
             ->edges()
             ->reduce(
-                $nodes->put((string) $node->name(), $node),
+                $nodes->put($node->name()->toString(), $node),
                 function(Map $nodes, Edge $edge): Map {
                     if ($nodes->values()->contains($edge->to())) {
                         return $nodes;

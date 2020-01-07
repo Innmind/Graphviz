@@ -58,6 +58,10 @@ final class Edge implements EdgeInterface
         Shape $shape3 = null,
         Shape $shape4 = null
     ): EdgeInterface {
+        $shape = $shape->toString();
+        $shape2 = $shape2 ? $shape2->toString() : '';
+        $shape3 = $shape3 ? $shape3->toString() : '';
+        $shape4 = $shape4 ? $shape4->toString() : '';
         $value = $shape.$shape2.$shape3.$shape4;
 
         $this->attributes = $this->attributes->put('arrowhead', $value);
@@ -76,7 +80,7 @@ final class Edge implements EdgeInterface
     {
         $this->attributes = $this->attributes->put(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
 
         return $this;
@@ -93,7 +97,7 @@ final class Edge implements EdgeInterface
     {
         $this->attributes = $this->attributes->put(
             'URL',
-            (string) new Value((string) $url)
+            (new Value((string) $url))->toString(),
         );
 
         return $this;

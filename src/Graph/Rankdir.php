@@ -24,7 +24,7 @@ final class Rankdir
         return self::$lr ?? self::$lr = new self('LR');
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->value;
     }

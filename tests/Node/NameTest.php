@@ -26,7 +26,7 @@ class NameTest extends TestCase
                 return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false;
             })
             ->then(function(string $string): void {
-                $this->assertSame($string, (string) new  Name($string));
+                $this->assertSame($string, (new Name($string))->toString());
             });
     }
 

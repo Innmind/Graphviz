@@ -61,7 +61,7 @@ final class Node implements NodeInterface
     {
         $this->attributes = $this->attributes->put(
             'URL',
-            (string) new Value((string) $url)
+            (new Value((string) $url))->toString(),
         );
 
         return $this;
@@ -71,7 +71,7 @@ final class Node implements NodeInterface
     {
         $this->attributes = $this->attributes->put(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
 
         return $this;

@@ -37,8 +37,8 @@ class GraphTest extends TestCase
     {
         $this->assertInstanceOf(Name::class, Graph::directed('foo')->name());
         $this->assertInstanceOf(Name::class, Graph::undirected('foo')->name());
-        $this->assertSame('foo', (string) Graph::directed('foo')->name());
-        $this->assertSame('foo', (string) Graph::undirected('foo')->name());
+        $this->assertSame('foo', Graph::directed('foo')->name()->toString());
+        $this->assertSame('foo', Graph::undirected('foo')->name()->toString());
     }
 
     public function testAdd()

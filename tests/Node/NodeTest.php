@@ -33,7 +33,7 @@ class NodeTest extends TestCase
 
         $this->assertInstanceOf(Node::class, $node);
         $this->assertInstanceOf(Name::class, $node->name());
-        $this->assertSame('foo', (string) $node->name());
+        $this->assertSame('foo', $node->name()->toString());
     }
 
     public function testName()
