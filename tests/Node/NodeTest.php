@@ -12,8 +12,8 @@ use Innmind\Graphviz\{
 };
 use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
-    MapInterface
+    Set,
+    Map,
 };
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +33,7 @@ class NodeTest extends TestCase
 
         $this->assertInstanceOf(Node::class, $node);
         $this->assertInstanceOf(Name::class, $node->name());
-        $this->assertSame('foo', (string) $node->name());
+        $this->assertSame('foo', $node->name()->toString());
     }
 
     public function testName()
@@ -50,8 +50,8 @@ class NodeTest extends TestCase
         $node = new Node(new Name('foo'));
         $to = new Node(new Name('bar'));
 
-        $this->assertInstanceOf(SetInterface::class, $node->edges());
-        $this->assertSame(Edge::class, (string) $node->edges()->type());
+        $this->assertInstanceOf(Set::class, $node->edges());
+        $this->assertSame(Edge::class, $node->edges()->type());
         $this->assertCount(0, $node->edges());
 
         $edge = $node->linkedTo($to);
@@ -67,9 +67,9 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertInstanceOf(MapInterface::class, $node->attributes());
-        $this->assertSame('string', (string) $node->attributes()->keyType());
-        $this->assertSame('string', (string) $node->attributes()->valueType());
+        $this->assertInstanceOf(Map::class, $node->attributes());
+        $this->assertSame('string', $node->attributes()->keyType());
+        $this->assertSame('string', $node->attributes()->valueType());
         $this->assertCount(0, $node->attributes());
     }
 
@@ -77,16 +77,16 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->target($url = Url::fromString('example.com')));
+        $this->assertNull($node->target($url = Url::of('example.com')));
         $this->assertCount(1, $node->attributes());
-        $this->assertSame((string) $url, $node->attributes()->get('URL'));
+        $this->assertSame($url->toString(), $node->attributes()->get('URL'));
     }
 
     public function testLabel()
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->displayAs('watev'));
+        $this->assertNull($node->displayAs('watev'));
         $this->assertCount(1, $node->attributes());
         $this->assertSame('watev', $node->attributes()->get('label'));
     }
@@ -95,7 +95,7 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->shaped($shape = Shape::ellipse()));
+        $this->assertNull($node->shaped($shape = Shape::ellipse()));
         $this->assertTrue($node->hasAttributes());
         $this->assertSame('ellipse', $node->attributes()->get('shape'));
     }

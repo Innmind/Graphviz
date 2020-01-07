@@ -22,7 +22,7 @@ class ValueTest extends TestCase
         $this
             ->forAll(Generator\string())
             ->then(function(string $string): void {
-                $this->assertSame($string, (string) new Value($string));
+                $this->assertSame($string, (new Value($string))->toString());
             });
     }
 

@@ -6,26 +6,25 @@ namespace Innmind\Graphviz\Edge;
 use Innmind\Graphviz\{
     Edge as EdgeInterface,
     Node,
-    Attribute\Value
+    Attribute\Value,
 };
 use Innmind\Colour\RGBA;
-use Innmind\Url\UrlInterface;
-use Innmind\Immutable\{
-    MapInterface,
-    Map
-};
+use Innmind\Url\Url;
+use Innmind\Immutable\Map;
 
 final class Edge implements EdgeInterface
 {
-    private $from;
-    private $to;
-    private $attributes;
+    private Node $from;
+    private Node $to;
+    /** @var Map<string, string> */
+    private Map $attributes;
 
     public function __construct(Node $from, Node $to)
     {
         $this->from = $from;
         $this->to = $to;
-        $this->attributes = new Map('string', 'string');
+        /** @var Map<string, string> */
+        $this->attributes = Map::of('string', 'string');
     }
 
     public function from(): Node
@@ -38,18 +37,14 @@ final class Edge implements EdgeInterface
         return $this->to;
     }
 
-    public function asBidirectional(): EdgeInterface
+    public function asBidirectional(): void
     {
-        $this->attributes = $this->attributes->put('dir', 'both');
-
-        return $this;
+        $this->attributes = ($this->attributes)('dir', 'both');
     }
 
-    public function withoutDirection(): EdgeInterface
+    public function withoutDirection(): void
     {
-        $this->attributes = $this->attributes->put('dir', 'none');
-
-        return $this;
+        $this->attributes = ($this->attributes)('dir', 'none');
     }
 
     public function shaped(
@@ -57,67 +52,57 @@ final class Edge implements EdgeInterface
         Shape $shape2 = null,
         Shape $shape3 = null,
         Shape $shape4 = null
-    ): EdgeInterface {
+    ): void {
+        $shape = $shape->toString();
+        $shape2 = $shape2 ? $shape2->toString() : '';
+        $shape3 = $shape3 ? $shape3->toString() : '';
+        $shape4 = $shape4 ? $shape4->toString() : '';
         $value = $shape.$shape2.$shape3.$shape4;
 
-        $this->attributes = $this->attributes->put('arrowhead', $value);
+        $this->attributes = ($this->attributes)('arrowhead', $value);
 
         if (
             $this->attributes->contains('dir') &&
             $this->attributes->get('dir') === 'both'
         ) {
-            $this->attributes = $this->attributes->put('arrowtail', $value);
+            $this->attributes = ($this->attributes)('arrowtail', $value);
         }
-
-        return $this;
     }
 
-    public function displayAs(string $label): EdgeInterface
+    public function displayAs(string $label): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function useColor(RGBA $color): EdgeInterface
+    public function useColor(RGBA $color): void
     {
-        $this->attributes = $this->attributes->put('color', (string) $color);
-
-        return $this;
+        $this->attributes = ($this->attributes)('color', $color->toString());
     }
 
-    public function target(UrlInterface $url): EdgeInterface
+    public function target(Url $url): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'URL',
-            (string) new Value((string) $url)
+            (new Value($url->toString()))->toString(),
         );
-
-        return $this;
     }
 
-    public function dotted(): EdgeInterface
+    public function dotted(): void
     {
-        $this->attributes = $this->attributes->put('style', 'dotted');
-
-        return $this;
+        $this->attributes = ($this->attributes)('style', 'dotted');
     }
 
-    public function bold(): EdgeInterface
+    public function bold(): void
     {
-        $this->attributes = $this->attributes->put('style', 'bold');
-
-        return $this;
+        $this->attributes = ($this->attributes)('style', 'bold');
     }
 
-    public function filled(): EdgeInterface
+    public function filled(): void
     {
-        $this->attributes = $this->attributes->put('style', 'filled');
-
-        return $this;
+        $this->attributes = ($this->attributes)('style', 'filled');
     }
 
     public function hasAttributes(): bool
@@ -128,7 +113,7 @@ final class Edge implements EdgeInterface
     /**
      * {@inheritdoc}
      */
-    public function attributes(): MapInterface
+    public function attributes(): Map
     {
         return $this->attributes;
     }

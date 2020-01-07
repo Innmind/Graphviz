@@ -1,10 +1,9 @@
 # Graphviz
 
-| `master` | `develop` |
-|----------|-----------|
-| [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=develop) |
-| [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=master) | [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/?branch=develop) |
-| [![Build Status](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Graphviz/build-status/master) | [![Build Status](https://scrutinizer-ci.com/g/Innmind/Graphviz/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Graphviz/build-status/develop) |
+| `develop` |
+|-----------|
+| [![codecov](https://codecov.io/gh/Innmind/Graphviz/branch/develop/graph/badge.svg)](https://codecov.io/gh/Innmind/Graphviz) |
+| [![Build Status](https://github.com/Innmind/Graphviz/workflows/CI/badge.svg)](https://github.com/Innmind/Graphviz/actions?query=workflow%3ACI) |
 
 Graphviz model to help build graphs. This model goal is to express the possibilities offered by Graphviz (though note that all features are not implemented).
 
@@ -21,42 +20,41 @@ use Innmind\Graphviz\{
     Layout\Dot,
     Graph\Graph,
     Node\Node,
-    Node\Shape
+    Node\Shape,
 };
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
 use Innmind\Server\Control\{
     ServerFactory,
-    Server\Command
+    Server\Command,
 };
 
 $dot = new Dot;
 $graph = Graph::directed();
-$clusterOne = Graph::directed('one')
-    ->target(Url::fromString('http://example.com'))
-    ->displayAs('One')
-    ->fillWithColor(Colour::fromString('blue'))
-    ->add(Node::named('one'));
-$clusterTwo = Graph::directed('two')
-    ->fillWithColor(Colour::fromString('red'))
-    ->add(Node::named('two'));
-$clusterThree = Graph::directed('three')
-    ->add($three = Node::named('three'));
+$clusterOne = Graph::directed('one');
+$clusterOne->target(Url::of('http://example.com'));
+$clusterOne->displayAs('One');
+$clusterOne->fillWithColor(Colour::of('blue'));
+$clusterOne->add(Node::named('one'));
+$clusterTwo = Graph::directed('two');
+$clusterTwo->fillWithColor(Colour::of('red'));
+$clusterTwo->add(Node::named('two'));
+$clusterThree = Graph::directed('three');
+$clusterThree->add($three = Node::named('three'));
 
 //important to not reuse nodes added in clusters otherwise clusters boundaries
 //will be messed up
-$root = Node::named('root')
-    ->shaped(Shape::house());
+$root = Node::named('root');
+$root->shaped(Shape::house());
 $root->linkedTo($one = Node::named('one'));
 $root->linkedTo($two = Node::named('two'));
 $one->linkedTo($three);
 $two->linkedTo($three);
 
-$graph
-    ->add($root)
-    ->cluster($clusterOne)
-    ->cluster($clusterTwo)
-    ->cluster($clusterThree);
+$graph->add($root);
+$graph->cluster($clusterOne);
+$graph->cluster($clusterTwo);
+$graph->cluster($clusterThree);
 
 $output = $dot($graph);
 
@@ -67,7 +65,7 @@ $output = $dot($graph);
         Command::foreground('dot')
             ->withShortOption('Tsvg')
             ->withShortOption('o', 'graph.svg')
-            ->withInput($output)
+            ->withInput($output),
     )
     ->wait();
 ```

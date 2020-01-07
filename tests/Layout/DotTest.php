@@ -44,7 +44,10 @@ class DotTest extends TestCase
         $main->linkedTo($printf);
         $execute->linkedTo($compare);
 
-        $output = $layout(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $layout($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -61,14 +64,17 @@ digraph G {
 DOT;
 
         $this->assertInstanceOf(Readable::class, $output);
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testDPI()
     {
         $dot = new Dot(new DPI(200));
 
-        $output = $dot(Graph::directed()->add(new Node(new Name('main'))));
+        $graph = Graph::directed();
+        $graph->add(new Node(new Name('main')));
+
+        $output = $dot($graph);
         $expected = <<<DOT
 digraph G {
     dpi="200";
@@ -76,7 +82,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testNodeAttributes()
@@ -101,13 +107,15 @@ DOT;
         $init->linkedTo($makeString);
         $main->linkedTo($printf);
         $execute->linkedTo($compare);
-        $main
-            ->shaped(Shape::circle())
-            ->displayAs('Main Node')
-            ->target(Url::fromString('example.com'));
+        $main->shaped(Shape::circle());
+        $main->displayAs('Main Node');
+        $main->target(Url::of('example.com'));
         $parse->displayAs('Parse');
 
-        $output = $dot(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -125,7 +133,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testEdgeAttributes()
@@ -135,15 +143,17 @@ DOT;
         $main = new Node(new Name('main'));
         $second = new Node(new Name('second'));
         $third = new Node(new Name('third'));
-        $main
-            ->linkedTo($second)
-            ->displayAs('watev')
-            ->withoutDirection();
+        $edge = $main->linkedTo($second);
+        $edge->displayAs('watev');
+        $edge->withoutDirection();
         $main
             ->linkedTo($third)
             ->asBidirectional();
 
-        $output = $dot(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -152,7 +162,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testUndirectedGraph()
@@ -161,9 +171,10 @@ DOT;
         $main = Node::named('main');
         $main->linkedTo(Node::named('second'));
 
-        $output = $dot(
-            Graph::undirected()->add($main)
-        );
+        $graph = Graph::undirected();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 graph G {
@@ -171,16 +182,17 @@ graph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testNamedGraph()
     {
         $dot = new Dot;
 
-        $output = $dot(
-            Graph::directed('foo')->add(Node::named('main'))
-        );
+        $foo = Graph::directed('foo');
+        $foo->add(Node::named('main'));
+
+        $output = $dot($foo);
 
         $expected = <<<DOT
 digraph foo {
@@ -188,16 +200,16 @@ digraph foo {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderClusters()
     {
         $root = Graph::directed();
-        $firstCluster = Graph::directed('first')
-            ->displayAs('First')
-            ->fillWithColor(Colour::fromString('yellow'))
-            ->colorizeBorderWith(Colour::fromString('green'));
+        $firstCluster = Graph::directed('first');
+        $firstCluster->displayAs('First');
+        $firstCluster->fillWithColor(Colour::of('yellow'));
+        $firstCluster->colorizeBorderWith(Colour::of('green'));
         $secondCluster = Graph::directed('second');
         $thirdCluster = Graph::directed('third');
 
@@ -211,11 +223,10 @@ DOT;
         $first->linkedTo($third);
         $second->linkedTo($third);
 
-        $root
-            ->add($start)
-            ->cluster($firstCluster)
-            ->cluster($secondCluster)
-            ->cluster($thirdCluster);
+        $root->add($start);
+        $root->cluster($firstCluster);
+        $root->cluster($secondCluster);
+        $root->cluster($thirdCluster);
 
         $first = Node::named('first');
         $second = Node::named('second');
@@ -252,7 +263,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderGraphFromLeftToRight()
@@ -267,7 +278,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderCyclicGraph()
@@ -277,9 +288,10 @@ DOT;
         $main->linkedTo($second = Node::named('second'));
         $second->linkedTo($main);
 
-        $output = $dot(
-            Graph::directed()->add($main)
-        );
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -288,6 +300,6 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, (string) $output);
+        $this->assertSame($expected, $output->toString());
     }
 }

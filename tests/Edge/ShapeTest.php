@@ -20,7 +20,7 @@ class ShapeTest extends TestCase
             ->forAll($this->shapes())
             ->then(function(string $shape): void {
                 $this->assertInstanceOf(Shape::class, Shape::$shape());
-                $this->assertSame($shape, (string) Shape::$shape());
+                $this->assertSame($shape, Shape::$shape()->toString());
             });
     }
 
@@ -33,7 +33,7 @@ class ShapeTest extends TestCase
                 $shape2 = $shape->open();
 
                 $this->assertNotSame($shape, $shape2);
-                $this->assertSame('o'.$shape, (string) $shape2);
+                $this->assertSame('o'.$shape->toString(), $shape2->toString());
             });
     }
 
@@ -46,7 +46,7 @@ class ShapeTest extends TestCase
                 $shape2 = $shape->left();
 
                 $this->assertNotSame($shape, $shape2);
-                $this->assertSame('l'.$shape, (string) $shape2);
+                $this->assertSame('l'.$shape->toString(), $shape2->toString());
             });
     }
 
@@ -59,7 +59,7 @@ class ShapeTest extends TestCase
                 $shape2 = $shape->right();
 
                 $this->assertNotSame($shape, $shape2);
-                $this->assertSame('r'.$shape, (string) $shape2);
+                $this->assertSame('r'.$shape->toString(), $shape2->toString());
             });
     }
 
@@ -80,9 +80,10 @@ class ShapeTest extends TestCase
 
                 $this->assertSame(
                     $side.$shape,
-                    (string) Shape::$shape()
+                    Shape::$shape()
                         ->$side1()
                         ->$side2()
+                        ->toString(),
                 );
             });
     }
@@ -99,9 +100,10 @@ class ShapeTest extends TestCase
 
                 $this->assertSame(
                     'o'.$sideChar.$shape,
-                    (string) Shape::$shape()
+                    Shape::$shape()
                         ->open()
                         ->$side()
+                        ->toString(),
                 );
             });
     }

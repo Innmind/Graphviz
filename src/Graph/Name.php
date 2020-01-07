@@ -8,20 +8,18 @@ use Innmind\Immutable\Str;
 
 final class Name
 {
-    private $value;
+    private string $value;
 
     public function __construct(string $name)
     {
-        $name = new Str($name);
-
-        if (!$name->matches('~[a-zA-Z0-9_]+~')) {
-            throw new DomainException;
+        if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
+            throw new DomainException($name);
         }
 
-        $this->value = (string) $name;
+        $this->value = $name;
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->value;
     }

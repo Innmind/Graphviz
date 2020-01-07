@@ -8,11 +8,11 @@ use Innmind\Immutable\Str;
 
 final class Name
 {
-    private $value;
+    private string $value;
 
     public function __construct(string $name)
     {
-        $name = new Str($name);
+        $name = Str::of($name);
 
         if (
             $name->length() === 0 ||
@@ -21,13 +21,13 @@ final class Name
             $name->contains('.') ||
             $name->contains("\x00")
         ) {
-            throw new DomainException;
+            throw new DomainException($name->toString());
         }
 
-        $this->value = (string) $name;
+        $this->value = $name->toString();
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->value;
     }

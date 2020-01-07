@@ -4,19 +4,18 @@ declare(strict_types = 1);
 namespace Innmind\Graphviz\Node;
 
 use Innmind\Colour\RGBA;
-use Innmind\Immutable\{
-    MapInterface,
-    Map
-};
+use Innmind\Immutable\Map;
 
 final class Shape
 {
-    private $attributes;
+    /** @var Map<string, string> */
+    private Map $attributes;
 
     private function __construct(string $name)
     {
-        $this->attributes = (new Map('string', 'string'))
-            ->put('shape', $name);
+        /** @var Map<string, string> */
+        $this->attributes = Map::of('string', 'string')
+            ('shape', $name);
     }
 
     public static function box(): self
@@ -33,24 +32,24 @@ final class Shape
         $self = new self('polygon');
 
         if ($sides) {
-            $self->attributes = $self->attributes->put('sides', (string) $sides);
+            $self->attributes = ($self->attributes)('sides', (string) $sides);
         }
 
         if ($peripheries) {
-            $self->attributes = $self->attributes->put('peripheries', (string) $peripheries);
+            $self->attributes = ($self->attributes)('peripheries', (string) $peripheries);
         }
 
         if ($distortion) {
-            $self->attributes = $self->attributes->put(
+            $self->attributes = ($self->attributes)(
                 'distortion',
-                sprintf('%0.1f', $distortion)
+                \sprintf('%0.1f', $distortion),
             );
         }
 
         if ($skew) {
-            $self->attributes = $self->attributes->put(
+            $self->attributes = ($self->attributes)(
                 'skew',
-                sprintf('%0.1f', $skew)
+                \sprintf('%0.1f', $skew),
             );
         }
 
@@ -60,10 +59,9 @@ final class Shape
     public static function ellipse(float $width = .75, float $height = .5): self
     {
         $self = new self('ellipse');
-        $self->attributes = $self
-            ->attributes
-            ->put('width', (string) $width)
-            ->put('height', (string) $height);
+        $self->attributes = ($self->attributes)
+            ('width', (string) $width)
+            ('height', (string) $height);
 
         return $self;
     }
@@ -186,9 +184,7 @@ final class Shape
     public function withColor(RGBA $color): self
     {
         $self = clone $this;
-        $self->attributes = $self
-            ->attributes
-            ->put('color', (string) $color);
+        $self->attributes = ($self->attributes)('color', $color->toString());
 
         return $self;
     }
@@ -196,18 +192,17 @@ final class Shape
     public function fillWithColor(RGBA $color): self
     {
         $self = clone $this;
-        $self->attributes = $self
-            ->attributes
-            ->put('style', 'filled')
-            ->put('fillcolor', (string) $color);
+        $self->attributes = ($self->attributes)
+            ('style', 'filled')
+            ('fillcolor', $color->toString());
 
         return $self;
     }
 
     /**
-     * @return MapInterface<string, string>
+     * @return Map<string, string>
      */
-    public function attributes(): MapInterface
+    public function attributes(): Map
     {
         return $this->attributes;
     }

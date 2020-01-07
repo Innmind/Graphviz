@@ -15,8 +15,8 @@ class RankdirTest extends TestCase
 
         $this->assertInstanceOf(Rankdir::class, $tb);
         $this->assertInstanceOf(Rankdir::class, $lr);
-        $this->assertSame('TB', (string) $tb);
-        $this->assertSame('LR', (string) $lr);
+        $this->assertSame('TB', $tb->toString());
+        $this->assertSame('LR', $lr->toString());
         $this->assertSame($tb, Rankdir::topToBottom());
         $this->assertSame($lr, Rankdir::leftToRight());
     }

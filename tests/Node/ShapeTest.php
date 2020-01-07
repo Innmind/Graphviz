@@ -5,7 +5,7 @@ namespace Tests\Innmind\Graphviz\Node;
 
 use Innmind\Graphviz\Node\Shape;
 use Innmind\Colour\Colour;
-use Innmind\Immutable\MapInterface;
+use Innmind\Immutable\Map;
 use PHPUnit\Framework\TestCase;
 
 class ShapeTest extends TestCase
@@ -13,9 +13,9 @@ class ShapeTest extends TestCase
     public function testBox()
     {
         $this->assertInstanceOf(Shape::class, Shape::box());
-        $this->assertInstanceOf(MapInterface::class, Shape::box()->attributes());
-        $this->assertSame('string', (string) Shape::box()->attributes()->keyType());
-        $this->assertSame('string', (string) Shape::box()->attributes()->valueType());
+        $this->assertInstanceOf(Map::class, Shape::box()->attributes());
+        $this->assertSame('string', Shape::box()->attributes()->keyType());
+        $this->assertSame('string', Shape::box()->attributes()->valueType());
         $this->assertCount(1, Shape::box()->attributes());
         $this->assertSame('box', Shape::box()->attributes()->get('shape'));
     }
@@ -242,7 +242,7 @@ class ShapeTest extends TestCase
     public function testWithColor()
     {
         $shape = Shape::box();
-        $shape2 = $shape->withColor(Colour::fromString('blue'));
+        $shape2 = $shape->withColor(Colour::of('blue'));
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);
@@ -254,7 +254,7 @@ class ShapeTest extends TestCase
     public function testFillWithColor()
     {
         $shape = Shape::box();
-        $shape2 = $shape->fillWithColor(Colour::fromString('blue'));
+        $shape2 = $shape->fillWithColor(Colour::of('blue'));
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);

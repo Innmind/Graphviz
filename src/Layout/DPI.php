@@ -7,7 +7,7 @@ use Innmind\Graphviz\Exception\DomainException;
 
 final class DPI
 {
-    private $value;
+    private int $value;
 
     public function __construct(int $value)
     {

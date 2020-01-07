@@ -5,11 +5,11 @@ namespace Innmind\Graphviz\Edge;
 
 final class Shape
 {
-    private $value;
-    private $modifier = '';
-    private $side = '';
+    private string $value;
+    private string $modifier = '';
+    private string $side = '';
 
-    private function __construct($value)
+    private function __construct(string $value)
     {
         $this->value = $value;
     }
@@ -93,7 +93,7 @@ final class Shape
         return $self;
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->modifier.$this->side.$this->value;
     }

@@ -7,28 +7,30 @@ use Innmind\Graphviz\{
     Node as NodeInterface,
     Edge,
     Attribute\Value,
-    Exception\DomainException
+    Exception\DomainException,
 };
-use Innmind\Url\UrlInterface;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
     Set,
-    MapInterface,
-    Map
+    Map,
 };
 
 final class Node implements NodeInterface
 {
-    private $name;
-    private $edges;
-    private $attributes;
-    private $shape;
+    private Name $name;
+    /** @var Set<Edge> */
+    private Set $edges;
+    /** @var Map<string, string> */
+    private Map $attributes;
+    private ?Shape $shape = null;
 
     public function __construct(Name $name)
     {
         $this->name = $name;
-        $this->edges = new Set(Edge::class);
-        $this->attributes = new Map('string', 'string');
+        /** @var Set<Edge> */
+        $this->edges = Set::of(Edge::class);
+        /** @var Map<string, string> */
+        $this->attributes = Map::of('string', 'string');
     }
 
     public static function named(string $name): self
@@ -44,7 +46,7 @@ final class Node implements NodeInterface
     /**
      * {@inheritdoc}
      */
-    public function edges(): SetInterface
+    public function edges(): Set
     {
         return $this->edges;
     }
@@ -52,36 +54,30 @@ final class Node implements NodeInterface
     public function linkedTo(NodeInterface $node): Edge
     {
         $edge = new Edge\Edge($this, $node);
-        $this->edges = $this->edges->add($edge);
+        $this->edges = ($this->edges)($edge);
 
         return $edge;
     }
 
-    public function target(UrlInterface $url): NodeInterface
+    public function target(Url $url): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'URL',
-            (string) new Value((string) $url)
+            (new Value($url->toString()))->toString(),
         );
-
-        return $this;
     }
 
-    public function displayAs(string $label): NodeInterface
+    public function displayAs(string $label): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function shaped(Shape $shape): NodeInterface
+    public function shaped(Shape $shape): void
     {
         $this->shape = $shape;
-
-        return $this;
     }
 
     public function hasAttributes(): bool
@@ -96,7 +92,7 @@ final class Node implements NodeInterface
     /**
      * {@inheritdoc}
      */
-    public function attributes(): MapInterface
+    public function attributes(): Map
     {
         $attributes = $this->attributes;
 

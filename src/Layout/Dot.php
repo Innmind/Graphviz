@@ -6,18 +6,18 @@ namespace Innmind\Graphviz\Layout;
 use Innmind\Graphviz\{
     Node,
     Edge,
-    Graph
+    Graph,
 };
 use Innmind\Stream\Readable;
 use Innmind\Immutable\{
     Str,
     Set,
-    Sequence
 };
+use function Innmind\Immutable\join;
 
 final class Dot
 {
-    private $dpi;
+    private ?DPI $dpi;
 
     public function __construct(DPI $dpi = null)
     {
@@ -27,7 +27,7 @@ final class Dot
     public function __invoke(Graph $graph): Readable
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
-        $output = new Str("$type {$graph->name()} {\n");
+        $output = Str::of("$type {$graph->name()->toString()} {\n");
 
         $output = $this->renderDPI($output);
         $output = $this->renderAttributes($output, $graph);
@@ -37,10 +37,8 @@ final class Dot
         $output = $this->renderStyledNodes($output, $graph);
 
         $output = $output->append('}');
-        $stream = \fopen('php://temp', 'r+');
-        \fwrite($stream, (string) $output);
 
-        return new Readable\Stream($stream);
+        return Readable\Stream::ofContent($output->toString());
     }
 
     private function renderDPI(Str $output): Str
@@ -50,9 +48,9 @@ final class Dot
         }
 
         return $output
-            ->append(sprintf(
+            ->append(\sprintf(
                 '    dpi="%s";',
-                $this->dpi->toInt()
+                $this->dpi->toInt(),
             ))
             ->append("\n");
     }
@@ -65,10 +63,10 @@ final class Dot
                 $output,
                 static function(Str $output, string $key, string $value): Str {
                     return $output
-                        ->append(sprintf(
+                        ->append(\sprintf(
                             '    %s="%s";',
                             $key,
-                            $value
+                            $value,
                         ))
                         ->append("\n");
                 }
@@ -83,7 +81,7 @@ final class Dot
                 $output,
                 function(Str $output, Graph $cluster): Str {
                     return $this->renderCluster($output, $cluster);
-                }
+                },
             );
     }
 
@@ -94,16 +92,16 @@ final class Dot
         return $graph
             ->nodes()
             ->reduce(
-                new Set(Edge::class),
+                Set::of(Edge::class),
                 static function(Set $edges, Node $node): Set {
                     return $edges->merge($node->edges());
-                }
+                },
             )
             ->reduce(
                 $output,
                 function(Str $output, Edge $edge) use ($type): Str {
                     return $this->renderEdge($output, $edge, $type);
-                }
+                },
             );
     }
 
@@ -119,9 +117,9 @@ final class Dot
                 $output,
                 static function(Str $output, Node $node): Str {
                     return $output
-                        ->append('    '.$node->name())
+                        ->append('    '.$node->name()->toString())
                         ->append(";\n");
-                }
+                },
             );
     }
 
@@ -136,7 +134,7 @@ final class Dot
                 $output,
                 function(Str $output, Node $node): Str {
                     return $this->renderNodeStyle($output, $node);
-                }
+                },
             );
     }
 
@@ -144,7 +142,7 @@ final class Dot
     {
         $output = $output
             ->append('    subgraph cluster_')
-            ->append((string) $cluster->name())
+            ->append($cluster->name()->toString())
             ->append(" {\n");
 
         $output = $cluster
@@ -152,12 +150,12 @@ final class Dot
             ->reduce(
                 $output,
                 static function(Str $output, string $key, string $value): Str {
-                    return $output->append(sprintf(
+                    return $output->append(\sprintf(
                         "        %s=\"%s\"\n",
                         $key,
-                        $value
+                        $value,
                     ));
-                }
+                },
             );
 
         $output = $this->renderEdges($output, $cluster);
@@ -172,26 +170,28 @@ final class Dot
         $attributes = '';
 
         if ($edge->hasAttributes()) {
-            $attributes = (string) $edge
+            $attributes = $edge
                 ->attributes()
                 ->map(static function(string $key, string $value): string {
-                    return sprintf(
+                    return \sprintf(
                         '%s="%s"',
                         $key,
-                        $value
+                        $value,
                     );
                 })
-                ->join(', ')
+                ->values();
+            $attributes = join(', ', $attributes)
                 ->prepend(' [')
-                ->append(']');
+                ->append(']')
+                ->toString();
         }
 
         return $output
-            ->append(sprintf(
+            ->append(\sprintf(
                 '    %s %s %s',
-                $edge->from()->name(),
+                $edge->from()->name()->toString(),
                 $type,
-                $edge->to()->name()
+                $edge->to()->name()->toString(),
             ))
             ->append($attributes)
             ->append(";\n");
@@ -199,21 +199,23 @@ final class Dot
 
     private function renderNodeStyle(Str $output, Node $node): Str
     {
-        $attributes = (string) $node
+        $attributes = $node
             ->attributes()
             ->map(static function(string $key, string $value): string {
-                return sprintf(
+                return \sprintf(
                     '%s="%s"',
                     $key,
-                    $value
+                    $value,
                 );
             })
-            ->join(', ')
+            ->values();
+        $attributes = join(', ', $attributes)
             ->prepend(' [')
-            ->append(']');
+            ->append(']')
+            ->toString();
 
         return $output
-            ->append('    '.$node->name())
+            ->append('    '.$node->name()->toString())
             ->append($attributes)
             ->append(";\n");
     }

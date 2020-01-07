@@ -8,18 +8,18 @@ use Innmind\Immutable\Str;
 
 final class Value
 {
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {
-        if ((new Str($value))->contains("\x00")) {
+        if (Str::of($value)->contains("\x00")) {
             throw new DomainException($value);
         }
 
         $this->value = $value;
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->value;
     }

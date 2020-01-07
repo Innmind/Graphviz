@@ -8,35 +8,40 @@ use Innmind\Graphviz\{
     Node,
     Edge,
     Attribute\Value,
-    Exception\MixedGraphsNotAllowed
+    Exception\MixedGraphsNotAllowed,
 };
 use Innmind\Colour\RGBA;
-use Innmind\Url\UrlInterface;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
     Set,
-    MapInterface,
-    Map
+    Map,
 };
+use function Innmind\Immutable\unwrap;
 
 final class Graph implements GraphInterface
 {
-    private $directed;
-    private $name;
-    private $roots;
-    private $clusters;
-    private $attributes;
+    private bool $directed;
+    private Name $name;
+    /** @var Set<Node> */
+    private Set $roots;
+    /** @var Set<GraphInterface> */
+    private Set $clusters;
+    /** @var Map<string, string> */
+    private Map $attributes;
 
     private function __construct(bool $directed, Name $name, Rankdir $rankdir = null)
     {
         $this->directed = $directed;
         $this->name = $name;
-        $this->roots = new Set(Node::class);
-        $this->clusters = new Set(GraphInterface::class);
-        $this->attributes = new Map('string', 'string');
+        /** @var Set<Node> */
+        $this->roots = Set::of(Node::class);
+        /** @var Set<GraphInterface> */
+        $this->clusters = Set::of(GraphInterface::class);
+        /** @var Map<string, string> */
+        $this->attributes = Map::of('string', 'string');
 
         if ($rankdir) {
-            $this->attributes = $this->attributes->put('rankdir', (string) $rankdir);
+            $this->attributes = ($this->attributes)('rankdir', $rankdir->toString());
         }
     }
 
@@ -60,36 +65,32 @@ final class Graph implements GraphInterface
         return $this->name;
     }
 
-    public function cluster(GraphInterface $cluster): GraphInterface
+    public function cluster(GraphInterface $cluster): void
     {
         if ($cluster->isDirected() !== $this->directed) {
             throw new MixedGraphsNotAllowed;
         }
 
-        $this->clusters = $this->clusters->add($cluster);
-
-        return $this;
+        $this->clusters = ($this->clusters)($cluster);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function clusters(): SetInterface
+    public function clusters(): Set
     {
         return $this->clusters;
     }
 
-    public function add(Node $node): GraphInterface
+    public function add(Node $node): void
     {
-        $this->roots = $this->roots->add($node);
-
-        return $this;
+        $this->roots = ($this->roots)($node);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function roots(): SetInterface
+    public function roots(): Set
     {
         return $this->roots;
     }
@@ -97,59 +98,51 @@ final class Graph implements GraphInterface
     /**
      * {@inheritdoc}
      */
-    public function nodes(): SetInterface
+    public function nodes(): Set
     {
         $map = $this->roots->reduce(
-            new Map('string', Node::class),
+            Map::of('string', Node::class),
             function(Map $nodes, Node $node): Map {
                 return $this->accumulateNodes($nodes, $node);
-            }
+            },
         );
 
-        return Set::of(Node::class, ...$map->values());
+        /** @var Set<Node> */
+        return Set::of(Node::class, ...unwrap($map->values()));
     }
 
-    public function displayAs(string $label): GraphInterface
+    public function displayAs(string $label): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'label',
-            (string) new Value($label)
+            (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function fillWithColor(RGBA $color): GraphInterface
+    public function fillWithColor(RGBA $color): void
     {
-        $this->attributes = $this
-            ->attributes
-            ->put('style', 'filled')
-            ->put('fillcolor', (string) $color);
-
-        return $this;
+        $this->attributes = ($this->attributes)
+            ('style', 'filled')
+            ('fillcolor', $color->toString());
     }
 
-    public function colorizeBorderWith(RGBA $color): GraphInterface
+    public function colorizeBorderWith(RGBA $color): void
     {
-        $this->attributes = $this->attributes->put('color', (string) $color);
-
-        return $this;
+        $this->attributes = ($this->attributes)('color', $color->toString());
     }
 
-    public function target(UrlInterface $url): GraphInterface
+    public function target(Url $url): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'URL',
-            (string) new Value((string) $url)
+            (new Value($url->toString()))->toString(),
         );
-
-        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributes(): MapInterface
+    public function attributes(): Map
     {
         return $this->attributes;
     }
@@ -159,14 +152,14 @@ final class Graph implements GraphInterface
         return $node
             ->edges()
             ->reduce(
-                $nodes->put((string) $node->name(), $node),
+                ($nodes)($node->name()->toString(), $node),
                 function(Map $nodes, Edge $edge): Map {
                     if ($nodes->values()->contains($edge->to())) {
                         return $nodes;
                     }
 
                     return $this->accumulateNodes($nodes, $edge->to());
-                }
+                },
             );
     }
 }
