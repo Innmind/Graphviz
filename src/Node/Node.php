@@ -57,31 +57,25 @@ final class Node implements NodeInterface
         return $edge;
     }
 
-    public function target(UrlInterface $url): NodeInterface
+    public function target(UrlInterface $url): void
     {
         $this->attributes = $this->attributes->put(
             'URL',
             (new Value((string) $url))->toString(),
         );
-
-        return $this;
     }
 
-    public function displayAs(string $label): NodeInterface
+    public function displayAs(string $label): void
     {
         $this->attributes = $this->attributes->put(
             'label',
             (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function shaped(Shape $shape): NodeInterface
+    public function shaped(Shape $shape): void
     {
         $this->shape = $shape;
-
-        return $this;
     }
 
     public function hasAttributes(): bool

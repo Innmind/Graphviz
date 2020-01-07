@@ -38,18 +38,14 @@ final class Edge implements EdgeInterface
         return $this->to;
     }
 
-    public function asBidirectional(): EdgeInterface
+    public function asBidirectional(): void
     {
         $this->attributes = $this->attributes->put('dir', 'both');
-
-        return $this;
     }
 
-    public function withoutDirection(): EdgeInterface
+    public function withoutDirection(): void
     {
         $this->attributes = $this->attributes->put('dir', 'none');
-
-        return $this;
     }
 
     public function shaped(
@@ -57,7 +53,7 @@ final class Edge implements EdgeInterface
         Shape $shape2 = null,
         Shape $shape3 = null,
         Shape $shape4 = null
-    ): EdgeInterface {
+    ): void {
         $shape = $shape->toString();
         $shape2 = $shape2 ? $shape2->toString() : '';
         $shape3 = $shape3 ? $shape3->toString() : '';
@@ -72,56 +68,42 @@ final class Edge implements EdgeInterface
         ) {
             $this->attributes = $this->attributes->put('arrowtail', $value);
         }
-
-        return $this;
     }
 
-    public function displayAs(string $label): EdgeInterface
+    public function displayAs(string $label): void
     {
         $this->attributes = $this->attributes->put(
             'label',
             (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function useColor(RGBA $color): EdgeInterface
+    public function useColor(RGBA $color): void
     {
         $this->attributes = $this->attributes->put('color', (string) $color);
-
-        return $this;
     }
 
-    public function target(UrlInterface $url): EdgeInterface
+    public function target(UrlInterface $url): void
     {
         $this->attributes = $this->attributes->put(
             'URL',
             (new Value((string) $url))->toString(),
         );
-
-        return $this;
     }
 
-    public function dotted(): EdgeInterface
+    public function dotted(): void
     {
         $this->attributes = $this->attributes->put('style', 'dotted');
-
-        return $this;
     }
 
-    public function bold(): EdgeInterface
+    public function bold(): void
     {
         $this->attributes = $this->attributes->put('style', 'bold');
-
-        return $this;
     }
 
-    public function filled(): EdgeInterface
+    public function filled(): void
     {
         $this->attributes = $this->attributes->put('style', 'filled');
-
-        return $this;
     }
 
     public function hasAttributes(): bool

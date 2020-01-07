@@ -22,9 +22,9 @@ interface Node
      */
     public function edges(): SetInterface;
     public function linkedTo(self $node): Edge;
-    public function target(UrlInterface $url): self;
-    public function displayAs(string $label): self;
-    public function shaped(Shape $shape): self;
+    public function target(UrlInterface $url): void;
+    public function displayAs(string $label): void;
+    public function shaped(Shape $shape): void;
     public function hasAttributes(): bool;
 
     /**

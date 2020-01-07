@@ -77,7 +77,7 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->target($url = Url::fromString('example.com')));
+        $this->assertNull($node->target($url = Url::fromString('example.com')));
         $this->assertCount(1, $node->attributes());
         $this->assertSame((string) $url, $node->attributes()->get('URL'));
     }
@@ -86,7 +86,7 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->displayAs('watev'));
+        $this->assertNull($node->displayAs('watev'));
         $this->assertCount(1, $node->attributes());
         $this->assertSame('watev', $node->attributes()->get('label'));
     }
@@ -95,7 +95,7 @@ class NodeTest extends TestCase
     {
         $node = new Node(new Name('foo'));
 
-        $this->assertSame($node, $node->shaped($shape = Shape::ellipse()));
+        $this->assertNull($node->shaped($shape = Shape::ellipse()));
         $this->assertTrue($node->hasAttributes());
         $this->assertSame('ellipse', $node->attributes()->get('shape'));
     }

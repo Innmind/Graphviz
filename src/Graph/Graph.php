@@ -60,15 +60,13 @@ final class Graph implements GraphInterface
         return $this->name;
     }
 
-    public function cluster(GraphInterface $cluster): GraphInterface
+    public function cluster(GraphInterface $cluster): void
     {
         if ($cluster->isDirected() !== $this->directed) {
             throw new MixedGraphsNotAllowed;
         }
 
         $this->clusters = $this->clusters->add($cluster);
-
-        return $this;
     }
 
     /**
@@ -79,11 +77,9 @@ final class Graph implements GraphInterface
         return $this->clusters;
     }
 
-    public function add(Node $node): GraphInterface
+    public function add(Node $node): void
     {
         $this->roots = $this->roots->add($node);
-
-        return $this;
     }
 
     /**
@@ -109,41 +105,33 @@ final class Graph implements GraphInterface
         return Set::of(Node::class, ...$map->values());
     }
 
-    public function displayAs(string $label): GraphInterface
+    public function displayAs(string $label): void
     {
         $this->attributes = $this->attributes->put(
             'label',
             (new Value($label))->toString(),
         );
-
-        return $this;
     }
 
-    public function fillWithColor(RGBA $color): GraphInterface
+    public function fillWithColor(RGBA $color): void
     {
         $this->attributes = $this
             ->attributes
             ->put('style', 'filled')
             ->put('fillcolor', (string) $color);
-
-        return $this;
     }
 
-    public function colorizeBorderWith(RGBA $color): GraphInterface
+    public function colorizeBorderWith(RGBA $color): void
     {
         $this->attributes = $this->attributes->put('color', (string) $color);
-
-        return $this;
     }
 
-    public function target(UrlInterface $url): GraphInterface
+    public function target(UrlInterface $url): void
     {
         $this->attributes = $this->attributes->put(
             'URL',
             (new Value((string) $url))->toString(),
         );
-
-        return $this;
     }
 
     /**

@@ -59,7 +59,7 @@ class GraphTest extends TestCase
         $third->linkedTo($main);
 
 
-        $this->assertSame($graph, $graph->add($root));
+        $this->assertNull($graph->add($root));
         $this->assertCount(1, $graph->roots());
         $this->assertSame($root, $graph->roots()->current());
         $this->assertCount(3, $graph->nodes());
@@ -82,7 +82,7 @@ class GraphTest extends TestCase
         $this->assertCount(0, $root->clusters());
 
         $cluster = Graph::directed('foo');
-        $this->assertSame($root, $root->cluster($cluster));
+        $this->assertNull($root->cluster($cluster));
         $this->assertCount(1, $root->clusters());
         $this->assertSame($cluster, $root->clusters()->current());
     }
@@ -101,7 +101,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertSame($graph, $graph->displayAs('watev'));
+        $this->assertNull($graph->displayAs('watev'));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('watev', $graph->attributes()->get('label'));
     }
@@ -110,7 +110,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertSame($graph, $graph->fillWithColor(Colour::fromString('red')));
+        $this->assertNull($graph->fillWithColor(Colour::fromString('red')));
         $this->assertCount(2, $graph->attributes());
         $this->assertSame('filled', $graph->attributes()->get('style'));
         $this->assertSame('#ff0000', $graph->attributes()->get('fillcolor'));
@@ -120,7 +120,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertSame($graph, $graph->colorizeBorderWith(Colour::fromString('red')));
+        $this->assertNull($graph->colorizeBorderWith(Colour::fromString('red')));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('#ff0000', $graph->attributes()->get('color'));
     }
@@ -129,7 +129,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertSame($graph, $graph->target(Url::fromString('example.com')));
+        $this->assertNull($graph->target(Url::fromString('example.com')));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('example.com', $graph->attributes()->get('URL'));
     }

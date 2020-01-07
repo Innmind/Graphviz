@@ -15,13 +15,13 @@ interface Graph
 {
     public function isDirected(): bool;
     public function name(): Name;
-    public function cluster(self $cluster): self;
+    public function cluster(self $cluster): void;
 
     /**
      * @return SetInterface<self>
      */
     public function clusters(): SetInterface;
-    public function add(Node $node): self;
+    public function add(Node $node): void;
 
     /**
      * @return SetInterface<Node>
@@ -32,10 +32,10 @@ interface Graph
      * @return SetInterface<Node>
      */
     public function nodes(): SetInterface;
-    public function displayAs(string $label): self;
-    public function fillWithColor(RGBA $color): self;
-    public function colorizeBorderWith(RGBA $color): self;
-    public function target(UrlInterface $url): self;
+    public function displayAs(string $label): void;
+    public function fillWithColor(RGBA $color): void;
+    public function colorizeBorderWith(RGBA $color): void;
+    public function target(UrlInterface $url): void;
 
     /**
      * @return MapInterface<string, string>

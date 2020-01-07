@@ -44,7 +44,10 @@ class DotTest extends TestCase
         $main->linkedTo($printf);
         $execute->linkedTo($compare);
 
-        $output = $layout(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $layout($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -68,7 +71,10 @@ DOT;
     {
         $dot = new Dot(new DPI(200));
 
-        $output = $dot(Graph::directed()->add(new Node(new Name('main'))));
+        $graph = Graph::directed();
+        $graph->add(new Node(new Name('main')));
+
+        $output = $dot($graph);
         $expected = <<<DOT
 digraph G {
     dpi="200";
@@ -101,13 +107,15 @@ DOT;
         $init->linkedTo($makeString);
         $main->linkedTo($printf);
         $execute->linkedTo($compare);
-        $main
-            ->shaped(Shape::circle())
-            ->displayAs('Main Node')
-            ->target(Url::fromString('example.com'));
+        $main->shaped(Shape::circle());
+        $main->displayAs('Main Node');
+        $main->target(Url::fromString('example.com'));
         $parse->displayAs('Parse');
 
-        $output = $dot(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -135,15 +143,17 @@ DOT;
         $main = new Node(new Name('main'));
         $second = new Node(new Name('second'));
         $third = new Node(new Name('third'));
-        $main
-            ->linkedTo($second)
-            ->displayAs('watev')
-            ->withoutDirection();
+        $edge = $main->linkedTo($second);
+        $edge->displayAs('watev');
+        $edge->withoutDirection();
         $main
             ->linkedTo($third)
             ->asBidirectional();
 
-        $output = $dot(Graph::directed()->add($main));
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
@@ -161,9 +171,10 @@ DOT;
         $main = Node::named('main');
         $main->linkedTo(Node::named('second'));
 
-        $output = $dot(
-            Graph::undirected()->add($main)
-        );
+        $graph = Graph::undirected();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 graph G {
@@ -178,9 +189,10 @@ DOT;
     {
         $dot = new Dot;
 
-        $output = $dot(
-            Graph::directed('foo')->add(Node::named('main'))
-        );
+        $foo = Graph::directed('foo');
+        $foo->add(Node::named('main'));
+
+        $output = $dot($foo);
 
         $expected = <<<DOT
 digraph foo {
@@ -194,10 +206,10 @@ DOT;
     public function testRenderClusters()
     {
         $root = Graph::directed();
-        $firstCluster = Graph::directed('first')
-            ->displayAs('First')
-            ->fillWithColor(Colour::fromString('yellow'))
-            ->colorizeBorderWith(Colour::fromString('green'));
+        $firstCluster = Graph::directed('first');
+        $firstCluster->displayAs('First');
+        $firstCluster->fillWithColor(Colour::fromString('yellow'));
+        $firstCluster->colorizeBorderWith(Colour::fromString('green'));
         $secondCluster = Graph::directed('second');
         $thirdCluster = Graph::directed('third');
 
@@ -211,11 +223,10 @@ DOT;
         $first->linkedTo($third);
         $second->linkedTo($third);
 
-        $root
-            ->add($start)
-            ->cluster($firstCluster)
-            ->cluster($secondCluster)
-            ->cluster($thirdCluster);
+        $root->add($start);
+        $root->cluster($firstCluster);
+        $root->cluster($secondCluster);
+        $root->cluster($thirdCluster);
 
         $first = Node::named('first');
         $second = Node::named('second');
@@ -277,9 +288,10 @@ DOT;
         $main->linkedTo($second = Node::named('second'));
         $second->linkedTo($main);
 
-        $output = $dot(
-            Graph::directed()->add($main)
-        );
+        $graph = Graph::directed();
+        $graph->add($main);
+
+        $output = $dot($graph);
 
         $expected = <<<DOT
 digraph G {
