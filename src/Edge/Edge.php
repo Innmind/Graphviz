@@ -16,12 +16,14 @@ final class Edge implements EdgeInterface
 {
     private Node $from;
     private Node $to;
+    /** @var Map<string, string> */
     private Map $attributes;
 
     public function __construct(Node $from, Node $to)
     {
         $this->from = $from;
         $this->to = $to;
+        /** @var Map<string, string> */
         $this->attributes = Map::of('string', 'string');
     }
 

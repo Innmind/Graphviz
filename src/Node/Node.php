@@ -18,14 +18,18 @@ use Innmind\Immutable\{
 final class Node implements NodeInterface
 {
     private Name $name;
+    /** @var Set<Edge> */
     private Set $edges;
+    /** @var Map<string, string> */
     private Map $attributes;
     private ?Shape $shape = null;
 
     public function __construct(Name $name)
     {
         $this->name = $name;
+        /** @var Set<Edge> */
         $this->edges = Set::of(Edge::class);
+        /** @var Map<string, string> */
         $this->attributes = Map::of('string', 'string');
     }
 

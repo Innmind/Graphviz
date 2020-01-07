@@ -8,10 +8,12 @@ use Innmind\Immutable\Map;
 
 final class Shape
 {
+    /** @var Map<string, string> */
     private Map $attributes;
 
     private function __construct(string $name)
     {
+        /** @var Map<string, string> */
         $this->attributes = Map::of('string', 'string')
             ('shape', $name);
     }

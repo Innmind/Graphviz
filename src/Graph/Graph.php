@@ -22,16 +22,22 @@ final class Graph implements GraphInterface
 {
     private bool $directed;
     private Name $name;
+    /** @var Set<Node> */
     private Set $roots;
+    /** @var Set<GraphInterface> */
     private Set $clusters;
+    /** @var Map<string, string> */
     private Map $attributes;
 
     private function __construct(bool $directed, Name $name, Rankdir $rankdir = null)
     {
         $this->directed = $directed;
         $this->name = $name;
+        /** @var Set<Node> */
         $this->roots = Set::of(Node::class);
+        /** @var Set<GraphInterface> */
         $this->clusters = Set::of(GraphInterface::class);
+        /** @var Map<string, string> */
         $this->attributes = Map::of('string', 'string');
 
         if ($rankdir) {
@@ -101,6 +107,7 @@ final class Graph implements GraphInterface
             }
         );
 
+        /** @var Set<Node> */
         return Set::of(Node::class, ...unwrap($map->values()));
     }
 
