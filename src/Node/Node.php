@@ -9,26 +9,24 @@ use Innmind\Graphviz\{
     Attribute\Value,
     Exception\DomainException,
 };
-use Innmind\Url\UrlInterface;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
     Set,
-    MapInterface,
     Map,
 };
 
 final class Node implements NodeInterface
 {
     private Name $name;
-    private SetInterface $edges;
-    private MapInterface $attributes;
+    private Set $edges;
+    private Map $attributes;
     private ?Shape $shape = null;
 
     public function __construct(Name $name)
     {
         $this->name = $name;
-        $this->edges = new Set(Edge::class);
-        $this->attributes = new Map('string', 'string');
+        $this->edges = Set::of(Edge::class);
+        $this->attributes = Map::of('string', 'string');
     }
 
     public static function named(string $name): self
@@ -44,7 +42,7 @@ final class Node implements NodeInterface
     /**
      * {@inheritdoc}
      */
-    public function edges(): SetInterface
+    public function edges(): Set
     {
         return $this->edges;
     }
@@ -52,22 +50,22 @@ final class Node implements NodeInterface
     public function linkedTo(NodeInterface $node): Edge
     {
         $edge = new Edge\Edge($this, $node);
-        $this->edges = $this->edges->add($edge);
+        $this->edges = ($this->edges)($edge);
 
         return $edge;
     }
 
-    public function target(UrlInterface $url): void
+    public function target(Url $url): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'URL',
-            (new Value((string) $url))->toString(),
+            (new Value($url->toString()))->toString(),
         );
     }
 
     public function displayAs(string $label): void
     {
-        $this->attributes = $this->attributes->put(
+        $this->attributes = ($this->attributes)(
             'label',
             (new Value($label))->toString(),
         );
@@ -90,7 +88,7 @@ final class Node implements NodeInterface
     /**
      * {@inheritdoc}
      */
-    public function attributes(): MapInterface
+    public function attributes(): Map
     {
         $attributes = $this->attributes;
 

@@ -15,10 +15,10 @@
     },
     "require": {
         "php": "~7.4",
-        "innmind/immutable": "^2.6",
-        "innmind/url": "^2.0",
-        "innmind/colour": "^2.0",
-        "innmind/stream": "^1.4"
+        "innmind/immutable": "~3.0",
+        "innmind/url": "~3.0",
+        "innmind/colour": "~3.0",
+        "innmind/stream": "~2.0"
     },
     "autoload": {
         "psr-4": {

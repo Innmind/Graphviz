@@ -11,7 +11,7 @@ use Innmind\Graphviz\{
 };
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
-use Innmind\Immutable\MapInterface;
+use Innmind\Immutable\Map;
 use PHPUnit\Framework\TestCase;
 
 class EdgeTest extends TestCase
@@ -26,9 +26,9 @@ class EdgeTest extends TestCase
             )
         );
         $this->assertFalse($edge->hasAttributes());
-        $this->assertInstanceOf(MapInterface::class, $edge->attributes());
-        $this->assertSame('string', (string) $edge->attributes()->keyType());
-        $this->assertSame('string', (string) $edge->attributes()->valueType());
+        $this->assertInstanceOf(Map::class, $edge->attributes());
+        $this->assertSame('string', $edge->attributes()->keyType());
+        $this->assertSame('string', $edge->attributes()->valueType());
     }
 
     public function testNodes()
@@ -128,7 +128,7 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class)
         );
 
-        $this->assertNull($edge->useColor(Colour::fromString('red')));
+        $this->assertNull($edge->useColor(Colour::of('red')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color'));
@@ -141,7 +141,7 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class)
         );
 
-        $this->assertNull($edge->target(Url::fromString('example.com')));
+        $this->assertNull($edge->target(Url::of('example.com')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('example.com', $edge->attributes()->get('URL'));

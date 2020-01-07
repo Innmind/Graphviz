@@ -12,7 +12,7 @@ final class Name
 
     public function __construct(string $name)
     {
-        $name = new Str($name);
+        $name = Str::of($name);
 
         if (
             $name->length() === 0 ||
@@ -24,7 +24,7 @@ final class Name
             throw new DomainException;
         }
 
-        $this->value = (string) $name;
+        $this->value = $name->toString();
     }
 
     public function toString(): string

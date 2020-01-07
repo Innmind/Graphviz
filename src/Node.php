@@ -7,10 +7,10 @@ use Innmind\Graphviz\Node\{
     Name,
     Shape,
 };
-use Innmind\Url\UrlInterface;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
-    MapInterface,
+    Set,
+    Map,
 };
 
 interface Node
@@ -18,17 +18,17 @@ interface Node
     public function name(): Name;
 
     /**
-     * @return SetInterface<Edge>
+     * @return Set<Edge>
      */
-    public function edges(): SetInterface;
+    public function edges(): Set;
     public function linkedTo(self $node): Edge;
-    public function target(UrlInterface $url): void;
+    public function target(Url $url): void;
     public function displayAs(string $label): void;
     public function shaped(Shape $shape): void;
     public function hasAttributes(): bool;
 
     /**
-     * @return MapInterface<string, string>
+     * @return Map<string, string>
      */
-    public function attributes(): MapInterface;
+    public function attributes(): Map;
 }

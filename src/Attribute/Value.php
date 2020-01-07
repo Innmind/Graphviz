@@ -12,7 +12,7 @@ final class Value
 
     public function __construct(string $value)
     {
-        if ((new Str($value))->contains("\x00")) {
+        if (Str::of($value)->contains("\x00")) {
             throw new DomainException($value);
         }
 

@@ -12,13 +12,11 @@ final class Name
 
     public function __construct(string $name)
     {
-        $name = new Str($name);
-
-        if (!$name->matches('~[a-zA-Z0-9_]+~')) {
+        if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
             throw new DomainException;
         }
 
-        $this->value = (string) $name;
+        $this->value = $name;
     }
 
     public function toString(): string

@@ -14,6 +14,7 @@ use Innmind\Immutable\{
     Set,
     Sequence,
 };
+use function Innmind\Immutable\join;
 
 final class Dot
 {
@@ -27,7 +28,7 @@ final class Dot
     public function __invoke(Graph $graph): Readable
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
-        $output = new Str("$type {$graph->name()->toString()} {\n");
+        $output = Str::of("$type {$graph->name()->toString()} {\n");
 
         $output = $this->renderDPI($output);
         $output = $this->renderAttributes($output, $graph);
@@ -37,10 +38,8 @@ final class Dot
         $output = $this->renderStyledNodes($output, $graph);
 
         $output = $output->append('}');
-        $stream = \fopen('php://temp', 'r+');
-        \fwrite($stream, (string) $output);
 
-        return new Readable\Stream($stream);
+        return Readable\Stream::ofContent($output->toString());
     }
 
     private function renderDPI(Str $output): Str
@@ -94,7 +93,7 @@ final class Dot
         return $graph
             ->nodes()
             ->reduce(
-                new Set(Edge::class),
+                Set::of(Edge::class),
                 static function(Set $edges, Node $node): Set {
                     return $edges->merge($node->edges());
                 }
@@ -172,7 +171,7 @@ final class Dot
         $attributes = '';
 
         if ($edge->hasAttributes()) {
-            $attributes = (string) $edge
+            $attributes = $edge
                 ->attributes()
                 ->map(static function(string $key, string $value): string {
                     return sprintf(
@@ -181,9 +180,11 @@ final class Dot
                         $value
                     );
                 })
-                ->join(', ')
+                ->values();
+            $attributes = join(', ', $attributes)
                 ->prepend(' [')
-                ->append(']');
+                ->append(']')
+                ->toString();
         }
 
         return $output
@@ -199,7 +200,7 @@ final class Dot
 
     private function renderNodeStyle(Str $output, Node $node): Str
     {
-        $attributes = (string) $node
+        $attributes = $node
             ->attributes()
             ->map(static function(string $key, string $value): string {
                 return sprintf(
@@ -208,9 +209,11 @@ final class Dot
                     $value
                 );
             })
-            ->join(', ')
+            ->values();
+        $attributes = join(', ', $attributes)
             ->prepend(' [')
-            ->append(']');
+            ->append(']')
+            ->toString();
 
         return $output
             ->append('    '.$node->name()->toString())

@@ -5,10 +5,10 @@ namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\Graph\Name;
 use Innmind\Colour\RGBA;
-use Innmind\Url\UrlInterface;
+use Innmind\Url\Url;
 use Innmind\Immutable\{
-    SetInterface,
-    MapInterface
+    Set,
+    Map,
 };
 
 interface Graph
@@ -18,27 +18,27 @@ interface Graph
     public function cluster(self $cluster): void;
 
     /**
-     * @return SetInterface<self>
+     * @return Set<self>
      */
-    public function clusters(): SetInterface;
+    public function clusters(): Set;
     public function add(Node $node): void;
 
     /**
-     * @return SetInterface<Node>
+     * @return Set<Node>
      */
-    public function roots(): SetInterface;
+    public function roots(): Set;
 
     /**
-     * @return SetInterface<Node>
+     * @return Set<Node>
      */
-    public function nodes(): SetInterface;
+    public function nodes(): Set;
     public function displayAs(string $label): void;
     public function fillWithColor(RGBA $color): void;
     public function colorizeBorderWith(RGBA $color): void;
-    public function target(UrlInterface $url): void;
+    public function target(Url $url): void;
 
     /**
-     * @return MapInterface<string, string>
+     * @return Map<string, string>
      */
-    public function attributes(): MapInterface;
+    public function attributes(): Map;
 }
