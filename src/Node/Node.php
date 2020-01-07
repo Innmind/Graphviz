@@ -7,22 +7,22 @@ use Innmind\Graphviz\{
     Node as NodeInterface,
     Edge,
     Attribute\Value,
-    Exception\DomainException
+    Exception\DomainException,
 };
 use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     SetInterface,
     Set,
     MapInterface,
-    Map
+    Map,
 };
 
 final class Node implements NodeInterface
 {
-    private $name;
-    private $edges;
-    private $attributes;
-    private $shape;
+    private Name $name;
+    private SetInterface $edges;
+    private MapInterface $attributes;
+    private ?Shape $shape = null;
 
     public function __construct(Name $name)
     {

@@ -6,12 +6,12 @@ namespace Innmind\Graphviz\Node;
 use Innmind\Colour\RGBA;
 use Innmind\Immutable\{
     MapInterface,
-    Map
+    Map,
 };
 
 final class Shape
 {
-    private $attributes;
+    private MapInterface $attributes;
 
     private function __construct(string $name)
     {

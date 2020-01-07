@@ -6,18 +6,18 @@ namespace Innmind\Graphviz\Layout;
 use Innmind\Graphviz\{
     Node,
     Edge,
-    Graph
+    Graph,
 };
 use Innmind\Stream\Readable;
 use Innmind\Immutable\{
     Str,
     Set,
-    Sequence
+    Sequence,
 };
 
 final class Dot
 {
-    private $dpi;
+    private ?DPI $dpi;
 
     public function __construct(DPI $dpi = null)
     {

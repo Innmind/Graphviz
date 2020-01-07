@@ -8,7 +8,7 @@ use Innmind\Graphviz\{
     Node,
     Edge,
     Attribute\Value,
-    Exception\MixedGraphsNotAllowed
+    Exception\MixedGraphsNotAllowed,
 };
 use Innmind\Colour\RGBA;
 use Innmind\Url\UrlInterface;
@@ -16,16 +16,16 @@ use Innmind\Immutable\{
     SetInterface,
     Set,
     MapInterface,
-    Map
+    Map,
 };
 
 final class Graph implements GraphInterface
 {
-    private $directed;
-    private $name;
-    private $roots;
-    private $clusters;
-    private $attributes;
+    private bool $directed;
+    private Name $name;
+    private SetInterface $roots;
+    private SetInterface $clusters;
+    private MapInterface $attributes;
 
     private function __construct(bool $directed, Name $name, Rankdir $rankdir = null)
     {

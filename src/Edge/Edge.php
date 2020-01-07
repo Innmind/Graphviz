@@ -6,20 +6,20 @@ namespace Innmind\Graphviz\Edge;
 use Innmind\Graphviz\{
     Edge as EdgeInterface,
     Node,
-    Attribute\Value
+    Attribute\Value,
 };
 use Innmind\Colour\RGBA;
 use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     MapInterface,
-    Map
+    Map,
 };
 
 final class Edge implements EdgeInterface
 {
-    private $from;
-    private $to;
-    private $attributes;
+    private Node $from;
+    private Node $to;
+    private MapInterface $attributes;
 
     public function __construct(Node $from, Node $to)
     {

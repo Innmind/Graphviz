@@ -5,12 +5,12 @@ namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\Node\{
     Name,
-    Shape
+    Shape,
 };
 use Innmind\Url\UrlInterface;
 use Innmind\Immutable\{
     SetInterface,
-    MapInterface
+    MapInterface,
 };
 
 interface Node

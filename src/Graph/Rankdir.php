@@ -5,9 +5,9 @@ namespace Innmind\Graphviz\Graph;
 
 final class Rankdir
 {
-    private static $lr;
-    private static $tb;
-    private $value;
+    private static ?self $lr;
+    private static ?self $tb;
+    private string $value;
 
     private function __construct(string $value)
     {
