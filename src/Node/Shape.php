@@ -42,14 +42,14 @@ final class Shape
         if ($distortion) {
             $self->attributes = ($self->attributes)(
                 'distortion',
-                sprintf('%0.1f', $distortion)
+                \sprintf('%0.1f', $distortion),
             );
         }
 
         if ($skew) {
             $self->attributes = ($self->attributes)(
                 'skew',
-                sprintf('%0.1f', $skew)
+                \sprintf('%0.1f', $skew),
             );
         }
 

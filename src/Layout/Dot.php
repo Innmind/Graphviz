@@ -12,7 +12,6 @@ use Innmind\Stream\Readable;
 use Innmind\Immutable\{
     Str,
     Set,
-    Sequence,
 };
 use function Innmind\Immutable\join;
 
@@ -49,9 +48,9 @@ final class Dot
         }
 
         return $output
-            ->append(sprintf(
+            ->append(\sprintf(
                 '    dpi="%s";',
-                $this->dpi->toInt()
+                $this->dpi->toInt(),
             ))
             ->append("\n");
     }
@@ -64,10 +63,10 @@ final class Dot
                 $output,
                 static function(Str $output, string $key, string $value): Str {
                     return $output
-                        ->append(sprintf(
+                        ->append(\sprintf(
                             '    %s="%s";',
                             $key,
-                            $value
+                            $value,
                         ))
                         ->append("\n");
                 }
@@ -82,7 +81,7 @@ final class Dot
                 $output,
                 function(Str $output, Graph $cluster): Str {
                     return $this->renderCluster($output, $cluster);
-                }
+                },
             );
     }
 
@@ -96,13 +95,13 @@ final class Dot
                 Set::of(Edge::class),
                 static function(Set $edges, Node $node): Set {
                     return $edges->merge($node->edges());
-                }
+                },
             )
             ->reduce(
                 $output,
                 function(Str $output, Edge $edge) use ($type): Str {
                     return $this->renderEdge($output, $edge, $type);
-                }
+                },
             );
     }
 
@@ -120,7 +119,7 @@ final class Dot
                     return $output
                         ->append('    '.$node->name()->toString())
                         ->append(";\n");
-                }
+                },
             );
     }
 
@@ -135,7 +134,7 @@ final class Dot
                 $output,
                 function(Str $output, Node $node): Str {
                     return $this->renderNodeStyle($output, $node);
-                }
+                },
             );
     }
 
@@ -151,12 +150,12 @@ final class Dot
             ->reduce(
                 $output,
                 static function(Str $output, string $key, string $value): Str {
-                    return $output->append(sprintf(
+                    return $output->append(\sprintf(
                         "        %s=\"%s\"\n",
                         $key,
-                        $value
+                        $value,
                     ));
-                }
+                },
             );
 
         $output = $this->renderEdges($output, $cluster);
@@ -174,10 +173,10 @@ final class Dot
             $attributes = $edge
                 ->attributes()
                 ->map(static function(string $key, string $value): string {
-                    return sprintf(
+                    return \sprintf(
                         '%s="%s"',
                         $key,
-                        $value
+                        $value,
                     );
                 })
                 ->values();
@@ -188,7 +187,7 @@ final class Dot
         }
 
         return $output
-            ->append(sprintf(
+            ->append(\sprintf(
                 '    %s %s %s',
                 $edge->from()->name()->toString(),
                 $type,
@@ -203,10 +202,10 @@ final class Dot
         $attributes = $node
             ->attributes()
             ->map(static function(string $key, string $value): string {
-                return sprintf(
+                return \sprintf(
                     '%s="%s"',
                     $key,
-                    $value
+                    $value,
                 );
             })
             ->values();

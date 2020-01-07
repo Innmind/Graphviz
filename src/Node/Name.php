@@ -21,7 +21,7 @@ final class Name
             $name->contains('.') ||
             $name->contains("\x00")
         ) {
-            throw new DomainException;
+            throw new DomainException($name->toString());
         }
 
         $this->value = $name->toString();

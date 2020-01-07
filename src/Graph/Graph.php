@@ -104,7 +104,7 @@ final class Graph implements GraphInterface
             Map::of('string', Node::class),
             function(Map $nodes, Node $node): Map {
                 return $this->accumulateNodes($nodes, $node);
-            }
+            },
         );
 
         /** @var Set<Node> */
@@ -159,7 +159,7 @@ final class Graph implements GraphInterface
                     }
 
                     return $this->accumulateNodes($nodes, $edge->to());
-                }
+                },
             );
     }
 }

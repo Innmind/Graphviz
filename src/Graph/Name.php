@@ -13,7 +13,7 @@ final class Name
     public function __construct(string $name)
     {
         if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
-            throw new DomainException;
+            throw new DomainException($name);
         }
 
         $this->value = $name;
