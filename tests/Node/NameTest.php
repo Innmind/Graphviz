@@ -8,22 +8,21 @@ use Innmind\Graphviz\{
     Exception\DomainException
 };
 use PHPUnit\Framework\TestCase;
-use Eris\{
-    Generator,
-    TestTrait
+use Innmind\BlackBox\{
+    PHPUnit\BlackBox,
+    Set,
 };
 
 class NameTest extends TestCase
 {
-    use TestTrait;
+    use BlackBox;
 
     public function testInterface()
     {
         $this
-            ->minimumEvaluationRatio(0.4)
-            ->forAll(Generator\string())
-            ->when(static function(string $string): bool {
-                return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false;
+            ->forAll(Set\Strings::any())
+            ->filter(static function(string $string): bool {
+                return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false && strpos($string, "\x00") === false;
             })
             ->then(function(string $string): void {
                 $this->assertSame($string, (new Name($string))->toString());
