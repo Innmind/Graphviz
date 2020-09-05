@@ -14,8 +14,8 @@ final class Shape
     private function __construct(string $name)
     {
         /** @var Map<string, string> */
-        $this->attributes = Map::of('string', 'string')
-            ('shape', $name);
+        $attributes = Map::of('string', 'string');
+        $this->attributes = ($attributes)('shape', $name);
     }
 
     public static function box(): self
