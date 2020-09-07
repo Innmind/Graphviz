@@ -5,14 +5,14 @@ namespace Tests\Innmind\Graphviz\Edge;
 
 use Innmind\Graphviz\Edge\Shape;
 use PHPUnit\Framework\TestCase;
-use Eris\{
-    Generator,
-    TestTrait
+use Innmind\BlackBox\{
+    PHPUnit\BlackBox,
+    Set,
 };
 
 class ShapeTest extends TestCase
 {
-    use TestTrait;
+    use BlackBox;
 
     public function testShape()
     {
@@ -66,13 +66,12 @@ class ShapeTest extends TestCase
     public function testSidesAreExclusive()
     {
         $this
-            ->minimumEvaluationRatio(0.1)
             ->forAll(
                 $this->shapes(),
-                Generator\elements('right', 'left'),
-                Generator\elements('right', 'left')
+                Set\Elements::of('right', 'left'),
+                Set\Elements::of('right', 'left')
             )
-            ->when(static function(string $shape, string $side1, string $side2): bool {
+            ->filter(static function(string $shape, string $side1, string $side2): bool {
                 return $side1 !== $side2;
             })
             ->then(function(string $shape, string $side1, string $side2): void {
@@ -93,7 +92,7 @@ class ShapeTest extends TestCase
         $this
             ->forAll(
                 $this->shapes(),
-                Generator\elements('right', 'left')
+                Set\Elements::of('right', 'left')
             )
             ->then(function(string $shape, string $side): void {
                 $sideChar = substr($side, 0, 1);
@@ -108,9 +107,9 @@ class ShapeTest extends TestCase
             });
     }
 
-    public function shapes(): Generator
+    public function shapes(): Set
     {
-        return Generator\elements(
+        return Set\Elements::of(
             'box',
             'crow',
             'curve',
