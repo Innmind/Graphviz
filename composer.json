@@ -34,8 +34,5 @@
         "phpunit/phpunit": "~8.0",
         "vimeo/psalm": "~4.4",
         "innmind/black-box": "^4.12"
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit --colors=always"
     }
 }
