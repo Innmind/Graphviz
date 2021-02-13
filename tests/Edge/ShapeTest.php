@@ -75,7 +75,7 @@ class ShapeTest extends TestCase
                 return $side1 !== $side2;
             })
             ->then(function(string $shape, string $side1, string $side2): void {
-                $side = substr($side2, 0, 1);
+                $side = \substr($side2, 0, 1);
 
                 $this->assertSame(
                     $side.$shape,
@@ -95,7 +95,7 @@ class ShapeTest extends TestCase
                 Set\Elements::of('right', 'left')
             )
             ->then(function(string $shape, string $side): void {
-                $sideChar = substr($side, 0, 1);
+                $sideChar = \substr($side, 0, 1);
 
                 $this->assertSame(
                     'o'.$sideChar.$shape,

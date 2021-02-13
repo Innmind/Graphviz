@@ -110,9 +110,6 @@ final class Edge implements EdgeInterface
         return $this->attributes->size() > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributes(): Map
     {
         return $this->attributes;

@@ -140,7 +140,7 @@ final class Dot
             );
     }
 
-    public function renderCluster(Str $output, Graph $cluster): Str
+    private function renderCluster(Str $output, Graph $cluster): Str
     {
         $output = $output
             ->append('    subgraph cluster_')

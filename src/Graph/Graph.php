@@ -74,9 +74,6 @@ final class Graph implements GraphInterface
         $this->clusters = ($this->clusters)($cluster);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clusters(): Set
     {
         return $this->clusters;
@@ -87,17 +84,11 @@ final class Graph implements GraphInterface
         $this->roots = ($this->roots)($node);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function roots(): Set
     {
         return $this->roots;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function nodes(): Set
     {
         $map = $this->roots->reduce(
@@ -139,9 +130,6 @@ final class Graph implements GraphInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributes(): Map
     {
         return $this->attributes;

@@ -47,7 +47,6 @@ class ShapeTest extends TestCase
         $this->assertSame('0.75', $shape->attributes()->get('width'));
         $this->assertSame('0.5', $shape->attributes()->get('height'));
 
-
         $shape = Shape::ellipse(.2, 2);
         $this->assertCount(3, $shape->attributes());
         $this->assertSame('ellipse', $shape->attributes()->get('shape'));

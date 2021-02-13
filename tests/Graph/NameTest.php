@@ -22,7 +22,7 @@ class NameTest extends TestCase
         $this
             ->forAll(Set\Strings::any())
             ->filter(static function(string $string): bool {
-                return (bool) preg_match('~[a-zA-Z0-9_]+~', $string);
+                return (bool) \preg_match('~[a-zA-Z0-9_]+~', $string);
             })
             ->then(function(string $string): void {
                 $this->assertSame($string, (new Name($string))->toString());
@@ -34,7 +34,7 @@ class NameTest extends TestCase
         $this
             ->forAll(Set\Strings::any())
             ->filter(static function(string $string): bool {
-                return !preg_match('~[a-zA-Z0-9_]+~', $string);
+                return !\preg_match('~[a-zA-Z0-9_]+~', $string);
             })
             ->then(function(string $string): void {
                 $this->expectException(DomainException::class);

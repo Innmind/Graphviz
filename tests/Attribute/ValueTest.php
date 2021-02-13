@@ -21,9 +21,9 @@ class ValueTest extends TestCase
     {
         $this
             ->forAll(Set\Decorate::immutable(
-                fn($chars) => \implode('', $chars),
+                static fn($chars) => \implode('', $chars),
                 Set\Sequence::of(
-                    Set\Unicode::any()->filter(fn($s) => $s !== "\x00"),
+                    Set\Unicode::any()->filter(static fn($s) => $s !== "\x00"),
                 ),
             ))
             ->then(function(string $string): void {

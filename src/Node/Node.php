@@ -43,9 +43,6 @@ final class Node implements NodeInterface
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function edges(): Set
     {
         return $this->edges;
@@ -89,9 +86,6 @@ final class Node implements NodeInterface
         return $this->attributes->count() > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributes(): Map
     {
         $attributes = $this->attributes;

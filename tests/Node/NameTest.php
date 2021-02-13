@@ -22,7 +22,7 @@ class NameTest extends TestCase
         $this
             ->forAll(Set\Strings::any())
             ->filter(static function(string $string): bool {
-                return strlen($string) > 0 && strpos($string, '->') === false && strpos($string, '-') === false && strpos($string, '.') === false && strpos($string, "\x00") === false;
+                return \strlen($string) > 0 && \strpos($string, '->') === false && \strpos($string, '-') === false && \strpos($string, '.') === false && \strpos($string, "\x00") === false;
             })
             ->then(function(string $string): void {
                 $this->assertSame($string, (new Name($string))->toString());
