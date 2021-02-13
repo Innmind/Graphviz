@@ -62,7 +62,6 @@ class GraphTest extends TestCase
         $second->linkedTo($third = Node\Node::named('third'));
         $third->linkedTo($main);
 
-
         $this->assertNull($graph->add($root));
         $this->assertCount(1, $graph->roots());
         $this->assertSame($root, first($graph->roots()));

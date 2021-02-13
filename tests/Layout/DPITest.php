@@ -8,19 +8,19 @@ use Innmind\Graphviz\{
     Exception\DomainException
 };
 use PHPUnit\Framework\TestCase;
-use Eris\{
-    Generator,
-    TestTrait
+use Innmind\BlackBox\{
+    PHPUnit\BlackBox,
+    Set,
 };
 
 class DPITest extends TestCase
 {
-    use TestTrait;
+    use BlackBox;
 
     public function testInterface()
     {
         $this
-            ->forAll(Generator\pos())
+            ->forAll(Set\Integers::above(1))
             ->then(function(int $int): void {
                 $this->assertSame($int, (new DPI($int))->toInt());
             });
@@ -29,15 +29,13 @@ class DPITest extends TestCase
     public function testThrowWhenLowerThanOne()
     {
         $this
-            ->forAll(Generator\neg())
+            ->forAll(Set\Integers::below(0))
             ->then(function(int $int): void {
-                $this->expectException(DomainException::class);
-
-                new DPI($int);
+                try {
+                    new DPI($int);
+                } catch (\Throwable $e) {
+                    $this->assertInstanceOf(DomainException::class, $e);
+                }
             });
-
-        $this->expectException(DomainException::class);
-
-        new DPI(0);
     }
 }

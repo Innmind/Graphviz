@@ -8,19 +8,24 @@ use Innmind\Graphviz\{
     Exception\DomainException
 };
 use PHPUnit\Framework\TestCase;
-use Eris\{
-    Generator,
-    TestTrait
+use Innmind\BlackBox\{
+    PHPUnit\BlackBox,
+    Set,
 };
 
 class ValueTest extends TestCase
 {
-    use TestTrait;
+    use BlackBox;
 
     public function testInterface()
     {
         $this
-            ->forAll(Generator\string())
+            ->forAll(Set\Decorate::immutable(
+                static fn($chars) => \implode('', $chars),
+                Set\Sequence::of(
+                    Set\Unicode::any()->filter(static fn($s) => $s !== "\x00"),
+                ),
+            ))
             ->then(function(string $string): void {
                 $this->assertSame($string, (new Value($string))->toString());
             });

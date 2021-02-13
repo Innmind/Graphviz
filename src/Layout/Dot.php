@@ -89,20 +89,22 @@ final class Dot
     {
         $type = $graph->isDirected() ? '->' : '--';
 
-        return $graph
+        /** @var Set<Edge> */
+        $edges = $graph
             ->nodes()
             ->reduce(
                 Set::of(Edge::class),
                 static function(Set $edges, Node $node): Set {
                     return $edges->merge($node->edges());
                 },
-            )
-            ->reduce(
-                $output,
-                function(Str $output, Edge $edge) use ($type): Str {
-                    return $this->renderEdge($output, $edge, $type);
-                },
             );
+
+        return $edges->reduce(
+            $output,
+            function(Str $output, Edge $edge) use ($type): Str {
+                return $this->renderEdge($output, $edge, $type);
+            },
+        );
     }
 
     private function renderLonelyRoots(Str $output, Graph $graph): Str
@@ -138,7 +140,7 @@ final class Dot
             );
     }
 
-    public function renderCluster(Str $output, Graph $cluster): Str
+    private function renderCluster(Str $output, Graph $cluster): Str
     {
         $output = $output
             ->append('    subgraph cluster_')

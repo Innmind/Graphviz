@@ -1,9 +1,8 @@
 # Graphviz
 
-| `develop` |
-|-----------|
-| [![codecov](https://codecov.io/gh/Innmind/Graphviz/branch/develop/graph/badge.svg)](https://codecov.io/gh/Innmind/Graphviz) |
-| [![Build Status](https://github.com/Innmind/Graphviz/workflows/CI/badge.svg)](https://github.com/Innmind/Graphviz/actions?query=workflow%3ACI) |
+[![Build Status](https://github.com/innmind/graphviz/workflows/CI/badge.svg?branch=master)](https://github.com/innmind/graphviz/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/innmind/graphviz/branch/develop/graph/badge.svg)](https://codecov.io/gh/innmind/graphviz)
+[![Type Coverage](https://shepherd.dev/github/innmind/graphviz/coverage.svg)](https://shepherd.dev/github/innmind/graphviz)
 
 Graphviz model to help build graphs. This model goal is to express the possibilities offered by Graphviz (though note that all features are not implemented).
 
