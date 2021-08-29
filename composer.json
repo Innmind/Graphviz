@@ -14,7 +14,7 @@
         "issues": "http://github.com/Innmind/Graphviz/issues"
     },
     "require": {
-        "php": "~7.4|~8.0",
+        "php": "~8.0",
         "innmind/immutable": "~3.0",
         "innmind/url": "~3.0",
         "innmind/colour": "~3.0",
