@@ -28,9 +28,9 @@ final class Node implements NodeInterface
     {
         $this->name = $name;
         /** @var Set<Edge> */
-        $this->edges = Set::of(Edge::class);
+        $this->edges = Set::of();
         /** @var Map<string, string> */
-        $this->attributes = Map::of('string', 'string');
+        $this->attributes = Map::of();
     }
 
     public static function named(string $name): self

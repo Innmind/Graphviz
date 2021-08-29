@@ -16,7 +16,6 @@ use Innmind\Immutable\{
     Set,
     Map,
 };
-use function Innmind\Immutable\unwrap;
 
 final class Graph implements GraphInterface
 {
@@ -34,11 +33,11 @@ final class Graph implements GraphInterface
         $this->directed = $directed;
         $this->name = $name;
         /** @var Set<Node> */
-        $this->roots = Set::of(Node::class);
+        $this->roots = Set::of();
         /** @var Set<GraphInterface> */
-        $this->clusters = Set::of(GraphInterface::class);
+        $this->clusters = Set::of();
         /** @var Map<string, string> */
-        $this->attributes = Map::of('string', 'string');
+        $this->attributes = Map::of();
 
         if ($rankdir) {
             $this->attributes = ($this->attributes)('rankdir', $rankdir->toString());
@@ -91,15 +90,16 @@ final class Graph implements GraphInterface
 
     public function nodes(): Set
     {
+        /** @var Map<string, Node> */
         $map = $this->roots->reduce(
-            Map::of('string', Node::class),
+            Map::of(),
             function(Map $nodes, Node $node): Map {
                 return $this->accumulateNodes($nodes, $node);
             },
         );
 
         /** @var Set<Node> */
-        return Set::of(Node::class, ...unwrap($map->values()));
+        return Set::of(...$map->values()->toList());
     }
 
     public function displayAs(string $label): void

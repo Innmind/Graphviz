@@ -93,7 +93,7 @@ final class Dot
         $edges = $graph
             ->nodes()
             ->reduce(
-                Set::of(Edge::class),
+                Set::of(),
                 static function(Set $edges, Node $node): Set {
                     return $edges->merge($node->edges());
                 },

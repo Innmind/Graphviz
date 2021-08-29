@@ -27,8 +27,6 @@ class EdgeTest extends TestCase
         );
         $this->assertFalse($edge->hasAttributes());
         $this->assertInstanceOf(Map::class, $edge->attributes());
-        $this->assertSame('string', $edge->attributes()->keyType());
-        $this->assertSame('string', $edge->attributes()->valueType());
     }
 
     public function testNodes()
@@ -52,7 +50,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->asBidirectional());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('both', $edge->attributes()->get('dir'));
+        $this->assertSame('both', $edge->attributes()->get('dir')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testWithoutDirection()
@@ -65,7 +66,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->withoutDirection());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('none', $edge->attributes()->get('dir'));
+        $this->assertSame('none', $edge->attributes()->get('dir')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testShaped()
@@ -85,7 +89,10 @@ class EdgeTest extends TestCase
         );
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead'));
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testShapedWhenBidirectional()
@@ -104,8 +111,14 @@ class EdgeTest extends TestCase
 
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(3, $edge->attributes());
-        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowtail'));
-        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead'));
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowtail')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
+        $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testDisplayAs()
@@ -118,7 +131,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->displayAs('foo'));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('foo', $edge->attributes()->get('label'));
+        $this->assertSame('foo', $edge->attributes()->get('label')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testUseColor()
@@ -131,7 +147,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->useColor(Colour::of('red')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('#ff0000', $edge->attributes()->get('color'));
+        $this->assertSame('#ff0000', $edge->attributes()->get('color')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testTarget()
@@ -144,7 +163,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->target(Url::of('example.com')));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('example.com', $edge->attributes()->get('URL'));
+        $this->assertSame('example.com', $edge->attributes()->get('URL')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testDotted()
@@ -157,7 +179,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->dotted());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('dotted', $edge->attributes()->get('style'));
+        $this->assertSame('dotted', $edge->attributes()->get('style')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testBold()
@@ -170,7 +195,10 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->bold());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('bold', $edge->attributes()->get('style'));
+        $this->assertSame('bold', $edge->attributes()->get('style')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testFilled()
@@ -183,6 +211,9 @@ class EdgeTest extends TestCase
         $this->assertNull($edge->filled());
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
-        $this->assertSame('filled', $edge->attributes()->get('style'));
+        $this->assertSame('filled', $edge->attributes()->get('style')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 }

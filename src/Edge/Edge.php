@@ -24,7 +24,7 @@ final class Edge implements EdgeInterface
         $this->from = $from;
         $this->to = $to;
         /** @var Map<string, string> */
-        $this->attributes = Map::of('string', 'string');
+        $this->attributes = Map::of();
     }
 
     public function from(): Node
@@ -61,12 +61,14 @@ final class Edge implements EdgeInterface
 
         $this->attributes = ($this->attributes)('arrowhead', $value);
 
-        if (
-            $this->attributes->contains('dir') &&
-            $this->attributes->get('dir') === 'both'
-        ) {
-            $this->attributes = ($this->attributes)('arrowtail', $value);
-        }
+        $this->attributes = $this
+            ->attributes
+            ->get('dir')
+            ->filter(static fn($dir) => $dir === 'both')
+            ->match(
+                fn() => ($this->attributes)('arrowtail', $value),
+                fn() => $this->attributes,
+            );
     }
 
     public function displayAs(string $label): void

@@ -51,7 +51,6 @@ class NodeTest extends TestCase
         $to = new Node(new Name('bar'));
 
         $this->assertInstanceOf(Set::class, $node->edges());
-        $this->assertSame(Edge::class, $node->edges()->type());
         $this->assertCount(0, $node->edges());
 
         $edge = $node->linkedTo($to);
@@ -68,8 +67,6 @@ class NodeTest extends TestCase
         $node = new Node(new Name('foo'));
 
         $this->assertInstanceOf(Map::class, $node->attributes());
-        $this->assertSame('string', $node->attributes()->keyType());
-        $this->assertSame('string', $node->attributes()->valueType());
         $this->assertCount(0, $node->attributes());
     }
 
@@ -79,7 +76,10 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->target($url = Url::of('example.com')));
         $this->assertCount(1, $node->attributes());
-        $this->assertSame($url->toString(), $node->attributes()->get('URL'));
+        $this->assertSame($url->toString(), $node->attributes()->get('URL')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testLabel()
@@ -88,7 +88,10 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->displayAs('watev'));
         $this->assertCount(1, $node->attributes());
-        $this->assertSame('watev', $node->attributes()->get('label'));
+        $this->assertSame('watev', $node->attributes()->get('label')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testShape()
@@ -97,6 +100,9 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->shaped($shape = Shape::ellipse()));
         $this->assertTrue($node->hasAttributes());
-        $this->assertSame('ellipse', $node->attributes()->get('shape'));
+        $this->assertSame('ellipse', $node->attributes()->get('shape')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 }
