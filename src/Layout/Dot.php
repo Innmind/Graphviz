@@ -167,13 +167,11 @@ final class Dot
         if (!$edge->attributes()->empty()) {
             $attributes = $edge
                 ->attributes()
-                ->map(static function(string $key, string $value): string {
-                    return \sprintf(
-                        '%s="%s"',
-                        $key,
-                        $value,
-                    );
-                })
+                ->map(static fn($key, $value) => \sprintf(
+                    '%s="%s"',
+                    $key,
+                    $value,
+                ))
                 ->values();
             $attributes = Str::of(', ')
                 ->join($attributes)
@@ -196,13 +194,11 @@ final class Dot
     {
         $attributes = $node
             ->attributes()
-            ->map(static function(string $key, string $value): string {
-                return \sprintf(
-                    '%s="%s"',
-                    $key,
-                    $value,
-                );
-            })
+            ->map(static fn($key, $value) => \sprintf(
+                '%s="%s"',
+                $key,
+                $value,
+            ))
             ->values();
         $attributes = Str::of(', ')
             ->join($attributes)
