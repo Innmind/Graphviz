@@ -3,32 +3,114 @@ declare(strict_types = 1);
 
 namespace Innmind\Graphviz;
 
-use Innmind\Graphviz\Edge\Shape;
+use Innmind\Graphviz\{
+    Edge\Shape,
+    Attribute\Value,
+};
 use Innmind\Colour\RGBA;
 use Innmind\Url\Url;
 use Innmind\Immutable\Map;
 
-interface Edge
+final class Edge
 {
-    public function from(): Node;
-    public function to(): Node;
-    public function asBidirectional(): void;
-    public function withoutDirection(): void;
+    private Node $from;
+    private Node $to;
+    /** @var Map<string, string> */
+    private Map $attributes;
+
+    public function __construct(Node $from, Node $to)
+    {
+        $this->from = $from;
+        $this->to = $to;
+        /** @var Map<string, string> */
+        $this->attributes = Map::of();
+    }
+
+    public function from(): Node
+    {
+        return $this->from;
+    }
+
+    public function to(): Node
+    {
+        return $this->to;
+    }
+
+    public function asBidirectional(): void
+    {
+        $this->attributes = ($this->attributes)('dir', 'both');
+    }
+
+    public function withoutDirection(): void
+    {
+        $this->attributes = ($this->attributes)('dir', 'none');
+    }
+
     public function shaped(
         Shape $shape,
         Shape $shape2 = null,
         Shape $shape3 = null,
         Shape $shape4 = null,
-    ): void;
-    public function displayAs(string $label): void;
-    public function useColor(RGBA $color): void;
-    public function target(Url $url): void;
-    public function dotted(): void;
-    public function bold(): void;
-    public function filled(): void;
+    ): void {
+        $shape = $shape->toString();
+        $shape2 = $shape2 ? $shape2->toString() : '';
+        $shape3 = $shape3 ? $shape3->toString() : '';
+        $shape4 = $shape4 ? $shape4->toString() : '';
+        $value = $shape.$shape2.$shape3.$shape4;
+
+        $this->attributes = ($this->attributes)('arrowhead', $value);
+
+        $this->attributes = $this
+            ->attributes
+            ->get('dir')
+            ->filter(static fn($dir) => $dir === 'both')
+            ->match(
+                fn() => ($this->attributes)('arrowtail', $value),
+                fn() => $this->attributes,
+            );
+    }
+
+    public function displayAs(string $label): void
+    {
+        $this->attributes = ($this->attributes)(
+            'label',
+            (new Value($label))->toString(),
+        );
+    }
+
+    public function useColor(RGBA $color): void
+    {
+        $this->attributes = ($this->attributes)('color', $color->toString());
+    }
+
+    public function target(Url $url): void
+    {
+        $this->attributes = ($this->attributes)(
+            'URL',
+            (new Value($url->toString()))->toString(),
+        );
+    }
+
+    public function dotted(): void
+    {
+        $this->attributes = ($this->attributes)('style', 'dotted');
+    }
+
+    public function bold(): void
+    {
+        $this->attributes = ($this->attributes)('style', 'bold');
+    }
+
+    public function filled(): void
+    {
+        $this->attributes = ($this->attributes)('style', 'filled');
+    }
 
     /**
      * @return Map<string, string>
      */
-    public function attributes(): Map;
+    public function attributes(): Map
+    {
+        return $this->attributes;
+    }
 }

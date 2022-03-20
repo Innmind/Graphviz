@@ -1,12 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Tests\Innmind\Graphviz\Graph;
+namespace Tests\Innmind\Graphviz;
 
 use Innmind\Graphviz\{
-    Graph\Graph,
+    Graph,
     Graph\Name,
-    Graph as GraphInterface,
     Node,
     Exception\MixedGraphsNotAllowed
 };
@@ -20,11 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 class GraphTest extends TestCase
 {
-    public function testInterface()
-    {
-        $this->assertInstanceOf(GraphInterface::class, Graph::directed());
-    }
-
     public function testDirection()
     {
         $this->assertInstanceOf(Graph::class, Graph::directed());
@@ -50,10 +44,10 @@ class GraphTest extends TestCase
         $this->assertInstanceOf(Set::class, $graph->nodes());
         $this->assertCount(0, $graph->nodes());
 
-        $root = Node\Node::named('main');
-        $root->linkedTo($second = Node\Node::named('second'));
-        $main = Node\Node::named('main');
-        $second->linkedTo($third = Node\Node::named('third'));
+        $root = Node::named('main');
+        $root->linkedTo($second = Node::named('second'));
+        $main = Node::named('main');
+        $second->linkedTo($third = Node::named('third'));
         $third->linkedTo($main);
 
         $this->assertNull($graph->add($root));

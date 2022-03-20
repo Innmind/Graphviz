@@ -6,11 +6,11 @@ namespace Tests\Innmind\Graphviz\Layout;
 use Innmind\Graphviz\{
     Layout\Dot,
     Layout\DPI,
-    Node\Node,
+    Node,
     Node\Shape,
     Node\Name,
-    Graph\Graph,
-    Graph\Rankdir
+    Graph,
+    Graph\Rankdir,
 };
 use Innmind\Filesystem\File\Content;
 use Innmind\Url\Url;

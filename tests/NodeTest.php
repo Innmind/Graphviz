@@ -1,13 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Tests\Innmind\Graphviz\Node;
+namespace Tests\Innmind\Graphviz;
 
 use Innmind\Graphviz\{
-    Node\Node,
+    Node,
     Node\Name,
     Node\Shape,
-    Node as NodeInterface,
     Edge
 };
 use Innmind\Url\Url;
@@ -19,14 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase
 {
-    public function testInterface()
-    {
-        $this->assertInstanceOf(
-            NodeInterface::class,
-            new Node(new Name('foo')),
-        );
-    }
-
     public function testNamed()
     {
         $node = Node::named('foo');
