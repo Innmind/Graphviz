@@ -7,7 +7,6 @@ use Innmind\Graphviz\{
     Graph,
     Graph\Name,
     Node,
-    Exception\MixedGraphsNotAllowed
 };
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
@@ -60,13 +59,6 @@ class GraphTest extends TestCase
         ));
         $this->assertCount(3, $graph->nodes());
         $this->assertSame([$root, $second, $third], $graph->nodes()->toList());
-    }
-
-    public function testThrowWhenMixedGraphs()
-    {
-        $this->expectException(MixedGraphsNotAllowed::class);
-
-        Graph::directed()->cluster(Graph::undirected());
     }
 
     public function testCluster()
