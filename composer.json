@@ -14,14 +14,12 @@
         "issues": "http://github.com/Innmind/Graphviz/issues"
     },
     "require": {
-        "php": "~8.0",
-        "innmind/immutable": "dev-next",
-        "innmind/url": "dev-next",
-        "innmind/colour": "dev-next",
-        "innmind/stream": "dev-next"
+        "php": "~8.1",
+        "innmind/immutable": "~4.0",
+        "innmind/url": "~4.0",
+        "innmind/colour": "~4.0",
+        "innmind/stream": "~3.0"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Innmind\\Graphviz\\": "src/"

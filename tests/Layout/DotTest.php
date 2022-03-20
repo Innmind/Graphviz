@@ -64,7 +64,10 @@ digraph G {
 DOT;
 
         $this->assertInstanceOf(Readable::class, $output);
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testDPI()
@@ -82,7 +85,10 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testNodeAttributes()
@@ -133,7 +139,10 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testEdgeAttributes()
@@ -162,7 +171,10 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testUndirectedGraph()
@@ -182,7 +194,10 @@ graph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testNamedGraph()
@@ -200,7 +215,10 @@ digraph foo {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testRenderClusters()
@@ -208,8 +226,8 @@ DOT;
         $root = Graph::directed();
         $firstCluster = Graph::directed('first');
         $firstCluster->displayAs('First');
-        $firstCluster->fillWithColor(Colour::of('yellow'));
-        $firstCluster->colorizeBorderWith(Colour::of('green'));
+        $firstCluster->fillWithColor(Colour::yellow->toRGBA());
+        $firstCluster->colorizeBorderWith(Colour::green->toRGBA());
         $secondCluster = Graph::directed('second');
         $thirdCluster = Graph::directed('third');
 
@@ -263,7 +281,10 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testRenderGraphFromLeftToRight()
@@ -278,7 +299,10 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 
     public function testRenderCyclicGraph()
@@ -300,6 +324,9 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString());
+        $this->assertSame($expected, $output->toString()->match(
+            static fn($string) => $string,
+            static fn() => null,
+        ));
     }
 }

@@ -13,7 +13,6 @@ use Innmind\Immutable\{
     Str,
     Set,
 };
-use function Innmind\Immutable\join;
 
 final class Dot
 {
@@ -182,7 +181,8 @@ final class Dot
                     );
                 })
                 ->values();
-            $attributes = join(', ', $attributes)
+            $attributes = Str::of(', ')
+                ->join($attributes)
                 ->prepend(' [')
                 ->append(']')
                 ->toString();
@@ -211,7 +211,8 @@ final class Dot
                 );
             })
             ->values();
-        $attributes = join(', ', $attributes)
+        $attributes = Str::of(', ')
+            ->join($attributes)
             ->prepend(' [')
             ->append(']')
             ->toString();

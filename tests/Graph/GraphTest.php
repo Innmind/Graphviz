@@ -113,7 +113,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertNull($graph->fillWithColor(Colour::of('red')));
+        $this->assertNull($graph->fillWithColor(Colour::red->toRGBA()));
         $this->assertCount(2, $graph->attributes());
         $this->assertSame('filled', $graph->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -129,7 +129,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed();
 
-        $this->assertNull($graph->colorizeBorderWith(Colour::of('red')));
+        $this->assertNull($graph->colorizeBorderWith(Colour::red->toRGBA()));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('#ff0000', $graph->attributes()->get('color')->match(
             static fn($value) => $value,

@@ -347,7 +347,7 @@ class ShapeTest extends TestCase
     public function testWithColor()
     {
         $shape = Shape::box();
-        $shape2 = $shape->withColor(Colour::of('blue'));
+        $shape2 = $shape->withColor(Colour::blue->toRGBA());
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);
@@ -362,7 +362,7 @@ class ShapeTest extends TestCase
     public function testFillWithColor()
     {
         $shape = Shape::box();
-        $shape2 = $shape->fillWithColor(Colour::of('blue'));
+        $shape2 = $shape->fillWithColor(Colour::blue->toRGBA());
 
         $this->assertInstanceOf(Shape::class, $shape2);
         $this->assertNotSame($shape2, $shape);

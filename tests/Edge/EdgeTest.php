@@ -144,7 +144,7 @@ class EdgeTest extends TestCase
             $this->createMock(Node::class)
         );
 
-        $this->assertNull($edge->useColor(Colour::of('red')));
+        $this->assertNull($edge->useColor(Colour::red->toRGBA()));
         $this->assertTrue($edge->hasAttributes());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color')->match(
