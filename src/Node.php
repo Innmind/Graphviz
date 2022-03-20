@@ -62,7 +62,7 @@ final class Node
 
     public function linkedTo(self $node): Edge
     {
-        $edge = Edge::between($this, $node);
+        $edge = Edge::between($this->name, $node);
         $this->edges = ($this->edges)($edge);
 
         return $edge;

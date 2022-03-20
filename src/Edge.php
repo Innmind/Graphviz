@@ -13,12 +13,12 @@ use Innmind\Immutable\Map;
 
 final class Edge
 {
-    private Node $from;
+    private Node\Name $from;
     private Node $to;
     /** @var Map<string, string> */
     private Map $attributes;
 
-    private function __construct(Node $from, Node $to)
+    private function __construct(Node\Name $from, Node $to)
     {
         $this->from = $from;
         $this->to = $to;
@@ -26,12 +26,12 @@ final class Edge
         $this->attributes = Map::of();
     }
 
-    public static function between(Node $from, Node $to): self
+    public static function between(Node\Name $from, Node $to): self
     {
         return new self($from, $to);
     }
 
-    public function from(): Node
+    public function from(): Node\Name
     {
         return $this->from;
     }

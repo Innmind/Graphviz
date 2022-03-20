@@ -182,7 +182,7 @@ final class Dot
 
         return Str::of(\sprintf(
                 '    %s %s %s',
-                $edge->from()->name()->toString(),
+                $edge->from()->toString(),
                 $type,
                 $edge->to()->name()->toString(),
             ))

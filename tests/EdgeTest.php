@@ -18,7 +18,7 @@ class EdgeTest extends TestCase
     public function testInterface()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
         $this->assertTrue($edge->attributes()->empty());
@@ -28,7 +28,7 @@ class EdgeTest extends TestCase
     public function testNodes()
     {
         $edge = Edge::between(
-            $from = Node::named('a'),
+            $from = Node\Name::of('a'),
             $to = Node::named('b'),
         );
 
@@ -39,7 +39,7 @@ class EdgeTest extends TestCase
     public function testAsBidirectional()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -55,7 +55,7 @@ class EdgeTest extends TestCase
     public function testWithoutDirection()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -71,7 +71,7 @@ class EdgeTest extends TestCase
     public function testShaped()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -94,7 +94,7 @@ class EdgeTest extends TestCase
     public function testShapedWhenBidirectional()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
         $edge->asBidirectional();
@@ -120,7 +120,7 @@ class EdgeTest extends TestCase
     public function testDisplayAs()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -136,7 +136,7 @@ class EdgeTest extends TestCase
     public function testUseColor()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -152,7 +152,7 @@ class EdgeTest extends TestCase
     public function testTarget()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -168,7 +168,7 @@ class EdgeTest extends TestCase
     public function testDotted()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -184,7 +184,7 @@ class EdgeTest extends TestCase
     public function testBold()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
@@ -200,7 +200,7 @@ class EdgeTest extends TestCase
     public function testFilled()
     {
         $edge = Edge::between(
-            Node::named('a'),
+            Node\Name::of('a'),
             Node::named('b'),
         );
 
