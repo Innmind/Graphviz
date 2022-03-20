@@ -27,7 +27,7 @@ final class Shape
      */
     public static function box(): self
     {
-        return new self(Map::of(['shape', 'box']));
+        return self::shape('box');
     }
 
     /**
@@ -84,7 +84,7 @@ final class Shape
      */
     public static function circle(): self
     {
-        return new self(Map::of(['shape', 'circle']));
+        return self::shape('circle');
     }
 
     /**
@@ -92,7 +92,7 @@ final class Shape
      */
     public static function point(): self
     {
-        return new self(Map::of(['shape', 'point']));
+        return self::shape('point');
     }
 
     /**
@@ -100,7 +100,7 @@ final class Shape
      */
     public static function egg(): self
     {
-        return new self(Map::of(['shape', 'egg']));
+        return self::shape('egg');
     }
 
     /**
@@ -108,7 +108,7 @@ final class Shape
      */
     public static function triangle(): self
     {
-        return new self(Map::of(['shape', 'triangle']));
+        return self::shape('triangle');
     }
 
     /**
@@ -116,7 +116,7 @@ final class Shape
      */
     public static function plaintext(): self
     {
-        return new self(Map::of(['shape', 'plaintext']));
+        return self::shape('plaintext');
     }
 
     /**
@@ -124,7 +124,7 @@ final class Shape
      */
     public static function diamond(): self
     {
-        return new self(Map::of(['shape', 'diamond']));
+        return self::shape('diamond');
     }
 
     /**
@@ -132,7 +132,7 @@ final class Shape
      */
     public static function trapezium(): self
     {
-        return new self(Map::of(['shape', 'trapezium']));
+        return self::shape('trapezium');
     }
 
     /**
@@ -140,7 +140,7 @@ final class Shape
      */
     public static function parallelogram(): self
     {
-        return new self(Map::of(['shape', 'parallelogram']));
+        return self::shape('parallelogram');
     }
 
     /**
@@ -148,7 +148,7 @@ final class Shape
      */
     public static function house(): self
     {
-        return new self(Map::of(['shape', 'house']));
+        return self::shape('house');
     }
 
     /**
@@ -156,7 +156,7 @@ final class Shape
      */
     public static function hexagon(): self
     {
-        return new self(Map::of(['shape', 'hexagon']));
+        return self::shape('hexagon');
     }
 
     /**
@@ -164,7 +164,7 @@ final class Shape
      */
     public static function octagon(): self
     {
-        return new self(Map::of(['shape', 'octagon']));
+        return self::shape('octagon');
     }
 
     /**
@@ -172,7 +172,7 @@ final class Shape
      */
     public static function doublecircle(): self
     {
-        return new self(Map::of(['shape', 'doublecircle']));
+        return self::shape('doublecircle');
     }
 
     /**
@@ -180,7 +180,7 @@ final class Shape
      */
     public static function doubleoctagon(): self
     {
-        return new self(Map::of(['shape', 'doubleoctagon']));
+        return self::shape('doubleoctagon');
     }
 
     /**
@@ -188,7 +188,7 @@ final class Shape
      */
     public static function tripleoctagon(): self
     {
-        return new self(Map::of(['shape', 'tripleoctagon']));
+        return self::shape('tripleoctagon');
     }
 
     /**
@@ -196,7 +196,7 @@ final class Shape
      */
     public static function invtriangle(): self
     {
-        return new self(Map::of(['shape', 'invtriangle']));
+        return self::shape('invtriangle');
     }
 
     /**
@@ -204,7 +204,7 @@ final class Shape
      */
     public static function invtrapezium(): self
     {
-        return new self(Map::of(['shape', 'invtrapezium']));
+        return self::shape('invtrapezium');
     }
 
     /**
@@ -212,7 +212,7 @@ final class Shape
      */
     public static function invhouse(): self
     {
-        return new self(Map::of(['shape', 'invhouse']));
+        return self::shape('invhouse');
     }
 
     /**
@@ -220,7 +220,7 @@ final class Shape
      */
     public static function Mdiamond(): self
     {
-        return new self(Map::of(['shape', 'Mdiamond']));
+        return self::shape('Mdiamond');
     }
 
     /**
@@ -228,7 +228,7 @@ final class Shape
      */
     public static function Msquare(): self
     {
-        return new self(Map::of(['shape', 'Msquare']));
+        return self::shape('Msquare');
     }
 
     /**
@@ -236,7 +236,7 @@ final class Shape
      */
     public static function Mcircle(): self
     {
-        return new self(Map::of(['shape', 'Mcircle']));
+        return self::shape('Mcircle');
     }
 
     /**
@@ -244,7 +244,7 @@ final class Shape
      */
     public static function none(): self
     {
-        return new self(Map::of(['shape', 'none']));
+        return self::shape('none');
     }
 
     /**
@@ -252,7 +252,7 @@ final class Shape
      */
     public static function record(): self
     {
-        return new self(Map::of(['shape', 'record']));
+        return self::shape('record');
     }
 
     /**
@@ -260,7 +260,7 @@ final class Shape
      */
     public static function Mrecord(): self
     {
-        return new self(Map::of(['shape', 'Mrecord']));
+        return self::shape('Mrecord');
     }
 
     public function withColor(RGBA $color): self
@@ -285,5 +285,13 @@ final class Shape
     public function attributes(): Map
     {
         return $this->attributes;
+    }
+
+    /**
+     * @psalm-pure
+     */
+    private static function shape(string $name): self
+    {
+        return new self(Map::of(['shape', $name]));
     }
 }
