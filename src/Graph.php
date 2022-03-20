@@ -16,6 +16,9 @@ use Innmind\Immutable\{
     Map,
 };
 
+/**
+ * @psalm-immutable
+ */
 final class Graph
 {
     private bool $directed;
@@ -27,30 +30,58 @@ final class Graph
     /** @var Map<string, string> */
     private Map $attributes;
 
-    private function __construct(bool $directed, Name $name, Rankdir $rankdir = null)
-    {
+    /**
+     * @param Set<Node> $nodes
+     * @param Set<self> $clusters
+     * @param Map<string, string> $attributes
+     */
+    private function __construct(
+        bool $directed,
+        Name $name,
+        Set $nodes,
+        Set $clusters,
+        Map $attributes,
+        Rankdir $rankdir = null,
+    ) {
         $this->directed = $directed;
         $this->name = $name;
-        /** @var Set<Node> */
-        $this->nodes = Set::of();
-        /** @var Set<self> */
-        $this->clusters = Set::of();
-        /** @var Map<string, string> */
-        $this->attributes = Map::of();
+        $this->nodes = $nodes;
+        $this->clusters = $clusters;
+        $this->attributes = $attributes;
 
         if ($rankdir) {
             $this->attributes = ($this->attributes)('rankdir', $rankdir->toString());
         }
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function directed(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(true, Name::of($name), $rankdir);
+        /** @var Set<Node> */
+        $nodes = Set::of();
+        /** @var Set<self> */
+        $clusters = Set::of();
+        /** @var Map<string, string> */
+        $attributes = Map::of();
+
+        return new self(true, Name::of($name), $nodes, $clusters, $attributes, $rankdir);
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function undirected(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(false, Name::of($name), $rankdir);
+        /** @var Set<Node> */
+        $nodes = Set::of();
+        /** @var Set<self> */
+        $clusters = Set::of();
+        /** @var Map<string, string> */
+        $attributes = Map::of();
+
+        return new self(false, Name::of($name), $nodes, $clusters, $attributes, $rankdir);
     }
 
     public function isDirected(): bool
@@ -63,13 +94,22 @@ final class Graph
         return $this->name;
     }
 
-    public function cluster(self $cluster): void
+    /**
+     * @throws MixedGraphsNotAllowed
+     */
+    public function cluster(self $cluster): self
     {
         if ($cluster->isDirected() !== $this->directed) {
             throw new MixedGraphsNotAllowed;
         }
 
-        $this->clusters = ($this->clusters)($cluster);
+        return new self(
+            $this->directed,
+            $this->name,
+            $this->nodes,
+            ($this->clusters)($cluster),
+            $this->attributes,
+        );
     }
 
     /**
@@ -80,9 +120,15 @@ final class Graph
         return $this->clusters;
     }
 
-    public function add(Node $node): void
+    public function add(Node $node): self
     {
-        $this->nodes = ($this->nodes)($node);
+        return new self(
+            $this->directed,
+            $this->name,
+            ($this->nodes)($node),
+            $this->clusters,
+            $this->attributes,
+        );
     }
 
     /**
@@ -109,31 +155,55 @@ final class Graph
         return $this->nodes;
     }
 
-    public function displayAs(string $label): void
+    public function displayAs(string $label): self
     {
-        $this->attributes = ($this->attributes)(
-            'label',
-            Value::of($label)->toString(),
+        return new self(
+            $this->directed,
+            $this->name,
+            $this->nodes,
+            $this->clusters,
+            ($this->attributes)(
+                'label',
+                Value::of($label)->toString(),
+            ),
         );
     }
 
-    public function fillWithColor(RGBA $color): void
+    public function fillWithColor(RGBA $color): self
     {
-        $this->attributes = ($this->attributes)
-            ('style', 'filled')
-            ('fillcolor', $color->toString());
+        return new self(
+            $this->directed,
+            $this->name,
+            $this->nodes,
+            $this->clusters,
+            ($this->attributes)
+                ('style', 'filled')
+                ('fillcolor', $color->toString()),
+        );
     }
 
-    public function colorizeBorderWith(RGBA $color): void
+    public function colorizeBorderWith(RGBA $color): self
     {
-        $this->attributes = ($this->attributes)('color', $color->toString());
+        return new self(
+            $this->directed,
+            $this->name,
+            $this->nodes,
+            $this->clusters,
+            ($this->attributes)('color', $color->toString()),
+        );
     }
 
-    public function target(Url $url): void
+    public function target(Url $url): self
     {
-        $this->attributes = ($this->attributes)(
-            'URL',
-            Value::of($url->toString())->toString(),
+        return new self(
+            $this->directed,
+            $this->name,
+            $this->nodes,
+            $this->clusters,
+            ($this->attributes)(
+                'URL',
+                Value::of($url->toString())->toString(),
+            ),
         );
     }
 

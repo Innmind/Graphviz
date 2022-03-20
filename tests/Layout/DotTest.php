@@ -46,11 +46,11 @@ class DotTest extends TestCase
             ->linkedTo($compare);
         $init = $init->linkedTo($makeString);
 
-        $graph = Graph::directed();
-        $graph->add($main);
-        $graph->add($parse);
-        $graph->add($execute);
-        $graph->add($init);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($parse)
+            ->add($execute)
+            ->add($init);
 
         $output = $layout($graph);
 
@@ -76,8 +76,7 @@ DOT;
     {
         $dot = Dot::of(DPI::of(200));
 
-        $graph = Graph::directed();
-        $graph->add(Node::of(Name::of('main')));
+        $graph = Graph::directed()->add(Node::named('main'));
 
         $output = $dot($graph);
         $expected = <<<DOT
@@ -120,11 +119,11 @@ DOT;
             ->linkedTo($compare);
         $init = $init->linkedTo($makeString);
 
-        $graph = Graph::directed();
-        $graph->add($main);
-        $graph->add($parse);
-        $graph->add($execute);
-        $graph->add($init);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($parse)
+            ->add($execute)
+            ->add($init);
 
         $output = $dot($graph);
 
@@ -165,8 +164,7 @@ DOT;
             static fn($edge) => $edge->asBidirectional(),
         );
 
-        $graph = Graph::directed();
-        $graph->add($main);
+        $graph = Graph::directed()->add($main);
 
         $output = $dot($graph);
 
@@ -185,8 +183,7 @@ DOT;
         $dot = Dot::of();
         $main = Node::named('main')->linkedTo(Node::named('second'));
 
-        $graph = Graph::undirected();
-        $graph->add($main);
+        $graph = Graph::undirected()->add($main);
 
         $output = $dot($graph);
 
@@ -203,8 +200,7 @@ DOT;
     {
         $dot = Dot::of();
 
-        $foo = Graph::directed('foo');
-        $foo->add(Node::named('main'));
+        $foo = Graph::directed('foo')->add(Node::named('main'));
 
         $output = $dot($foo);
 
@@ -219,32 +215,6 @@ DOT;
 
     public function testRenderClusters()
     {
-        $root = Graph::directed();
-        $firstCluster = Graph::directed('first');
-        $firstCluster->displayAs('First');
-        $firstCluster->fillWithColor(Colour::yellow->toRGBA());
-        $firstCluster->colorizeBorderWith(Colour::green->toRGBA());
-        $secondCluster = Graph::directed('second');
-        $thirdCluster = Graph::directed('third');
-
-        $start = Node::named('start');
-        $first = Node::named('first');
-        $second = Node::named('second');
-        $third = Node::named('third');
-
-        $start = $start
-            ->linkedTo($first)
-            ->linkedTo($second);
-        $first = $first->linkedTo($third);
-        $second = $second->linkedTo($third);
-
-        $root->add($start);
-        $root->add($first);
-        $root->add($second);
-        $root->cluster($firstCluster);
-        $root->cluster($secondCluster);
-        $root->cluster($thirdCluster);
-
         $first = Node::named('first');
         $second = Node::named('second');
         $third = Node::named('third');
@@ -252,9 +222,26 @@ DOT;
         $second = $second->linkedTo(Node::named('second_inner'));
         $third = $third->linkedTo(Node::named('third_inner'));
 
-        $firstCluster->add($first);
-        $secondCluster->add($second);
-        $thirdCluster->add($third);
+        $firstCluster = Graph::directed('first')
+            ->displayAs('First')
+            ->fillWithColor(Colour::yellow->toRGBA())
+            ->colorizeBorderWith(Colour::green->toRGBA())
+            ->add($first);
+
+        $secondCluster = Graph::directed('second')->add($second);
+        $thirdCluster = Graph::directed('third')->add($third);
+
+        $root = Graph::directed()
+            ->add(
+                Node::named('start')
+                    ->linkedTo($first)
+                    ->linkedTo($second),
+            )
+            ->add(Node::named('first')->linkedTo(Node::named('third')))
+            ->add(Node::named('second')->linkedTo(Node::named('third')))
+            ->cluster($firstCluster)
+            ->cluster($secondCluster)
+            ->cluster($thirdCluster);
 
         $output = Dot::of()($root);
 
@@ -304,9 +291,9 @@ DOT;
         $main = Node::named('main')->linkedTo($second = Node::named('second'));
         $second = $second->linkedTo($main);
 
-        $graph = Graph::directed();
-        $graph->add($main);
-        $graph->add($second);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($second);
 
         $output = $dot($graph);
 
