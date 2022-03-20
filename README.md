@@ -6,6 +6,10 @@
 
 Graphviz model to help build graphs. This model goal is to express the possibilities offered by Graphviz (though note that all features are not implemented).
 
+All objects of this package are immutable.
+
+**Important**: you must use [`vimeo/psalm`](https://packagist.org/packages/vimeo/psalm) to make sure you use this library correctly.
+
 ## Installation
 
 ```sh
