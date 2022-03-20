@@ -12,6 +12,9 @@ use Innmind\Colour\RGBA;
 use Innmind\Url\Url;
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Edge
 {
     private Name $from;
@@ -29,6 +32,9 @@ final class Edge
         $this->attributes = $attributes;
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function between(Name $from, Name $to): self
     {
         /** @var Map<string, string> */
@@ -47,25 +53,16 @@ final class Edge
         return $this->to;
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function asBidirectional(): self
     {
         return $this->with('dir', 'both');
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function withoutDirection(): self
     {
         return $this->with('dir', 'none');
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function shaped(
         Shape $shape,
         Shape $shape2 = null,
@@ -90,9 +87,6 @@ final class Edge
             );
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function displayAs(string $label): self
     {
         return $this->with(
@@ -101,17 +95,11 @@ final class Edge
         );
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function useColor(RGBA $color): self
     {
         return $this->with('color', $color->toString());
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function target(Url $url): self
     {
         return $this->with(
@@ -120,25 +108,16 @@ final class Edge
         );
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function dotted(): self
     {
         return $this->with('style', 'dotted');
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function bold(): self
     {
         return $this->with('style', 'bold');
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     public function filled(): self
     {
         return $this->with('style', 'filled');
@@ -152,9 +131,6 @@ final class Edge
         return $this->attributes;
     }
 
-    /**
-     * @psalm-mutation-free
-     */
     private function with(string $key, string $value): self
     {
         return new self(
