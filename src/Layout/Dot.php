@@ -16,6 +16,9 @@ use Innmind\Immutable\{
     Sequence,
 };
 
+/**
+ * @psalm-immutable
+ */
 final class Dot
 {
     /** @var Maybe<DPI> */
