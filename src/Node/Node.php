@@ -13,6 +13,7 @@ use Innmind\Url\Url;
 use Innmind\Immutable\{
     Set,
     Map,
+    Maybe,
 };
 
 final class Node implements NodeInterface
@@ -22,7 +23,8 @@ final class Node implements NodeInterface
     private Set $edges;
     /** @var Map<string, string> */
     private Map $attributes;
-    private ?Shape $shape = null;
+    /** @var Maybe<Shape> */
+    private Maybe $shape;
 
     public function __construct(Name $name)
     {
@@ -31,6 +33,8 @@ final class Node implements NodeInterface
         $this->edges = Set::of();
         /** @var Map<string, string> */
         $this->attributes = Map::of();
+        /** @var Maybe<Shape> */
+        $this->shape = Maybe::nothing();
     }
 
     public static function named(string $name): self
@@ -74,17 +78,17 @@ final class Node implements NodeInterface
 
     public function shaped(Shape $shape): void
     {
-        $this->shape = $shape;
+        $this->shape = Maybe::just($shape);
     }
 
     public function attributes(): Map
     {
-        $attributes = $this->attributes;
-
-        if ($this->shape instanceof Shape) {
-            $attributes = $this->shape->attributes()->merge($attributes);
-        }
-
-        return $attributes;
+        return $this
+            ->shape
+            ->map(static fn($shape) => $shape->attributes())
+            ->match(
+                fn($attributes) => $attributes->merge($this->attributes),
+                fn() => $this->attributes,
+            );
     }
 }
