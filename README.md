@@ -27,31 +27,29 @@ use Innmind\OperatingSystem\Factory;
 use Innmind\Server\Control\Server\Command;
 
 $dot = Dot::of();
-$graph = Graph::directed();
-$clusterOne = Graph::directed('one');
-$clusterOne->target(Url::of('http://example.com'));
-$clusterOne->displayAs('One');
-$clusterOne->fillWithColor(Colour::of('blue'));
-$clusterOne->add(Node::named('one'));
-$clusterTwo = Graph::directed('two');
-$clusterTwo->fillWithColor(Colour::of('red'));
-$clusterTwo->add(Node::named('two'));
-$clusterThree = Graph::directed('three');
-$clusterThree->add($three = Node::named('three'));
+$clusterOne = Graph::directed('one')
+    ->target(Url::of('http://example.com'))
+    ->displayAs('One')
+    ->fillWithColor(Colour::blue->toRGBA())
+    ->add($one = Node::named('one'));
+$clusterTwo = Graph::directed('two')
+    ->fillWithColor(Colour::red->toRGBA())
+    ->add($two = Node::named('two'));
+$clusterThree = Graph::directed('three')
+    ->add($three = Node::named('three'));
 
-// important to not reuse nodes added in clusters otherwise clusters boundaries
-// will be messed up
-$root = Node::named('root');
-$root->shaped(Shape::house());
-$root->linkedTo($one = Node::named('one'));
-$root->linkedTo($two = Node::named('two'));
-$one->linkedTo($three);
-$two->linkedTo($three);
+$root = Node::named('root')
+    ->shaped(Shape::house())
+    ->linkedTo($one->name())
+    ->linkedTo($two->name());
 
-$graph->add($root);
-$graph->cluster($clusterOne);
-$graph->cluster($clusterTwo);
-$graph->cluster($clusterThree);
+$graph = Graph::directed()
+    ->add($root)
+    ->add($one->linkedTo($three->name()))
+    ->add($two->linkedTo($three->name()))
+    ->cluster($clusterOne)
+    ->cluster($clusterTwo)
+    ->cluster($clusterThree);
 
 $output = $dot($graph);
 
