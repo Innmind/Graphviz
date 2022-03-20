@@ -46,6 +46,9 @@ class DotTest extends TestCase
 
         $graph = Graph::directed();
         $graph->add($main);
+        $graph->add($parse);
+        $graph->add($execute);
+        $graph->add($init);
 
         $output = $layout($graph);
 
@@ -114,6 +117,9 @@ DOT;
 
         $graph = Graph::directed();
         $graph->add($main);
+        $graph->add($parse);
+        $graph->add($execute);
+        $graph->add($init);
 
         $output = $dot($graph);
 
@@ -228,6 +234,8 @@ DOT;
         $second->linkedTo($third);
 
         $root->add($start);
+        $root->add($first);
+        $root->add($second);
         $root->cluster($firstCluster);
         $root->cluster($secondCluster);
         $root->cluster($thirdCluster);
@@ -294,6 +302,7 @@ DOT;
 
         $graph = Graph::directed();
         $graph->add($main);
+        $graph->add($second);
 
         $output = $dot($graph);
 

@@ -46,18 +46,18 @@ class GraphTest extends TestCase
 
         $root = Node::named('main');
         $root->linkedTo($second = Node::named('second'));
-        $main = Node::named('main');
         $second->linkedTo($third = Node::named('third'));
-        $third->linkedTo($main);
 
         $this->assertNull($graph->add($root));
+        $this->assertNull($graph->add($second));
+        $this->assertNull($graph->add($third));
         $this->assertCount(1, $graph->roots());
         $this->assertSame($root, $graph->roots()->find(static fn() => true)->match(
             static fn($root) => $root,
             static fn() => null,
         ));
         $this->assertCount(3, $graph->nodes());
-        $this->assertSame([$main, $second, $third], $graph->nodes()->toList());
+        $this->assertSame([$root, $second, $third], $graph->nodes()->toList());
     }
 
     public function testThrowWhenMixedGraphs()

@@ -21,7 +21,7 @@ final class Graph
     private bool $directed;
     private Name $name;
     /** @var Set<Node> */
-    private Set $roots;
+    private Set $nodes;
     /** @var Set<self> */
     private Set $clusters;
     /** @var Map<string, string> */
@@ -32,7 +32,7 @@ final class Graph
         $this->directed = $directed;
         $this->name = $name;
         /** @var Set<Node> */
-        $this->roots = Set::of();
+        $this->nodes = Set::of();
         /** @var Set<self> */
         $this->clusters = Set::of();
         /** @var Map<string, string> */
@@ -82,7 +82,7 @@ final class Graph
 
     public function add(Node $node): void
     {
-        $this->roots = ($this->roots)($node);
+        $this->nodes = ($this->nodes)($node);
     }
 
     /**
@@ -90,7 +90,15 @@ final class Graph
      */
     public function roots(): Set
     {
-        return $this->roots;
+        $targeted = $this
+            ->nodes
+            ->map(static fn($node) => $node->edges())
+            ->flatMap(static fn($edges) => $edges)
+            ->map(static fn($edge) => $edge->to()->name()->toString());
+
+        return $this->nodes->filter(
+            static fn($node) => !$targeted->contains($node->name()->toString()),
+        );
     }
 
     /**
@@ -98,16 +106,7 @@ final class Graph
      */
     public function nodes(): Set
     {
-        /** @var Map<string, Node> */
-        $map = $this->roots->reduce(
-            Map::of(),
-            function(Map $nodes, Node $node): Map {
-                return $this->accumulateNodes($nodes, $node);
-            },
-        );
-
-        /** @var Set<Node> */
-        return Set::of(...$map->values()->toList());
+        return $this->nodes;
     }
 
     public function displayAs(string $label): void
@@ -144,21 +143,5 @@ final class Graph
     public function attributes(): Map
     {
         return $this->attributes;
-    }
-
-    private function accumulateNodes(Map $nodes, Node $node): Map
-    {
-        return $node
-            ->edges()
-            ->reduce(
-                ($nodes)($node->name()->toString(), $node),
-                function(Map $nodes, Edge $edge): Map {
-                    if ($nodes->values()->contains($edge->to())) {
-                        return $nodes;
-                    }
-
-                    return $this->accumulateNodes($nodes, $edge->to());
-                },
-            );
     }
 }
