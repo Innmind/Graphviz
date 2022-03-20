@@ -22,11 +22,17 @@ final class Shape
         $this->attributes = $attributes;
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function box(): self
     {
         return new self(Map::of(['shape', 'box']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function polygon(
         int $sides = null,
         int $peripheries = null,
@@ -61,6 +67,9 @@ final class Shape
         return new self($attributes);
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function ellipse(float $width = .75, float $height = .5): self
     {
         return new self(Map::of(
@@ -70,116 +79,185 @@ final class Shape
         ));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function circle(): self
     {
         return new self(Map::of(['shape', 'circle']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function point(): self
     {
         return new self(Map::of(['shape', 'point']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function egg(): self
     {
         return new self(Map::of(['shape', 'egg']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function triangle(): self
     {
         return new self(Map::of(['shape', 'triangle']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function plaintext(): self
     {
         return new self(Map::of(['shape', 'plaintext']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function diamond(): self
     {
         return new self(Map::of(['shape', 'diamond']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function trapezium(): self
     {
         return new self(Map::of(['shape', 'trapezium']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function parallelogram(): self
     {
         return new self(Map::of(['shape', 'parallelogram']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function house(): self
     {
         return new self(Map::of(['shape', 'house']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function hexagon(): self
     {
         return new self(Map::of(['shape', 'hexagon']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function octagon(): self
     {
         return new self(Map::of(['shape', 'octagon']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function doublecircle(): self
     {
         return new self(Map::of(['shape', 'doublecircle']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function doubleoctagon(): self
     {
         return new self(Map::of(['shape', 'doubleoctagon']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function tripleoctagon(): self
     {
         return new self(Map::of(['shape', 'tripleoctagon']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invtriangle(): self
     {
         return new self(Map::of(['shape', 'invtriangle']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invtrapezium(): self
     {
         return new self(Map::of(['shape', 'invtrapezium']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invhouse(): self
     {
         return new self(Map::of(['shape', 'invhouse']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mdiamond(): self
     {
         return new self(Map::of(['shape', 'Mdiamond']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Msquare(): self
     {
         return new self(Map::of(['shape', 'Msquare']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mcircle(): self
     {
         return new self(Map::of(['shape', 'Mcircle']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function none(): self
     {
         return new self(Map::of(['shape', 'none']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function record(): self
     {
         return new self(Map::of(['shape', 'record']));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mrecord(): self
     {
         return new self(Map::of(['shape', 'Mrecord']));

@@ -23,6 +23,8 @@ final class Name
     }
 
     /**
+     * @psalm-pure
+     *
      * @throws DomainException
      */
     public static function of(string $name): self

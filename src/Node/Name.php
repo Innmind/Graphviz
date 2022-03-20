@@ -30,6 +30,9 @@ final class Name
         $this->value = $name->toString();
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function of(string $name): self
     {
         return new self($name);
