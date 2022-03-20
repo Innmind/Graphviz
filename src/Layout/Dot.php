@@ -184,7 +184,7 @@ final class Dot
                 '    %s %s %s',
                 $edge->from()->toString(),
                 $type,
-                $edge->to()->name()->toString(),
+                $edge->to()->toString(),
             ))
             ->append($attributes)
             ->append(';');

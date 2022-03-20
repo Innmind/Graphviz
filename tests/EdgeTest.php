@@ -6,7 +6,7 @@ namespace Tests\Innmind\Graphviz;
 use Innmind\Graphviz\{
     Edge,
     Edge\Shape,
-    Node,
+    Node\Name,
 };
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
@@ -18,8 +18,8 @@ class EdgeTest extends TestCase
     public function testInterface()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
+            Name::of('a'),
+            Name::of('b'),
         );
         $this->assertTrue($edge->attributes()->empty());
         $this->assertInstanceOf(Map::class, $edge->attributes());
@@ -28,8 +28,8 @@ class EdgeTest extends TestCase
     public function testNodes()
     {
         $edge = Edge::between(
-            $from = Node\Name::of('a'),
-            $to = Node::named('b'),
+            $from = Name::of('a'),
+            $to = Name::of('b'),
         );
 
         $this->assertSame($from, $edge->from());
@@ -39,12 +39,10 @@ class EdgeTest extends TestCase
     public function testAsBidirectional()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->asBidirectional();
 
-        $this->assertNull($edge->asBidirectional());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('both', $edge->attributes()->get('dir')->match(
             static fn($value) => $value,
@@ -55,12 +53,10 @@ class EdgeTest extends TestCase
     public function testWithoutDirection()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->withoutDirection();
 
-        $this->assertNull($edge->withoutDirection());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('none', $edge->attributes()->get('dir')->match(
             static fn($value) => $value,
@@ -71,19 +67,16 @@ class EdgeTest extends TestCase
     public function testShaped()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
-
-        $this->assertNull(
-            $edge->shaped(
+            Name::of('a'),
+            Name::of('b'),
+        )
+            ->shaped(
                 Shape::box(),
                 Shape::vee(),
                 Shape::tee(),
                 Shape::dot(),
-            ),
-        );
-        $this->assertFalse($edge->attributes()->empty());
+            );
+
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead')->match(
             static fn($value) => $value,
@@ -94,18 +87,17 @@ class EdgeTest extends TestCase
     public function testShapedWhenBidirectional()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
-        $edge->asBidirectional();
-        $edge->shaped(
-            Shape::box(),
-            Shape::vee(),
-            Shape::tee(),
-            Shape::dot(),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )
+            ->asBidirectional()
+            ->shaped(
+                Shape::box(),
+                Shape::vee(),
+                Shape::tee(),
+                Shape::dot(),
+            );
 
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(3, $edge->attributes());
         $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowtail')->match(
             static fn($value) => $value,
@@ -120,12 +112,10 @@ class EdgeTest extends TestCase
     public function testDisplayAs()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->displayAs('foo');
 
-        $this->assertNull($edge->displayAs('foo'));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('foo', $edge->attributes()->get('label')->match(
             static fn($value) => $value,
@@ -136,12 +126,10 @@ class EdgeTest extends TestCase
     public function testUseColor()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->useColor(Colour::red->toRGBA());
 
-        $this->assertNull($edge->useColor(Colour::red->toRGBA()));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color')->match(
             static fn($value) => $value,
@@ -152,12 +140,10 @@ class EdgeTest extends TestCase
     public function testTarget()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->target(Url::of('example.com'));
 
-        $this->assertNull($edge->target(Url::of('example.com')));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('example.com', $edge->attributes()->get('URL')->match(
             static fn($value) => $value,
@@ -168,12 +154,10 @@ class EdgeTest extends TestCase
     public function testDotted()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->dotted();
 
-        $this->assertNull($edge->dotted());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('dotted', $edge->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -184,12 +168,10 @@ class EdgeTest extends TestCase
     public function testBold()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->bold();
 
-        $this->assertNull($edge->bold());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('bold', $edge->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -200,12 +182,10 @@ class EdgeTest extends TestCase
     public function testFilled()
     {
         $edge = Edge::between(
-            Node\Name::of('a'),
-            Node::named('b'),
-        );
+            Name::of('a'),
+            Name::of('b'),
+        )->filled();
 
-        $this->assertNull($edge->filled());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('filled', $edge->attributes()->get('style')->match(
             static fn($value) => $value,

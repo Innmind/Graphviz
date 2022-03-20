@@ -44,20 +44,21 @@ class GraphTest extends TestCase
         $this->assertInstanceOf(Set::class, $graph->nodes());
         $this->assertCount(0, $graph->nodes());
 
-        $root = Node::named('main');
-        $root->linkedTo($second = Node::named('second'));
-        $main = Node::named('main');
-        $second->linkedTo($third = Node::named('third'));
-        $third->linkedTo($main);
+        $root = Node::named('main')->linkedTo($second = Node::named('second'));
+        $second = $second->linkedTo($third = Node::named('third'));
 
-        $this->assertNull($graph->add($root));
+        $graph = $graph
+            ->add($root)
+            ->add($second)
+            ->add($third);
+
         $this->assertCount(1, $graph->roots());
         $this->assertSame($root, $graph->roots()->find(static fn() => true)->match(
             static fn($root) => $root,
             static fn() => null,
         ));
         $this->assertCount(3, $graph->nodes());
-        $this->assertSame([$main, $second, $third], $graph->nodes()->toList());
+        $this->assertSame([$root, $second, $third], $graph->nodes()->toList());
     }
 
     public function testThrowWhenMixedGraphs()
@@ -75,7 +76,7 @@ class GraphTest extends TestCase
         $this->assertCount(0, $root->clusters());
 
         $cluster = Graph::directed('foo');
-        $this->assertNull($root->cluster($cluster));
+        $root = $root->cluster($cluster);
         $this->assertCount(1, $root->clusters());
         $this->assertSame($cluster, $root->clusters()->find(static fn() => true)->match(
             static fn($cluster) => $cluster,
@@ -93,9 +94,8 @@ class GraphTest extends TestCase
 
     public function testDisplayAs()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->displayAs('watev');
 
-        $this->assertNull($graph->displayAs('watev'));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('watev', $graph->attributes()->get('label')->match(
             static fn($value) => $value,
@@ -105,9 +105,8 @@ class GraphTest extends TestCase
 
     public function testFillWithColor()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->fillWithColor(Colour::red->toRGBA());
 
-        $this->assertNull($graph->fillWithColor(Colour::red->toRGBA()));
         $this->assertCount(2, $graph->attributes());
         $this->assertSame('filled', $graph->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -121,9 +120,8 @@ class GraphTest extends TestCase
 
     public function testColorizeBorderWith()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->colorizeBorderWith(Colour::red->toRGBA());
 
-        $this->assertNull($graph->colorizeBorderWith(Colour::red->toRGBA()));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('#ff0000', $graph->attributes()->get('color')->match(
             static fn($value) => $value,
@@ -133,9 +131,8 @@ class GraphTest extends TestCase
 
     public function testTarget()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->target(Url::of('example.com'));
 
-        $this->assertNull($graph->target(Url::of('example.com')));
         $this->assertCount(1, $graph->attributes());
         $this->assertSame('example.com', $graph->attributes()->get('URL')->match(
             static fn($value) => $value,

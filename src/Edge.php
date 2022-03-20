@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\{
+    Node\Name,
     Edge\Shape,
     Attribute\Value,
 };
@@ -11,44 +12,55 @@ use Innmind\Colour\RGBA;
 use Innmind\Url\Url;
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Edge
 {
-    private Node\Name $from;
-    private Node $to;
+    private Name $from;
+    private Name $to;
     /** @var Map<string, string> */
     private Map $attributes;
 
-    private function __construct(Node\Name $from, Node $to)
+    /**
+     * @param Map<string, string> $attributes
+     */
+    private function __construct(Name $from, Name $to, Map $attributes)
     {
         $this->from = $from;
         $this->to = $to;
-        /** @var Map<string, string> */
-        $this->attributes = Map::of();
+        $this->attributes = $attributes;
     }
 
-    public static function between(Node\Name $from, Node $to): self
+    /**
+     * @psalm-pure
+     */
+    public static function between(Name $from, Name $to): self
     {
-        return new self($from, $to);
+        /** @var Map<string, string> */
+        $attributes = Map::of();
+
+        return new self($from, $to, $attributes);
     }
 
-    public function from(): Node\Name
+    public function from(): Name
     {
         return $this->from;
     }
 
-    public function to(): Node
+    public function to(): Name
     {
         return $this->to;
     }
 
-    public function asBidirectional(): void
+    public function asBidirectional(): self
     {
-        $this->attributes = ($this->attributes)('dir', 'both');
+        return $this->with('dir', 'both');
     }
 
-    public function withoutDirection(): void
+    public function withoutDirection(): self
     {
-        $this->attributes = ($this->attributes)('dir', 'none');
+        return $this->with('dir', 'none');
     }
 
     public function shaped(
@@ -56,59 +68,59 @@ final class Edge
         Shape $shape2 = null,
         Shape $shape3 = null,
         Shape $shape4 = null,
-    ): void {
+    ): self {
         $shape = $shape->toString();
         $shape2 = $shape2 ? $shape2->toString() : '';
         $shape3 = $shape3 ? $shape3->toString() : '';
         $shape4 = $shape4 ? $shape4->toString() : '';
         $value = $shape.$shape2.$shape3.$shape4;
 
-        $this->attributes = ($this->attributes)('arrowhead', $value);
+        $self = $this->with('arrowhead', $value);
 
-        $this->attributes = $this
+        return $self
             ->attributes
             ->get('dir')
             ->filter(static fn($dir) => $dir === 'both')
             ->match(
-                fn() => ($this->attributes)('arrowtail', $value),
-                fn() => $this->attributes,
+                static fn() => $self->with('arrowtail', $value),
+                static fn() => $self,
             );
     }
 
-    public function displayAs(string $label): void
+    public function displayAs(string $label): self
     {
-        $this->attributes = ($this->attributes)(
+        return $this->with(
             'label',
             Value::of($label)->toString(),
         );
     }
 
-    public function useColor(RGBA $color): void
+    public function useColor(RGBA $color): self
     {
-        $this->attributes = ($this->attributes)('color', $color->toString());
+        return $this->with('color', $color->toString());
     }
 
-    public function target(Url $url): void
+    public function target(Url $url): self
     {
-        $this->attributes = ($this->attributes)(
+        return $this->with(
             'URL',
             Value::of($url->toString())->toString(),
         );
     }
 
-    public function dotted(): void
+    public function dotted(): self
     {
-        $this->attributes = ($this->attributes)('style', 'dotted');
+        return $this->with('style', 'dotted');
     }
 
-    public function bold(): void
+    public function bold(): self
     {
-        $this->attributes = ($this->attributes)('style', 'bold');
+        return $this->with('style', 'bold');
     }
 
-    public function filled(): void
+    public function filled(): self
     {
-        $this->attributes = ($this->attributes)('style', 'filled');
+        return $this->with('style', 'filled');
     }
 
     /**
@@ -117,5 +129,14 @@ final class Edge
     public function attributes(): Map
     {
         return $this->attributes;
+    }
+
+    private function with(string $key, string $value): self
+    {
+        return new self(
+            $this->from,
+            $this->to,
+            ($this->attributes)($key, $value),
+        );
     }
 }
