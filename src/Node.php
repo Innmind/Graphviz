@@ -25,7 +25,6 @@ interface Node
     public function target(Url $url): void;
     public function displayAs(string $label): void;
     public function shaped(Shape $shape): void;
-    public function hasAttributes(): bool;
 
     /**
      * @return Map<string, string>

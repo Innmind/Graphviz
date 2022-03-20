@@ -107,11 +107,6 @@ final class Edge implements EdgeInterface
         $this->attributes = ($this->attributes)('style', 'filled');
     }
 
-    public function hasAttributes(): bool
-    {
-        return $this->attributes->size() > 0;
-    }
-
     public function attributes(): Map
     {
         return $this->attributes;

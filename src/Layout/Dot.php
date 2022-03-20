@@ -107,10 +107,7 @@ final class Dot
     {
         $lines = $graph
             ->roots()
-            ->filter(static function(Node $node): bool {
-                //styled nodes are rendered below
-                return !$node->hasAttributes() && $node->edges()->size() === 0;
-            })
+            ->filter(static fn($node) => $node->attributes()->empty() && $node->edges()->empty()) //styled nodes are rendered below
             ->map(static fn($node) => Str::of('    '.$node->name()->toString().';'))
             ->toList();
 
@@ -124,7 +121,7 @@ final class Dot
     {
         $lines = $graph
             ->nodes()
-            ->filter(static fn($node) => $node->hasAttributes())
+            ->filter(static fn($node) => !$node->attributes()->empty())
             ->map(fn($node) => $this->nodeStyle($node))
             ->toList();
 
@@ -162,7 +159,7 @@ final class Dot
     {
         $attributes = '';
 
-        if ($edge->hasAttributes()) {
+        if (!$edge->attributes()->empty()) {
             $attributes = $edge
                 ->attributes()
                 ->map(static function(string $key, string $value): string {

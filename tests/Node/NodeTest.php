@@ -99,7 +99,7 @@ class NodeTest extends TestCase
         $node = new Node(new Name('foo'));
 
         $this->assertNull($node->shaped($shape = Shape::ellipse()));
-        $this->assertTrue($node->hasAttributes());
+        $this->assertFalse($node->attributes()->empty());
         $this->assertSame('ellipse', $node->attributes()->get('shape')->match(
             static fn($value) => $value,
             static fn() => null,

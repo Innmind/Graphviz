@@ -26,7 +26,6 @@ interface Edge
     public function dotted(): void;
     public function bold(): void;
     public function filled(): void;
-    public function hasAttributes(): bool;
 
     /**
      * @return Map<string, string>

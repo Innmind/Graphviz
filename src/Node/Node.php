@@ -77,15 +77,6 @@ final class Node implements NodeInterface
         $this->shape = $shape;
     }
 
-    public function hasAttributes(): bool
-    {
-        if ($this->shape instanceof Shape) {
-            return true;
-        }
-
-        return $this->attributes->count() > 0;
-    }
-
     public function attributes(): Map
     {
         $attributes = $this->attributes;
