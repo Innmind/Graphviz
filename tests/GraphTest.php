@@ -44,8 +44,9 @@ class GraphTest extends TestCase
         $this->assertInstanceOf(Set::class, $graph->nodes());
         $this->assertCount(0, $graph->nodes());
 
-        $root = Node::named('main')->linkedTo($second = Node::named('second'));
-        $second = $second->linkedTo($third = Node::named('third'));
+        $third = Node::named('third');
+        $root = Node::named('main')->linkedTo(Node\Name::of('second'));
+        $second = Node::named('second')->linkedTo($third->name());
 
         $graph = $graph
             ->add($root)

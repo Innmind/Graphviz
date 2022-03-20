@@ -79,10 +79,10 @@ final class Node
     /**
      * @param (pure-callable(Edge): Edge)|null $map
      */
-    public function linkedTo(self $node, callable $map = null): self
+    public function linkedTo(Name $node, callable $map = null): self
     {
         $map ??= static fn(Edge $edge): Edge => $edge;
-        $edge = Edge::between($this->name, $node->name());
+        $edge = Edge::between($this->name, $node);
 
         return new self(
             $this->name,

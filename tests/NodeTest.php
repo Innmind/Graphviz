@@ -39,7 +39,7 @@ class NodeTest extends TestCase
     public function testEdges()
     {
         $node = Node::of(Name::of('foo'));
-        $to = Node::of(Name::of('bar'));
+        $to = Name::of('bar');
 
         $this->assertInstanceOf(Set::class, $node->edges());
         $this->assertCount(0, $node->edges());
@@ -49,14 +49,13 @@ class NodeTest extends TestCase
             function($edge) use ($node, $to) {
                 $this->assertInstanceOf(Edge::class, $edge);
                 $this->assertSame($node->name(), $edge->from());
-                $this->assertSame($to->name(), $edge->to());
+                $this->assertSame($to, $edge->to());
 
                 return $edge;
             },
         );
 
         $this->assertCount(1, $node->edges());
-        $this->assertCount(0, $to->edges());
     }
 
     public function testAttributes()

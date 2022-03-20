@@ -28,22 +28,20 @@ class DotTest extends TestCase
         $main = Node::of(Name::of('main'));
         $parse = Node::of(Name::of('parse'));
         $execute = Node::of(Name::of('execute'));
-        $makeString = Node::of(Name::of('make_string'));
-        $compare = Node::of(Name::of('compare'));
-        $printf = Node::of(Name::of('printf'));
+        $makeString = Name::of('make_string');
+        $printf = Name::of('printf');
         $init = Node::of(Name::of('init'));
-        $cleanup = Node::of(Name::of('cleanup'));
 
-        $parse = $parse->linkedTo($execute);
+        $parse = $parse->linkedTo($execute->name());
         $main = $main
-            ->linkedTo($parse)
-            ->linkedTo($init)
-            ->linkedTo($cleanup)
+            ->linkedTo($parse->name())
+            ->linkedTo($init->name())
+            ->linkedTo(Name::of('cleanup'))
             ->linkedTo($printf);
         $execute = $execute
             ->linkedTo($makeString)
             ->linkedTo($printf)
-            ->linkedTo($compare);
+            ->linkedTo(Name::of('compare'));
         $init = $init->linkedTo($makeString);
 
         $graph = Graph::directed()
@@ -96,19 +94,17 @@ DOT;
         $main = Node::of(Name::of('main'));
         $parse = Node::of(Name::of('parse'));
         $execute = Node::of(Name::of('execute'));
-        $makeString = Node::of(Name::of('make_string'));
-        $compare = Node::of(Name::of('compare'));
-        $printf = Node::of(Name::of('printf'));
+        $makeString = Name::of('make_string');
+        $printf = Name::of('printf');
         $init = Node::of(Name::of('init'));
-        $cleanup = Node::of(Name::of('cleanup'));
 
         $parse = $parse
-            ->linkedTo($execute)
+            ->linkedTo($execute->name())
             ->displayAs('Parse');
         $main = $main
-            ->linkedTo($parse)
-            ->linkedTo($init)
-            ->linkedTo($cleanup)
+            ->linkedTo($parse->name())
+            ->linkedTo($init->name())
+            ->linkedTo(Name::of('cleanup'))
             ->linkedTo($printf)
             ->shaped(Shape::circle())
             ->displayAs('Main Node')
@@ -116,7 +112,7 @@ DOT;
         $execute = $execute
             ->linkedTo($makeString)
             ->linkedTo($printf)
-            ->linkedTo($compare);
+            ->linkedTo(Name::of('compare'));
         $init = $init->linkedTo($makeString);
 
         $graph = Graph::directed()
@@ -150,17 +146,14 @@ DOT;
     {
         $dot = Dot::of();
 
-        $main = Node::of(Name::of('main'));
-        $second = Node::of(Name::of('second'));
-        $third = Node::of(Name::of('third'));
-        $main = $main->linkedTo(
-            $second,
+        $main = Node::of(Name::of('main'))->linkedTo(
+            Name::of('second'),
             static fn($edge) => $edge
                 ->displayAs('watev')
                 ->withoutDirection(),
         );
         $main = $main->linkedTo(
-            $third,
+            Name::of('third'),
             static fn($edge) => $edge->asBidirectional(),
         );
 
@@ -181,7 +174,7 @@ DOT;
     public function testUndirectedGraph()
     {
         $dot = Dot::of();
-        $main = Node::named('main')->linkedTo(Node::named('second'));
+        $main = Node::named('main')->linkedTo(Name::of('second'));
 
         $graph = Graph::undirected()->add($main);
 
@@ -218,9 +211,9 @@ DOT;
         $first = Node::named('first');
         $second = Node::named('second');
         $third = Node::named('third');
-        $first = $first->linkedTo(Node::named('first_inner'));
-        $second = $second->linkedTo(Node::named('second_inner'));
-        $third = $third->linkedTo(Node::named('third_inner'));
+        $first = $first->linkedTo(Name::of('first_inner'));
+        $second = $second->linkedTo(Name::of('second_inner'));
+        $third = $third->linkedTo(Name::of('third_inner'));
 
         $firstCluster = Graph::directed('first')
             ->displayAs('First')
@@ -234,11 +227,11 @@ DOT;
         $root = Graph::directed()
             ->add(
                 Node::named('start')
-                    ->linkedTo($first)
-                    ->linkedTo($second),
+                    ->linkedTo($first->name())
+                    ->linkedTo($second->name()),
             )
-            ->add(Node::named('first')->linkedTo(Node::named('third')))
-            ->add(Node::named('second')->linkedTo(Node::named('third')))
+            ->add(Node::named('first')->linkedTo(Name::of('third')))
+            ->add(Node::named('second')->linkedTo(Name::of('third')))
             ->cluster($firstCluster)
             ->cluster($secondCluster)
             ->cluster($thirdCluster);
@@ -288,8 +281,8 @@ DOT;
     public function testRenderCyclicGraph()
     {
         $dot = Dot::of();
-        $main = Node::named('main')->linkedTo($second = Node::named('second'));
-        $second = $second->linkedTo($main);
+        $main = Node::named('main')->linkedTo(Name::of('second'));
+        $second = Node::named('second')->linkedTo($main->name());
 
         $graph = Graph::directed()
             ->add($main)
