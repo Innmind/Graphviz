@@ -44,11 +44,17 @@ class NodeTest extends TestCase
         $this->assertInstanceOf(Set::class, $node->edges());
         $this->assertCount(0, $node->edges());
 
-        $edge = $node->linkedTo($to);
+        $this->assertNull($node->linkedTo(
+            $to,
+            function($edge) use ($node, $to) {
+                $this->assertInstanceOf(Edge::class, $edge);
+                $this->assertSame($node->name(), $edge->from());
+                $this->assertSame($to, $edge->to());
 
-        $this->assertInstanceOf(Edge::class, $edge);
-        $this->assertSame($node->name(), $edge->from());
-        $this->assertSame($to, $edge->to());
+                return $edge;
+            },
+        ));
+
         $this->assertCount(1, $node->edges());
         $this->assertCount(0, $to->edges());
     }

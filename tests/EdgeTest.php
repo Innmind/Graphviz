@@ -41,10 +41,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->asBidirectional();
 
-        $this->assertNull($edge->asBidirectional());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('both', $edge->attributes()->get('dir')->match(
             static fn($value) => $value,
@@ -57,10 +55,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->withoutDirection();
 
-        $this->assertNull($edge->withoutDirection());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('none', $edge->attributes()->get('dir')->match(
             static fn($value) => $value,
@@ -73,17 +69,14 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
-
-        $this->assertNull(
-            $edge->shaped(
+        )
+            ->shaped(
                 Shape::box(),
                 Shape::vee(),
                 Shape::tee(),
                 Shape::dot(),
-            ),
-        );
-        $this->assertFalse($edge->attributes()->empty());
+            );
+
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowhead')->match(
             static fn($value) => $value,
@@ -96,16 +89,15 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
-        $edge->asBidirectional();
-        $edge->shaped(
-            Shape::box(),
-            Shape::vee(),
-            Shape::tee(),
-            Shape::dot(),
-        );
+        )
+            ->asBidirectional()
+            ->shaped(
+                Shape::box(),
+                Shape::vee(),
+                Shape::tee(),
+                Shape::dot(),
+            );
 
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(3, $edge->attributes());
         $this->assertSame('boxveeteedot', $edge->attributes()->get('arrowtail')->match(
             static fn($value) => $value,
@@ -122,10 +114,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->displayAs('foo');
 
-        $this->assertNull($edge->displayAs('foo'));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('foo', $edge->attributes()->get('label')->match(
             static fn($value) => $value,
@@ -138,10 +128,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->useColor(Colour::red->toRGBA());
 
-        $this->assertNull($edge->useColor(Colour::red->toRGBA()));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('#ff0000', $edge->attributes()->get('color')->match(
             static fn($value) => $value,
@@ -154,10 +142,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->target(Url::of('example.com'));
 
-        $this->assertNull($edge->target(Url::of('example.com')));
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('example.com', $edge->attributes()->get('URL')->match(
             static fn($value) => $value,
@@ -170,10 +156,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->dotted();
 
-        $this->assertNull($edge->dotted());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('dotted', $edge->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -186,10 +170,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->bold();
 
-        $this->assertNull($edge->bold());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('bold', $edge->attributes()->get('style')->match(
             static fn($value) => $value,
@@ -202,10 +184,8 @@ class EdgeTest extends TestCase
         $edge = Edge::between(
             Node\Name::of('a'),
             Node::named('b'),
-        );
+        )->filled();
 
-        $this->assertNull($edge->filled());
-        $this->assertFalse($edge->attributes()->empty());
         $this->assertCount(1, $edge->attributes());
         $this->assertSame('filled', $edge->attributes()->get('style')->match(
             static fn($value) => $value,

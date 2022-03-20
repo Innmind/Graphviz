@@ -60,12 +60,14 @@ final class Node
         return $this->edges;
     }
 
-    public function linkedTo(self $node): Edge
+    /**
+     * @param (callable(Edge): Edge)|null $map
+     */
+    public function linkedTo(self $node, callable $map = null): void
     {
+        $map ??= static fn(Edge $edge): Edge => $edge;
         $edge = Edge::between($this->name, $node);
-        $this->edges = ($this->edges)($edge);
-
-        return $edge;
+        $this->edges = ($this->edges)($map($edge));
     }
 
     public function target(Url $url): void

@@ -143,12 +143,16 @@ DOT;
         $main = Node::of(Name::of('main'));
         $second = Node::of(Name::of('second'));
         $third = Node::of(Name::of('third'));
-        $edge = $main->linkedTo($second);
-        $edge->displayAs('watev');
-        $edge->withoutDirection();
-        $main
-            ->linkedTo($third)
-            ->asBidirectional();
+        $main->linkedTo(
+            $second,
+            static fn($edge) => $edge
+                ->displayAs('watev')
+                ->withoutDirection(),
+        );
+        $main->linkedTo(
+            $third,
+            static fn($edge) => $edge->asBidirectional(),
+        );
 
         $graph = Graph::directed();
         $graph->add($main);
