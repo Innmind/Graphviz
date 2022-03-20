@@ -25,7 +25,7 @@ final class Shape
         int $sides = null,
         int $peripheries = null,
         float $distortion = null,
-        float $skew = null
+        float $skew = null,
     ): self {
         $self = new self('polygon');
 

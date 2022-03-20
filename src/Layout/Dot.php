@@ -68,7 +68,7 @@ final class Dot
                             $value,
                         ))
                         ->append("\n");
-                }
+                },
             );
     }
 

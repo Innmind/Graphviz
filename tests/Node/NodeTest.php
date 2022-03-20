@@ -23,7 +23,7 @@ class NodeTest extends TestCase
     {
         $this->assertInstanceOf(
             NodeInterface::class,
-            new Node(new Name('foo'))
+            new Node(new Name('foo')),
         );
     }
 
@@ -41,7 +41,7 @@ class NodeTest extends TestCase
         $name = new Name('foo');
         $this->assertSame(
             $name,
-            (new Node($name))->name()
+            (new Node($name))->name(),
         );
     }
 

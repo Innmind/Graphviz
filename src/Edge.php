@@ -18,7 +18,7 @@ interface Edge
         Shape $shape,
         Shape $shape2 = null,
         Shape $shape3 = null,
-        Shape $shape4 = null
+        Shape $shape4 = null,
     ): void;
     public function displayAs(string $label): void;
     public function useColor(RGBA $color): void;

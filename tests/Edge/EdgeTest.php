@@ -22,8 +22,8 @@ class EdgeTest extends TestCase
             EdgeInterface::class,
             $edge = new Edge(
                 $this->createMock(Node::class),
-                $this->createMock(Node::class)
-            )
+                $this->createMock(Node::class),
+            ),
         );
         $this->assertFalse($edge->hasAttributes());
         $this->assertInstanceOf(Map::class, $edge->attributes());
@@ -33,7 +33,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $from = $this->createMock(Node::class),
-            $to = $this->createMock(Node::class)
+            $to = $this->createMock(Node::class),
         );
 
         $this->assertSame($from, $edge->from());
@@ -44,7 +44,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->asBidirectional());
@@ -60,7 +60,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->withoutDirection());
@@ -76,7 +76,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull(
@@ -84,7 +84,7 @@ class EdgeTest extends TestCase
                 Shape::box(),
                 Shape::vee(),
                 Shape::tee(),
-                Shape::dot()
+                Shape::dot(),
             ),
         );
         $this->assertTrue($edge->hasAttributes());
@@ -99,14 +99,14 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
         $edge->asBidirectional();
         $edge->shaped(
             Shape::box(),
             Shape::vee(),
             Shape::tee(),
-            Shape::dot()
+            Shape::dot(),
         );
 
         $this->assertTrue($edge->hasAttributes());
@@ -125,7 +125,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->displayAs('foo'));
@@ -141,7 +141,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->useColor(Colour::red->toRGBA()));
@@ -157,7 +157,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->target(Url::of('example.com')));
@@ -173,7 +173,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->dotted());
@@ -189,7 +189,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->bold());
@@ -205,7 +205,7 @@ class EdgeTest extends TestCase
     {
         $edge = new Edge(
             $this->createMock(Node::class),
-            $this->createMock(Node::class)
+            $this->createMock(Node::class),
         );
 
         $this->assertNull($edge->filled());

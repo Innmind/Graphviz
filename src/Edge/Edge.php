@@ -51,7 +51,7 @@ final class Edge implements EdgeInterface
         Shape $shape,
         Shape $shape2 = null,
         Shape $shape3 = null,
-        Shape $shape4 = null
+        Shape $shape4 = null,
     ): void {
         $shape = $shape->toString();
         $shape2 = $shape2 ? $shape2->toString() : '';
