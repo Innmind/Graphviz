@@ -6,19 +6,25 @@ namespace Innmind\Graphviz\Node;
 use Innmind\Colour\RGBA;
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Shape
 {
     /** @var Map<string, string> */
     private Map $attributes;
 
-    private function __construct(string $name)
+    /**
+     * @param Map<string, string> $attributes
+     */
+    private function __construct(Map $attributes)
     {
-        $this->attributes = Map::of(['shape', $name]);
+        $this->attributes = $attributes;
     }
 
     public static function box(): self
     {
-        return new self('box');
+        return new self(Map::of(['shape', 'box']));
     }
 
     public static function polygon(
@@ -27,174 +33,172 @@ final class Shape
         float $distortion = null,
         float $skew = null,
     ): self {
-        $self = new self('polygon');
+        /** @var Map<string, string> */
+        $attributes = Map::of(['shape', 'polygon']);
 
         if ($sides) {
-            $self->attributes = ($self->attributes)('sides', (string) $sides);
+            $attributes = ($attributes)('sides', (string) $sides);
         }
 
         if ($peripheries) {
-            $self->attributes = ($self->attributes)('peripheries', (string) $peripheries);
+            $attributes = ($attributes)('peripheries', (string) $peripheries);
         }
 
         if ($distortion) {
-            $self->attributes = ($self->attributes)(
+            $attributes = ($attributes)(
                 'distortion',
                 \sprintf('%0.1f', $distortion),
             );
         }
 
         if ($skew) {
-            $self->attributes = ($self->attributes)(
+            $attributes = ($attributes)(
                 'skew',
                 \sprintf('%0.1f', $skew),
             );
         }
 
-        return $self;
+        return new self($attributes);
     }
 
     public static function ellipse(float $width = .75, float $height = .5): self
     {
-        $self = new self('ellipse');
-        $self->attributes = ($self->attributes)
-            ('width', (string) $width)
-            ('height', (string) $height);
-
-        return $self;
+        return new self(Map::of(
+            ['shape', 'ellipse'],
+            ['width', (string) $width],
+            ['height', (string) $height],
+        ));
     }
 
     public static function circle(): self
     {
-        return new self('circle');
+        return new self(Map::of(['shape', 'circle']));
     }
 
     public static function point(): self
     {
-        return new self('point');
+        return new self(Map::of(['shape', 'point']));
     }
 
     public static function egg(): self
     {
-        return new self('egg');
+        return new self(Map::of(['shape', 'egg']));
     }
 
     public static function triangle(): self
     {
-        return new self('triangle');
+        return new self(Map::of(['shape', 'triangle']));
     }
 
     public static function plaintext(): self
     {
-        return new self('plaintext');
+        return new self(Map::of(['shape', 'plaintext']));
     }
 
     public static function diamond(): self
     {
-        return new self('diamond');
+        return new self(Map::of(['shape', 'diamond']));
     }
 
     public static function trapezium(): self
     {
-        return new self('trapezium');
+        return new self(Map::of(['shape', 'trapezium']));
     }
 
     public static function parallelogram(): self
     {
-        return new self('parallelogram');
+        return new self(Map::of(['shape', 'parallelogram']));
     }
 
     public static function house(): self
     {
-        return new self('house');
+        return new self(Map::of(['shape', 'house']));
     }
 
     public static function hexagon(): self
     {
-        return new self('hexagon');
+        return new self(Map::of(['shape', 'hexagon']));
     }
 
     public static function octagon(): self
     {
-        return new self('octagon');
+        return new self(Map::of(['shape', 'octagon']));
     }
 
     public static function doublecircle(): self
     {
-        return new self('doublecircle');
+        return new self(Map::of(['shape', 'doublecircle']));
     }
 
     public static function doubleoctagon(): self
     {
-        return new self('doubleoctagon');
+        return new self(Map::of(['shape', 'doubleoctagon']));
     }
 
     public static function tripleoctagon(): self
     {
-        return new self('tripleoctagon');
+        return new self(Map::of(['shape', 'tripleoctagon']));
     }
 
     public static function invtriangle(): self
     {
-        return new self('invtriangle');
+        return new self(Map::of(['shape', 'invtriangle']));
     }
 
     public static function invtrapezium(): self
     {
-        return new self('invtrapezium');
+        return new self(Map::of(['shape', 'invtrapezium']));
     }
 
     public static function invhouse(): self
     {
-        return new self('invhouse');
+        return new self(Map::of(['shape', 'invhouse']));
     }
 
     public static function Mdiamond(): self
     {
-        return new self('Mdiamond');
+        return new self(Map::of(['shape', 'Mdiamond']));
     }
 
     public static function Msquare(): self
     {
-        return new self('Msquare');
+        return new self(Map::of(['shape', 'Msquare']));
     }
 
     public static function Mcircle(): self
     {
-        return new self('Mcircle');
+        return new self(Map::of(['shape', 'Mcircle']));
     }
 
     public static function none(): self
     {
-        return new self('none');
+        return new self(Map::of(['shape', 'none']));
     }
 
     public static function record(): self
     {
-        return new self('record');
+        return new self(Map::of(['shape', 'record']));
     }
 
     public static function Mrecord(): self
     {
-        return new self('Mrecord');
+        return new self(Map::of(['shape', 'Mrecord']));
     }
 
     public function withColor(RGBA $color): self
     {
-        $self = clone $this;
-        $self->attributes = ($self->attributes)('color', $color->toString());
-
-        return $self;
+        return new self(
+            ($this->attributes)('color', $color->toString()),
+        );
     }
 
     public function fillWithColor(RGBA $color): self
     {
-        $self = clone $this;
-        $self->attributes = ($self->attributes)
-            ('style', 'filled')
-            ('fillcolor', $color->toString());
-
-        return $self;
+        return new self(
+            ($this->attributes)
+                ('style', 'filled')
+                ('fillcolor', $color->toString()),
+        );
     }
 
     /**
