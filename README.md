@@ -17,18 +17,16 @@ composer require innmind/graphviz
 ```php
 use Innmind\Graphviz\{
     Layout\Dot,
-    Graph\Graph,
-    Node\Node,
+    Graph,
+    Node,
     Node\Shape,
 };
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
-use Innmind\Server\Control\{
-    ServerFactory,
-    Server\Command,
-};
+use Innmind\OperatingSystem\Factory;
+use Innmind\Server\Control\Server\Command;
 
-$dot = new Dot;
+$dot = Dot::of();
 $graph = Graph::directed();
 $clusterOne = Graph::directed('one');
 $clusterOne->target(Url::of('http://example.com'));
@@ -41,8 +39,8 @@ $clusterTwo->add(Node::named('two'));
 $clusterThree = Graph::directed('three');
 $clusterThree->add($three = Node::named('three'));
 
-//important to not reuse nodes added in clusters otherwise clusters boundaries
-//will be messed up
+// important to not reuse nodes added in clusters otherwise clusters boundaries
+// will be messed up
 $root = Node::named('root');
 $root->shaped(Shape::house());
 $root->linkedTo($one = Node::named('one'));
@@ -57,8 +55,8 @@ $graph->cluster($clusterThree);
 
 $output = $dot($graph);
 
-(new ServerFactory)
-    ->make()
+Factory::build()
+    ->control()
     ->processes()
     ->execute(
         Command::foreground('dot')
