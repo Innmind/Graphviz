@@ -6,6 +6,9 @@ namespace Innmind\Graphviz\Attribute;
 use Innmind\Graphviz\Exception\DomainException;
 use Innmind\Immutable\Str;
 
+/**
+ * @psalm-immutable
+ */
 final class Value
 {
     private string $value;

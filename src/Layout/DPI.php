@@ -5,6 +5,9 @@ namespace Innmind\Graphviz\Layout;
 
 use Innmind\Graphviz\Exception\DomainException;
 
+/**
+ * @psalm-immutable
+ */
 final class DPI
 {
     private int $value;
