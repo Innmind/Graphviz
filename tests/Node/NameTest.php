@@ -25,7 +25,7 @@ class NameTest extends TestCase
                 return \strlen($string) > 0 && \strpos($string, '->') === false && \strpos($string, '-') === false && \strpos($string, '.') === false && \strpos($string, "\x00") === false;
             })
             ->then(function(string $string): void {
-                $this->assertSame($string, (new Name($string))->toString());
+                $this->assertSame($string, Name::of($string)->toString());
             });
     }
 
@@ -33,34 +33,34 @@ class NameTest extends TestCase
     {
         $this->expectException(DomainException::class);
 
-        new Name('');
+        Name::of('');
     }
 
     public function testThrowWhenContainingAnArrow()
     {
         $this->expectException(DomainException::class);
 
-        new Name('->');
+        Name::of('->');
     }
 
     public function testThrowWhenContainingAnDash()
     {
         $this->expectException(DomainException::class);
 
-        new Name('-');
+        Name::of('-');
     }
 
     public function testThrowWhenContainingADot()
     {
         $this->expectException(DomainException::class);
 
-        new Name('.');
+        Name::of('.');
     }
 
     public function testThrowWhenContainingANullCharacter()
     {
         $this->expectException(DomainException::class);
 
-        new Name("\x00");
+        Name::of("\x00");
     }
 }

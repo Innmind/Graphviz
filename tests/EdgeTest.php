@@ -17,9 +17,9 @@ class EdgeTest extends TestCase
 {
     public function testInterface()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
         $this->assertTrue($edge->attributes()->empty());
         $this->assertInstanceOf(Map::class, $edge->attributes());
@@ -27,9 +27,9 @@ class EdgeTest extends TestCase
 
     public function testNodes()
     {
-        $edge = new Edge(
-            $from = new Node(new Node\Name('a')),
-            $to = new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            $from = Node::named('a'),
+            $to = Node::named('b'),
         );
 
         $this->assertSame($from, $edge->from());
@@ -38,9 +38,9 @@ class EdgeTest extends TestCase
 
     public function testAsBidirectional()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->asBidirectional());
@@ -54,9 +54,9 @@ class EdgeTest extends TestCase
 
     public function testWithoutDirection()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->withoutDirection());
@@ -70,9 +70,9 @@ class EdgeTest extends TestCase
 
     public function testShaped()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull(
@@ -93,9 +93,9 @@ class EdgeTest extends TestCase
 
     public function testShapedWhenBidirectional()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
         $edge->asBidirectional();
         $edge->shaped(
@@ -119,9 +119,9 @@ class EdgeTest extends TestCase
 
     public function testDisplayAs()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->displayAs('foo'));
@@ -135,9 +135,9 @@ class EdgeTest extends TestCase
 
     public function testUseColor()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->useColor(Colour::red->toRGBA()));
@@ -151,9 +151,9 @@ class EdgeTest extends TestCase
 
     public function testTarget()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->target(Url::of('example.com')));
@@ -167,9 +167,9 @@ class EdgeTest extends TestCase
 
     public function testDotted()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->dotted());
@@ -183,9 +183,9 @@ class EdgeTest extends TestCase
 
     public function testBold()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->bold());
@@ -199,9 +199,9 @@ class EdgeTest extends TestCase
 
     public function testFilled()
     {
-        $edge = new Edge(
-            new Node(new Node\Name('a')),
-            new Node(new Node\Name('b')),
+        $edge = Edge::between(
+            Node::named('a'),
+            Node::named('b'),
         );
 
         $this->assertNull($edge->filled());

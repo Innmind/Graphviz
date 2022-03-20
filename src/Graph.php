@@ -45,12 +45,12 @@ final class Graph
 
     public static function directed(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(true, new Name($name), $rankdir);
+        return new self(true, Name::of($name), $rankdir);
     }
 
     public static function undirected(string $name = 'G', Rankdir $rankdir = null): self
     {
-        return new self(false, new Name($name), $rankdir);
+        return new self(false, Name::of($name), $rankdir);
     }
 
     public function isDirected(): bool
@@ -114,7 +114,7 @@ final class Graph
     {
         $this->attributes = ($this->attributes)(
             'label',
-            (new Value($label))->toString(),
+            Value::of($label)->toString(),
         );
     }
 
@@ -134,7 +134,7 @@ final class Graph
     {
         $this->attributes = ($this->attributes)(
             'URL',
-            (new Value($url->toString()))->toString(),
+            Value::of($url->toString())->toString(),
         );
     }
 

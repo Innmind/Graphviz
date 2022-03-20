@@ -18,12 +18,17 @@ final class Edge
     /** @var Map<string, string> */
     private Map $attributes;
 
-    public function __construct(Node $from, Node $to)
+    private function __construct(Node $from, Node $to)
     {
         $this->from = $from;
         $this->to = $to;
         /** @var Map<string, string> */
         $this->attributes = Map::of();
+    }
+
+    public static function between(Node $from, Node $to): self
+    {
+        return new self($from, $to);
     }
 
     public function from(): Node
@@ -74,7 +79,7 @@ final class Edge
     {
         $this->attributes = ($this->attributes)(
             'label',
-            (new Value($label))->toString(),
+            Value::of($label)->toString(),
         );
     }
 
@@ -87,7 +92,7 @@ final class Edge
     {
         $this->attributes = ($this->attributes)(
             'URL',
-            (new Value($url->toString()))->toString(),
+            Value::of($url->toString())->toString(),
         );
     }
 

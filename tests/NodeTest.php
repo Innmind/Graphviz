@@ -29,17 +29,17 @@ class NodeTest extends TestCase
 
     public function testName()
     {
-        $name = new Name('foo');
+        $name = Name::of('foo');
         $this->assertSame(
             $name,
-            (new Node($name))->name(),
+            Node::of($name)->name(),
         );
     }
 
     public function testEdges()
     {
-        $node = new Node(new Name('foo'));
-        $to = new Node(new Name('bar'));
+        $node = Node::of(Name::of('foo'));
+        $to = Node::of(Name::of('bar'));
 
         $this->assertInstanceOf(Set::class, $node->edges());
         $this->assertCount(0, $node->edges());
@@ -55,7 +55,7 @@ class NodeTest extends TestCase
 
     public function testAttributes()
     {
-        $node = new Node(new Name('foo'));
+        $node = Node::of(Name::of('foo'));
 
         $this->assertInstanceOf(Map::class, $node->attributes());
         $this->assertCount(0, $node->attributes());
@@ -63,7 +63,7 @@ class NodeTest extends TestCase
 
     public function testTarget()
     {
-        $node = new Node(new Name('foo'));
+        $node = Node::of(Name::of('foo'));
 
         $this->assertNull($node->target($url = Url::of('example.com')));
         $this->assertCount(1, $node->attributes());
@@ -75,7 +75,7 @@ class NodeTest extends TestCase
 
     public function testLabel()
     {
-        $node = new Node(new Name('foo'));
+        $node = Node::of(Name::of('foo'));
 
         $this->assertNull($node->displayAs('watev'));
         $this->assertCount(1, $node->attributes());
@@ -87,7 +87,7 @@ class NodeTest extends TestCase
 
     public function testShape()
     {
-        $node = new Node(new Name('foo'));
+        $node = Node::of(Name::of('foo'));
 
         $this->assertNull($node->shaped($shape = Shape::ellipse()));
         $this->assertFalse($node->attributes()->empty());

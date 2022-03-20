@@ -10,7 +10,7 @@ final class Name
 {
     private string $value;
 
-    public function __construct(string $name)
+    private function __construct(string $name)
     {
         $name = Str::of($name);
 
@@ -25,6 +25,11 @@ final class Name
         }
 
         $this->value = $name->toString();
+    }
+
+    public static function of(string $name): self
+    {
+        return new self($name);
     }
 
     public function toString(): string

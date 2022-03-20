@@ -10,13 +10,21 @@ final class Name
 {
     private string $value;
 
-    public function __construct(string $name)
+    private function __construct(string $name)
     {
         if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
             throw new DomainException($name);
         }
 
         $this->value = $name;
+    }
+
+    /**
+     * @throws DomainException
+     */
+    public static function of(string $name): self
+    {
+        return new self($name);
     }
 
     public function toString(): string

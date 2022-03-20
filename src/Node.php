@@ -26,7 +26,7 @@ final class Node
     /** @var Maybe<Shape> */
     private Maybe $shape;
 
-    public function __construct(Name $name)
+    private function __construct(Name $name)
     {
         $this->name = $name;
         /** @var Set<Edge> */
@@ -37,9 +37,14 @@ final class Node
         $this->shape = Maybe::nothing();
     }
 
+    public static function of(Name $name): self
+    {
+        return new self($name);
+    }
+
     public static function named(string $name): self
     {
-        return new self(new Name($name));
+        return new self(Name::of($name));
     }
 
     public function name(): Name
@@ -57,7 +62,7 @@ final class Node
 
     public function linkedTo(self $node): Edge
     {
-        $edge = new Edge($this, $node);
+        $edge = Edge::between($this, $node);
         $this->edges = ($this->edges)($edge);
 
         return $edge;
@@ -67,7 +72,7 @@ final class Node
     {
         $this->attributes = ($this->attributes)(
             'URL',
-            (new Value($url->toString()))->toString(),
+            Value::of($url->toString())->toString(),
         );
     }
 
@@ -75,7 +80,7 @@ final class Node
     {
         $this->attributes = ($this->attributes)(
             'label',
-            (new Value($label))->toString(),
+            Value::of($label)->toString(),
         );
     }
 

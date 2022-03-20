@@ -24,15 +24,15 @@ class DotTest extends TestCase
      */
     public function testFigure2()
     {
-        $layout = new Dot;
-        $main = new Node(new Name('main'));
-        $parse = new Node(new Name('parse'));
-        $execute = new Node(new Name('execute'));
-        $makeString = new Node(new Name('make_string'));
-        $compare = new Node(new Name('compare'));
-        $printf = new Node(new Name('printf'));
-        $init = new Node(new Name('init'));
-        $cleanup = new Node(new Name('cleanup'));
+        $layout = Dot::of();
+        $main = Node::of(Name::of('main'));
+        $parse = Node::of(Name::of('parse'));
+        $execute = Node::of(Name::of('execute'));
+        $makeString = Node::of(Name::of('make_string'));
+        $compare = Node::of(Name::of('compare'));
+        $printf = Node::of(Name::of('printf'));
+        $init = Node::of(Name::of('init'));
+        $cleanup = Node::of(Name::of('cleanup'));
 
         $parse->linkedTo($execute);
         $main->linkedTo($parse);
@@ -69,10 +69,10 @@ DOT;
 
     public function testDPI()
     {
-        $dot = new Dot(new DPI(200));
+        $dot = Dot::of(DPI::of(200));
 
         $graph = Graph::directed();
-        $graph->add(new Node(new Name('main')));
+        $graph->add(Node::of(Name::of('main')));
 
         $output = $dot($graph);
         $expected = <<<DOT
@@ -87,16 +87,16 @@ DOT;
 
     public function testNodeAttributes()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
-        $main = new Node(new Name('main'));
-        $parse = new Node(new Name('parse'));
-        $execute = new Node(new Name('execute'));
-        $makeString = new Node(new Name('make_string'));
-        $compare = new Node(new Name('compare'));
-        $printf = new Node(new Name('printf'));
-        $init = new Node(new Name('init'));
-        $cleanup = new Node(new Name('cleanup'));
+        $main = Node::of(Name::of('main'));
+        $parse = Node::of(Name::of('parse'));
+        $execute = Node::of(Name::of('execute'));
+        $makeString = Node::of(Name::of('make_string'));
+        $compare = Node::of(Name::of('compare'));
+        $printf = Node::of(Name::of('printf'));
+        $init = Node::of(Name::of('init'));
+        $cleanup = Node::of(Name::of('cleanup'));
 
         $parse->linkedTo($execute);
         $main->linkedTo($parse);
@@ -138,11 +138,11 @@ DOT;
 
     public function testEdgeAttributes()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
-        $main = new Node(new Name('main'));
-        $second = new Node(new Name('second'));
-        $third = new Node(new Name('third'));
+        $main = Node::of(Name::of('main'));
+        $second = Node::of(Name::of('second'));
+        $third = Node::of(Name::of('third'));
         $edge = $main->linkedTo($second);
         $edge->displayAs('watev');
         $edge->withoutDirection();
@@ -167,7 +167,7 @@ DOT;
 
     public function testUndirectedGraph()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
         $main = Node::named('main');
         $main->linkedTo(Node::named('second'));
 
@@ -187,7 +187,7 @@ DOT;
 
     public function testNamedGraph()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
         $foo = Graph::directed('foo');
         $foo->add(Node::named('main'));
@@ -239,7 +239,7 @@ DOT;
         $secondCluster->add($second);
         $thirdCluster->add($third);
 
-        $output = (new Dot)($root);
+        $output = Dot::of()($root);
 
         $expected = <<<DOT
 digraph G {
@@ -270,7 +270,7 @@ DOT;
     {
         $root = Graph::directed('G', Rankdir::leftToRight);
 
-        $output = (new Dot)($root);
+        $output = Dot::of()($root);
 
         $expected = <<<DOT
 digraph G {
@@ -283,7 +283,7 @@ DOT;
 
     public function testRenderCyclicGraph()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
         $main = Node::named('main');
         $main->linkedTo($second = Node::named('second'));
         $second->linkedTo($main);

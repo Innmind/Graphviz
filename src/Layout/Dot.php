@@ -21,7 +21,7 @@ final class Dot
     /** @var Maybe<DPI> */
     private Maybe $dpi;
 
-    public function __construct(DPI $dpi = null)
+    private function __construct(DPI $dpi = null)
     {
         $this->dpi = Maybe::of($dpi);
     }
@@ -40,6 +40,11 @@ final class Dot
             ->map(static fn($line) => Content\Line::of($line));
 
         return Content\Lines::of($lines);
+    }
+
+    public static function of(DPI $dpi = null): self
+    {
+        return new self($dpi);
     }
 
     /**

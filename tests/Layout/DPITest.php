@@ -22,7 +22,7 @@ class DPITest extends TestCase
         $this
             ->forAll(Set\Integers::above(1))
             ->then(function(int $int): void {
-                $this->assertSame($int, (new DPI($int))->toInt());
+                $this->assertSame($int, DPI::of($int)->toInt());
             });
     }
 
@@ -32,7 +32,7 @@ class DPITest extends TestCase
             ->forAll(Set\Integers::below(0))
             ->then(function(int $int): void {
                 try {
-                    new DPI($int);
+                    DPI::of($int);
                 } catch (\Throwable $e) {
                     $this->assertInstanceOf(DomainException::class, $e);
                 }
