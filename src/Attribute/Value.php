@@ -6,17 +6,30 @@ namespace Innmind\Graphviz\Attribute;
 use Innmind\Graphviz\Exception\DomainException;
 use Innmind\Immutable\Str;
 
+/**
+ * @psalm-immutable
+ */
 final class Value
 {
     private string $value;
 
-    public function __construct(string $value)
+    private function __construct(string $value)
     {
         if (Str::of($value)->contains("\x00")) {
             throw new DomainException($value);
         }
 
         $this->value = $value;
+    }
+
+    /**
+     * @psalm-pure
+     *
+     * @throws DomainException
+     */
+    public static function of(string $value): self
+    {
+        return new self($value);
     }
 
     public function toString(): string

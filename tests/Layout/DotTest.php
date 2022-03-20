@@ -6,15 +6,15 @@ namespace Tests\Innmind\Graphviz\Layout;
 use Innmind\Graphviz\{
     Layout\Dot,
     Layout\DPI,
-    Node\Node,
+    Node,
     Node\Shape,
     Node\Name,
-    Graph\Graph,
-    Graph\Rankdir
+    Graph,
+    Graph\Rankdir,
 };
+use Innmind\Filesystem\File\Content;
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
-use Innmind\Stream\Readable;
 use PHPUnit\Framework\TestCase;
 
 class DotTest extends TestCase
@@ -24,28 +24,31 @@ class DotTest extends TestCase
      */
     public function testFigure2()
     {
-        $layout = new Dot;
-        $main = new Node(new Name('main'));
-        $parse = new Node(new Name('parse'));
-        $execute = new Node(new Name('execute'));
-        $makeString = new Node(new Name('make_string'));
-        $compare = new Node(new Name('compare'));
-        $printf = new Node(new Name('printf'));
-        $init = new Node(new Name('init'));
-        $cleanup = new Node(new Name('cleanup'));
+        $layout = Dot::of();
+        $main = Node::of(Name::of('main'));
+        $parse = Node::of(Name::of('parse'));
+        $execute = Node::of(Name::of('execute'));
+        $makeString = Name::of('make_string');
+        $printf = Name::of('printf');
+        $init = Node::of(Name::of('init'));
 
-        $parse->linkedTo($execute);
-        $main->linkedTo($parse);
-        $main->linkedTo($init);
-        $main->linkedTo($cleanup);
-        $execute->linkedTo($makeString);
-        $execute->linkedTo($printf);
-        $init->linkedTo($makeString);
-        $main->linkedTo($printf);
-        $execute->linkedTo($compare);
+        $parse = $parse->linkedTo($execute->name());
+        $main = $main
+            ->linkedTo($parse->name())
+            ->linkedTo($init->name())
+            ->linkedTo(Name::of('cleanup'))
+            ->linkedTo($printf);
+        $execute = $execute
+            ->linkedTo($makeString)
+            ->linkedTo($printf)
+            ->linkedTo(Name::of('compare'));
+        $init = $init->linkedTo($makeString);
 
-        $graph = Graph::directed();
-        $graph->add($main);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($parse)
+            ->add($execute)
+            ->add($init);
 
         $output = $layout($graph);
 
@@ -63,16 +66,15 @@ digraph G {
 }
 DOT;
 
-        $this->assertInstanceOf(Readable::class, $output);
+        $this->assertInstanceOf(Content::class, $output);
         $this->assertSame($expected, $output->toString());
     }
 
     public function testDPI()
     {
-        $dot = new Dot(new DPI(200));
+        $dot = Dot::of(DPI::of(200));
 
-        $graph = Graph::directed();
-        $graph->add(new Node(new Name('main')));
+        $graph = Graph::directed()->add(Node::named('main'));
 
         $output = $dot($graph);
         $expected = <<<DOT
@@ -87,33 +89,37 @@ DOT;
 
     public function testNodeAttributes()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
-        $main = new Node(new Name('main'));
-        $parse = new Node(new Name('parse'));
-        $execute = new Node(new Name('execute'));
-        $makeString = new Node(new Name('make_string'));
-        $compare = new Node(new Name('compare'));
-        $printf = new Node(new Name('printf'));
-        $init = new Node(new Name('init'));
-        $cleanup = new Node(new Name('cleanup'));
+        $main = Node::of(Name::of('main'));
+        $parse = Node::of(Name::of('parse'));
+        $execute = Node::of(Name::of('execute'));
+        $makeString = Name::of('make_string');
+        $printf = Name::of('printf');
+        $init = Node::of(Name::of('init'));
 
-        $parse->linkedTo($execute);
-        $main->linkedTo($parse);
-        $main->linkedTo($init);
-        $main->linkedTo($cleanup);
-        $execute->linkedTo($makeString);
-        $execute->linkedTo($printf);
-        $init->linkedTo($makeString);
-        $main->linkedTo($printf);
-        $execute->linkedTo($compare);
-        $main->shaped(Shape::circle());
-        $main->displayAs('Main Node');
-        $main->target(Url::of('example.com'));
-        $parse->displayAs('Parse');
+        $parse = $parse
+            ->linkedTo($execute->name())
+            ->displayAs('Parse');
+        $main = $main
+            ->linkedTo($parse->name())
+            ->linkedTo($init->name())
+            ->linkedTo(Name::of('cleanup'))
+            ->linkedTo($printf)
+            ->shaped(Shape::circle())
+            ->displayAs('Main Node')
+            ->target(Url::of('example.com'));
+        $execute = $execute
+            ->linkedTo($makeString)
+            ->linkedTo($printf)
+            ->linkedTo(Name::of('compare'));
+        $init = $init->linkedTo($makeString);
 
-        $graph = Graph::directed();
-        $graph->add($main);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($parse)
+            ->add($execute)
+            ->add($init);
 
         $output = $dot($graph);
 
@@ -138,20 +144,20 @@ DOT;
 
     public function testEdgeAttributes()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
-        $main = new Node(new Name('main'));
-        $second = new Node(new Name('second'));
-        $third = new Node(new Name('third'));
-        $edge = $main->linkedTo($second);
-        $edge->displayAs('watev');
-        $edge->withoutDirection();
-        $main
-            ->linkedTo($third)
-            ->asBidirectional();
+        $main = Node::of(Name::of('main'))->linkedTo(
+            Name::of('second'),
+            static fn($edge) => $edge
+                ->displayAs('watev')
+                ->withoutDirection(),
+        );
+        $main = $main->linkedTo(
+            Name::of('third'),
+            static fn($edge) => $edge->asBidirectional(),
+        );
 
-        $graph = Graph::directed();
-        $graph->add($main);
+        $graph = Graph::directed()->add($main);
 
         $output = $dot($graph);
 
@@ -167,12 +173,10 @@ DOT;
 
     public function testUndirectedGraph()
     {
-        $dot = new Dot;
-        $main = Node::named('main');
-        $main->linkedTo(Node::named('second'));
+        $dot = Dot::of();
+        $main = Node::named('main')->linkedTo(Name::of('second'));
 
-        $graph = Graph::undirected();
-        $graph->add($main);
+        $graph = Graph::undirected()->add($main);
 
         $output = $dot($graph);
 
@@ -187,10 +191,9 @@ DOT;
 
     public function testNamedGraph()
     {
-        $dot = new Dot;
+        $dot = Dot::of();
 
-        $foo = Graph::directed('foo');
-        $foo->add(Node::named('main'));
+        $foo = Graph::directed('foo')->add(Node::named('main'));
 
         $output = $dot($foo);
 
@@ -205,41 +208,35 @@ DOT;
 
     public function testRenderClusters()
     {
-        $root = Graph::directed();
-        $firstCluster = Graph::directed('first');
-        $firstCluster->displayAs('First');
-        $firstCluster->fillWithColor(Colour::of('yellow'));
-        $firstCluster->colorizeBorderWith(Colour::of('green'));
-        $secondCluster = Graph::directed('second');
-        $thirdCluster = Graph::directed('third');
-
-        $start = Node::named('start');
         $first = Node::named('first');
         $second = Node::named('second');
         $third = Node::named('third');
+        $first = $first->linkedTo(Name::of('first_inner'));
+        $second = $second->linkedTo(Name::of('second_inner'));
+        $third = $third->linkedTo(Name::of('third_inner'));
 
-        $start->linkedTo($first);
-        $start->linkedTo($second);
-        $first->linkedTo($third);
-        $second->linkedTo($third);
+        $firstCluster = Graph::directed('first')
+            ->displayAs('First')
+            ->fillWithColor(Colour::yellow->toRGBA())
+            ->colorizeBorderWith(Colour::green->toRGBA())
+            ->add($first);
 
-        $root->add($start);
-        $root->cluster($firstCluster);
-        $root->cluster($secondCluster);
-        $root->cluster($thirdCluster);
+        $secondCluster = Graph::directed('second')->add($second);
+        $thirdCluster = Graph::directed('third')->add($third);
 
-        $first = Node::named('first');
-        $second = Node::named('second');
-        $third = Node::named('third');
-        $first->linkedTo(Node::named('first_inner'));
-        $second->linkedTo(Node::named('second_inner'));
-        $third->linkedTo(Node::named('third_inner'));
+        $root = Graph::directed()
+            ->add(
+                Node::named('start')
+                    ->linkedTo($first->name())
+                    ->linkedTo($second->name()),
+            )
+            ->add(Node::named('first')->linkedTo(Name::of('third')))
+            ->add(Node::named('second')->linkedTo(Name::of('third')))
+            ->cluster($firstCluster)
+            ->cluster($secondCluster)
+            ->cluster($thirdCluster);
 
-        $firstCluster->add($first);
-        $secondCluster->add($second);
-        $thirdCluster->add($third);
-
-        $output = (new Dot)($root);
+        $output = Dot::of()($root);
 
         $expected = <<<DOT
 digraph G {
@@ -268,9 +265,9 @@ DOT;
 
     public function testRenderGraphFromLeftToRight()
     {
-        $root = Graph::directed('G', Rankdir::leftToRight());
+        $root = Graph::directed('G', Rankdir::leftToRight);
 
-        $output = (new Dot)($root);
+        $output = Dot::of()($root);
 
         $expected = <<<DOT
 digraph G {
@@ -283,13 +280,13 @@ DOT;
 
     public function testRenderCyclicGraph()
     {
-        $dot = new Dot;
-        $main = Node::named('main');
-        $main->linkedTo($second = Node::named('second'));
-        $second->linkedTo($main);
+        $dot = Dot::of();
+        $main = Node::named('main')->linkedTo(Name::of('second'));
+        $second = Node::named('second')->linkedTo($main->name());
 
-        $graph = Graph::directed();
-        $graph->add($main);
+        $graph = Graph::directed()
+            ->add($main)
+            ->add($second);
 
         $output = $dot($graph);
 

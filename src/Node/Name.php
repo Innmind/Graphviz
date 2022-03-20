@@ -6,11 +6,14 @@ namespace Innmind\Graphviz\Node;
 use Innmind\Graphviz\Exception\DomainException;
 use Innmind\Immutable\Str;
 
+/**
+ * @psalm-immutable
+ */
 final class Name
 {
     private string $value;
 
-    public function __construct(string $name)
+    private function __construct(string $name)
     {
         $name = Str::of($name);
 
@@ -25,6 +28,14 @@ final class Name
         }
 
         $this->value = $name->toString();
+    }
+
+    /**
+     * @psalm-pure
+     */
+    public static function of(string $name): self
+    {
+        return new self($name);
     }
 
     public function toString(): string

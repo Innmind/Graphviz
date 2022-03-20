@@ -69,7 +69,7 @@ class ShapeTest extends TestCase
             ->forAll(
                 $this->shapes(),
                 Set\Elements::of('right', 'left'),
-                Set\Elements::of('right', 'left')
+                Set\Elements::of('right', 'left'),
             )
             ->filter(static function(string $shape, string $side1, string $side2): bool {
                 return $side1 !== $side2;
@@ -92,7 +92,7 @@ class ShapeTest extends TestCase
         $this
             ->forAll(
                 $this->shapes(),
-                Set\Elements::of('right', 'left')
+                Set\Elements::of('right', 'left'),
             )
             ->then(function(string $shape, string $side): void {
                 $sideChar = \substr($side, 0, 1);
@@ -120,7 +120,7 @@ class ShapeTest extends TestCase
             'none',
             'normal',
             'tee',
-            'vee'
+            'vee',
         );
     }
 }
