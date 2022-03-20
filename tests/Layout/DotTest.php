@@ -268,7 +268,7 @@ DOT;
 
     public function testRenderGraphFromLeftToRight()
     {
-        $root = Graph::directed('G', Rankdir::leftToRight());
+        $root = Graph::directed('G', Rankdir::leftToRight);
 
         $output = (new Dot)($root);
 
