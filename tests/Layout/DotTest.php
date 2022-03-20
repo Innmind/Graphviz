@@ -12,9 +12,9 @@ use Innmind\Graphviz\{
     Graph\Graph,
     Graph\Rankdir
 };
+use Innmind\Filesystem\File\Content;
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
-use Innmind\Stream\Readable;
 use PHPUnit\Framework\TestCase;
 
 class DotTest extends TestCase
@@ -63,11 +63,8 @@ digraph G {
 }
 DOT;
 
-        $this->assertInstanceOf(Readable::class, $output);
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertInstanceOf(Content::class, $output);
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testDPI()
@@ -85,10 +82,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testNodeAttributes()
@@ -139,10 +133,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testEdgeAttributes()
@@ -171,10 +162,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testUndirectedGraph()
@@ -194,10 +182,7 @@ graph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testNamedGraph()
@@ -215,10 +200,7 @@ digraph foo {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderClusters()
@@ -281,10 +263,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderGraphFromLeftToRight()
@@ -299,10 +278,7 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 
     public function testRenderCyclicGraph()
@@ -324,9 +300,6 @@ digraph G {
 }
 DOT;
 
-        $this->assertSame($expected, $output->toString()->match(
-            static fn($string) => $string,
-            static fn() => null,
-        ));
+        $this->assertSame($expected, $output->toString());
     }
 }
