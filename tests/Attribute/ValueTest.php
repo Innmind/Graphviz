@@ -27,7 +27,7 @@ class ValueTest extends TestCase
                 ),
             ))
             ->then(function(string $string): void {
-                $this->assertSame($string, (new Value($string))->toString());
+                $this->assertSame($string, Value::of($string)->toString());
             });
     }
 
@@ -36,6 +36,6 @@ class ValueTest extends TestCase
         $this->expectException(DomainException::class);
         $this->expectExceptionMessage("foo\x00bar");
 
-        new Value("foo\x00bar");
+        Value::of("foo\x00bar");
     }
 }

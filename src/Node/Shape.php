@@ -6,197 +6,277 @@ namespace Innmind\Graphviz\Node;
 use Innmind\Colour\RGBA;
 use Innmind\Immutable\Map;
 
+/**
+ * @psalm-immutable
+ */
 final class Shape
 {
     /** @var Map<string, string> */
     private Map $attributes;
 
-    private function __construct(string $name)
+    /**
+     * @param Map<string, string> $attributes
+     */
+    private function __construct(Map $attributes)
     {
-        /** @var Map<string, string> */
-        $attributes = Map::of('string', 'string');
-        $this->attributes = ($attributes)('shape', $name);
+        $this->attributes = $attributes;
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function box(): self
     {
-        return new self('box');
+        return self::shape('box');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function polygon(
         int $sides = null,
         int $peripheries = null,
         float $distortion = null,
-        float $skew = null
+        float $skew = null,
     ): self {
-        $self = new self('polygon');
+        /** @var Map<string, string> */
+        $attributes = Map::of(['shape', 'polygon']);
 
         if ($sides) {
-            $self->attributes = ($self->attributes)('sides', (string) $sides);
+            $attributes = ($attributes)('sides', (string) $sides);
         }
 
         if ($peripheries) {
-            $self->attributes = ($self->attributes)('peripheries', (string) $peripheries);
+            $attributes = ($attributes)('peripheries', (string) $peripheries);
         }
 
         if ($distortion) {
-            $self->attributes = ($self->attributes)(
+            $attributes = ($attributes)(
                 'distortion',
                 \sprintf('%0.1f', $distortion),
             );
         }
 
         if ($skew) {
-            $self->attributes = ($self->attributes)(
+            $attributes = ($attributes)(
                 'skew',
                 \sprintf('%0.1f', $skew),
             );
         }
 
-        return $self;
+        return new self($attributes);
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function ellipse(float $width = .75, float $height = .5): self
     {
-        $self = new self('ellipse');
-        $self->attributes = ($self->attributes)
-            ('width', (string) $width)
-            ('height', (string) $height);
-
-        return $self;
+        return new self(Map::of(
+            ['shape', 'ellipse'],
+            ['width', (string) $width],
+            ['height', (string) $height],
+        ));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function circle(): self
     {
-        return new self('circle');
+        return self::shape('circle');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function point(): self
     {
-        return new self('point');
+        return self::shape('point');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function egg(): self
     {
-        return new self('egg');
+        return self::shape('egg');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function triangle(): self
     {
-        return new self('triangle');
+        return self::shape('triangle');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function plaintext(): self
     {
-        return new self('plaintext');
+        return self::shape('plaintext');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function diamond(): self
     {
-        return new self('diamond');
+        return self::shape('diamond');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function trapezium(): self
     {
-        return new self('trapezium');
+        return self::shape('trapezium');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function parallelogram(): self
     {
-        return new self('parallelogram');
+        return self::shape('parallelogram');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function house(): self
     {
-        return new self('house');
+        return self::shape('house');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function hexagon(): self
     {
-        return new self('hexagon');
+        return self::shape('hexagon');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function octagon(): self
     {
-        return new self('octagon');
+        return self::shape('octagon');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function doublecircle(): self
     {
-        return new self('doublecircle');
+        return self::shape('doublecircle');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function doubleoctagon(): self
     {
-        return new self('doubleoctagon');
+        return self::shape('doubleoctagon');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function tripleoctagon(): self
     {
-        return new self('tripleoctagon');
+        return self::shape('tripleoctagon');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invtriangle(): self
     {
-        return new self('invtriangle');
+        return self::shape('invtriangle');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invtrapezium(): self
     {
-        return new self('invtrapezium');
+        return self::shape('invtrapezium');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function invhouse(): self
     {
-        return new self('invhouse');
+        return self::shape('invhouse');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mdiamond(): self
     {
-        return new self('Mdiamond');
+        return self::shape('Mdiamond');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Msquare(): self
     {
-        return new self('Msquare');
+        return self::shape('Msquare');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mcircle(): self
     {
-        return new self('Mcircle');
+        return self::shape('Mcircle');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function none(): self
     {
-        return new self('none');
+        return self::shape('none');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function record(): self
     {
-        return new self('record');
+        return self::shape('record');
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function Mrecord(): self
     {
-        return new self('Mrecord');
+        return self::shape('Mrecord');
     }
 
     public function withColor(RGBA $color): self
     {
-        $self = clone $this;
-        $self->attributes = ($self->attributes)('color', $color->toString());
-
-        return $self;
+        return new self(
+            ($this->attributes)('color', $color->toString()),
+        );
     }
 
     public function fillWithColor(RGBA $color): self
     {
-        $self = clone $this;
-        $self->attributes = ($self->attributes)
-            ('style', 'filled')
-            ('fillcolor', $color->toString());
-
-        return $self;
+        return new self(
+            ($this->attributes)
+                ('style', 'filled')
+                ('fillcolor', $color->toString()),
+        );
     }
 
     /**
@@ -205,5 +285,13 @@ final class Shape
     public function attributes(): Map
     {
         return $this->attributes;
+    }
+
+    /**
+     * @psalm-pure
+     */
+    private static function shape(string $name): self
+    {
+        return new self(Map::of(['shape', $name]));
     }
 }

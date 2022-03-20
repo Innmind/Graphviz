@@ -25,7 +25,7 @@ class NameTest extends TestCase
                 return (bool) \preg_match('~[a-zA-Z0-9_]+~', $string);
             })
             ->then(function(string $string): void {
-                $this->assertSame($string, (new Name($string))->toString());
+                $this->assertSame($string, Name::of($string)->toString());
             });
     }
 
@@ -39,7 +39,7 @@ class NameTest extends TestCase
             ->then(function(string $string): void {
                 $this->expectException(DomainException::class);
 
-                new Name($string);
+                Name::of($string);
             });
     }
 }

@@ -8,217 +8,209 @@ use Innmind\Graphviz\{
     Edge,
     Graph,
 };
-use Innmind\Stream\Readable;
+use Innmind\Filesystem\File\Content;
 use Innmind\Immutable\{
     Str,
     Set,
+    Maybe,
+    Sequence,
 };
-use function Innmind\Immutable\join;
 
+/**
+ * @psalm-immutable
+ */
 final class Dot
 {
-    private ?DPI $dpi;
+    /** @var Maybe<DPI> */
+    private Maybe $dpi;
 
-    public function __construct(DPI $dpi = null)
+    private function __construct(DPI $dpi = null)
     {
-        $this->dpi = $dpi;
+        $this->dpi = Maybe::of($dpi);
     }
 
-    public function __invoke(Graph $graph): Readable
+    public function __invoke(Graph $graph): Content
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
-        $output = Str::of("$type {$graph->name()->toString()} {\n");
+        $lines = Sequence::of(Str::of("$type {$graph->name()->toString()} {"))
+            ->append($this->dpi())
+            ->append($this->attributes($graph))
+            ->append($this->clusters($graph))
+            ->append($this->edges($graph))
+            ->append($this->lonelyRoots($graph))
+            ->append($this->styledNodes($graph))
+            ->add(Str::of('}'))
+            ->map(static fn($line) => Content\Line::of($line));
 
-        $output = $this->renderDPI($output);
-        $output = $this->renderAttributes($output, $graph);
-        $output = $this->renderClusters($output, $graph);
-        $output = $this->renderEdges($output, $graph);
-        $output = $this->renderLonelyRoots($output, $graph);
-        $output = $this->renderStyledNodes($output, $graph);
-
-        $output = $output->append('}');
-
-        return Readable\Stream::ofContent($output->toString());
+        return Content\Lines::of($lines);
     }
 
-    private function renderDPI(Str $output): Str
+    public static function of(DPI $dpi = null): self
     {
-        if (!$this->dpi instanceof DPI) {
-            return $output;
-        }
+        return new self($dpi);
+    }
 
-        return $output
-            ->append(\sprintf(
+    /**
+     * @return Sequence<Str>
+     */
+    private function dpi(): Sequence
+    {
+        return $this->dpi->match(
+            static fn($dpi) => Sequence::of(Str::of(\sprintf(
                 '    dpi="%s";',
-                $this->dpi->toInt(),
-            ))
-            ->append("\n");
-    }
-
-    private function renderAttributes(Str $output, Graph $graph): Str
-    {
-        return $graph
-            ->attributes()
-            ->reduce(
-                $output,
-                static function(Str $output, string $key, string $value): Str {
-                    return $output
-                        ->append(\sprintf(
-                            '    %s="%s";',
-                            $key,
-                            $value,
-                        ))
-                        ->append("\n");
-                }
-            );
-    }
-
-    private function renderClusters(Str $output, Graph $graph): Str
-    {
-        return $graph
-            ->clusters()
-            ->reduce(
-                $output,
-                function(Str $output, Graph $cluster): Str {
-                    return $this->renderCluster($output, $cluster);
-                },
-            );
-    }
-
-    private function renderEdges(Str $output, Graph $graph): Str
-    {
-        $type = $graph->isDirected() ? '->' : '--';
-
-        /** @var Set<Edge> */
-        $edges = $graph
-            ->nodes()
-            ->reduce(
-                Set::of(Edge::class),
-                static function(Set $edges, Node $node): Set {
-                    return $edges->merge($node->edges());
-                },
-            );
-
-        return $edges->reduce(
-            $output,
-            function(Str $output, Edge $edge) use ($type): Str {
-                return $this->renderEdge($output, $edge, $type);
-            },
+                $dpi->toInt(),
+            ))),
+            static fn() => Sequence::of(),
         );
     }
 
-    private function renderLonelyRoots(Str $output, Graph $graph): Str
+    /**
+     * @return Sequence<Str>
+     */
+    private function attributes(Graph $graph): Sequence
     {
         return $graph
-            ->roots()
-            ->filter(static function(Node $node): bool {
-                //styled nodes are rendered below
-                return !$node->hasAttributes() && $node->edges()->size() === 0;
-            })
-            ->reduce(
-                $output,
-                static function(Str $output, Node $node): Str {
-                    return $output
-                        ->append('    '.$node->name()->toString())
-                        ->append(";\n");
-                },
-            );
-    }
-
-    private function renderStyledNodes(Str $output, Graph $graph): Str
-    {
-        return $graph
-            ->nodes()
-            ->filter(static function(Node $node): bool {
-                return $node->hasAttributes();
-            })
-            ->reduce(
-                $output,
-                function(Str $output, Node $node): Str {
-                    return $this->renderNodeStyle($output, $node);
-                },
-            );
-    }
-
-    private function renderCluster(Str $output, Graph $cluster): Str
-    {
-        $output = $output
-            ->append('    subgraph cluster_')
-            ->append($cluster->name()->toString())
-            ->append(" {\n");
-
-        $output = $cluster
             ->attributes()
-            ->reduce(
-                $output,
-                static function(Str $output, string $key, string $value): Str {
-                    return $output->append(\sprintf(
-                        "        %s=\"%s\"\n",
-                        $key,
-                        $value,
-                    ));
-                },
-            );
-
-        $output = $this->renderEdges($output, $cluster);
-        $output = $this->renderLonelyRoots($output, $cluster);
-        $output = $this->renderStyledNodes($output, $cluster);
-
-        return $output->append("    }\n");
+            ->map(static fn($key, $value) => Str::of(\sprintf(
+                '    %s="%s";',
+                $key,
+                $value,
+            )))
+            ->values();
     }
 
-    private function renderEdge(Str $output, Edge $edge, string $type): Str
+    /**
+     * @return Sequence<Str>
+     */
+    private function clusters(Graph $graph): Sequence
+    {
+        return Sequence::of(
+            ...$graph
+                ->clusters()
+                ->map(fn($cluster) => $this->cluster($cluster))
+                ->toList(),
+        )->flatMap(static fn($lines) => $lines);
+    }
+
+    /**
+     * @return Sequence<Str>
+     */
+    private function edges(Graph $graph): Sequence
+    {
+        $type = $graph->isDirected() ? '->' : '--';
+
+        $edges = $graph
+            ->nodes()
+            ->map(static fn($node) => $node->edges())
+            ->flatMap(static fn($nodes) => $nodes)
+            ->map(fn($edge) => $this->edge($edge, $type));
+
+        return Sequence::of(...$edges->toList());
+    }
+
+    /**
+     * @return Sequence<Str>
+     */
+    private function lonelyRoots(Graph $graph): Sequence
+    {
+        $lines = $graph
+            ->roots()
+            ->filter(static fn($node) => $node->attributes()->empty() && $node->edges()->empty()) //styled nodes are rendered below
+            ->map(static fn($node) => Str::of('    '.$node->name()->toString().';'))
+            ->toList();
+
+        return Sequence::of(...$lines);
+    }
+
+    /**
+     * @return Sequence<Str>
+     */
+    private function styledNodes(Graph $graph): Sequence
+    {
+        $lines = $graph
+            ->nodes()
+            ->filter(static fn($node) => !$node->attributes()->empty())
+            ->map(fn($node) => $this->nodeStyle($node))
+            ->toList();
+
+        return Sequence::of(...$lines);
+    }
+
+    /**
+     * @return Sequence<Str>
+     */
+    private function cluster(Graph $cluster): Sequence
+    {
+        $head = Sequence::of(
+            Str::of('    subgraph cluster_')
+                ->append($cluster->name()->toString())
+                ->append(' {'),
+        );
+        $attributes = $cluster
+            ->attributes()
+            ->map(static fn($key, $value) => Str::of(\sprintf(
+                '        %s="%s"',
+                $key,
+                $value,
+            )))
+            ->values();
+
+        return $head
+            ->append($attributes)
+            ->append($this->edges($cluster))
+            ->append($this->lonelyRoots($cluster))
+            ->append($this->styledNodes($cluster))
+            ->add(Str::of('    }'));
+    }
+
+    private function edge(Edge $edge, string $type): Str
     {
         $attributes = '';
 
-        if ($edge->hasAttributes()) {
+        if (!$edge->attributes()->empty()) {
             $attributes = $edge
                 ->attributes()
-                ->map(static function(string $key, string $value): string {
-                    return \sprintf(
-                        '%s="%s"',
-                        $key,
-                        $value,
-                    );
-                })
+                ->map(static fn($key, $value) => \sprintf(
+                    '%s="%s"',
+                    $key,
+                    $value,
+                ))
                 ->values();
-            $attributes = join(', ', $attributes)
+            $attributes = Str::of(', ')
+                ->join($attributes)
                 ->prepend(' [')
                 ->append(']')
                 ->toString();
         }
 
-        return $output
-            ->append(\sprintf(
+        return Str::of(\sprintf(
                 '    %s %s %s',
-                $edge->from()->name()->toString(),
+                $edge->from()->toString(),
                 $type,
-                $edge->to()->name()->toString(),
+                $edge->to()->toString(),
             ))
             ->append($attributes)
-            ->append(";\n");
+            ->append(';');
     }
 
-    private function renderNodeStyle(Str $output, Node $node): Str
+    private function nodeStyle(Node $node): Str
     {
         $attributes = $node
             ->attributes()
-            ->map(static function(string $key, string $value): string {
-                return \sprintf(
-                    '%s="%s"',
-                    $key,
-                    $value,
-                );
-            })
+            ->map(static fn($key, $value) => \sprintf(
+                '%s="%s"',
+                $key,
+                $value,
+            ))
             ->values();
-        $attributes = join(', ', $attributes)
+        $attributes = Str::of(', ')
+            ->join($attributes)
             ->prepend(' [')
             ->append(']')
             ->toString();
 
-        return $output
-            ->append('    '.$node->name()->toString())
+        return Str::of('    '.$node->name()->toString())
             ->append($attributes)
-            ->append(";\n");
+            ->append(';');
     }
 }

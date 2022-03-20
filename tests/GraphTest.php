@@ -1,14 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Tests\Innmind\Graphviz\Graph;
+namespace Tests\Innmind\Graphviz;
 
 use Innmind\Graphviz\{
-    Graph\Graph,
+    Graph,
     Graph\Name,
-    Graph as GraphInterface,
     Node,
-    Exception\MixedGraphsNotAllowed
 };
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
@@ -16,19 +14,10 @@ use Innmind\Immutable\{
     Set,
     Map,
 };
-use function Innmind\Immutable\{
-    first,
-    unwrap,
-};
 use PHPUnit\Framework\TestCase;
 
 class GraphTest extends TestCase
 {
-    public function testInterface()
-    {
-        $this->assertInstanceOf(GraphInterface::class, Graph::directed());
-    }
-
     public function testDirection()
     {
         $this->assertInstanceOf(Graph::class, Graph::directed());
@@ -50,30 +39,26 @@ class GraphTest extends TestCase
         $graph = Graph::directed();
 
         $this->assertInstanceOf(Set::class, $graph->roots());
-        $this->assertSame(Node::class, $graph->roots()->type());
         $this->assertCount(0, $graph->roots());
         $this->assertInstanceOf(Set::class, $graph->nodes());
-        $this->assertSame(Node::class, $graph->nodes()->type());
         $this->assertCount(0, $graph->nodes());
 
-        $root = Node\Node::named('main');
-        $root->linkedTo($second = Node\Node::named('second'));
-        $main = Node\Node::named('main');
-        $second->linkedTo($third = Node\Node::named('third'));
-        $third->linkedTo($main);
+        $third = Node::named('third');
+        $root = Node::named('main')->linkedTo(Node\Name::of('second'));
+        $second = Node::named('second')->linkedTo($third->name());
 
-        $this->assertNull($graph->add($root));
+        $graph = $graph
+            ->add($root)
+            ->add($second)
+            ->add($third);
+
         $this->assertCount(1, $graph->roots());
-        $this->assertSame($root, first($graph->roots()));
+        $this->assertSame($root, $graph->roots()->find(static fn() => true)->match(
+            static fn($root) => $root,
+            static fn() => null,
+        ));
         $this->assertCount(3, $graph->nodes());
-        $this->assertSame([$main, $second, $third], unwrap($graph->nodes()));
-    }
-
-    public function testThrowWhenMixedGraphs()
-    {
-        $this->expectException(MixedGraphsNotAllowed::class);
-
-        Graph::directed()->cluster(Graph::undirected());
+        $this->assertSame([$root, $second, $third], $graph->nodes()->toList());
     }
 
     public function testCluster()
@@ -81,13 +66,15 @@ class GraphTest extends TestCase
         $root = Graph::directed();
 
         $this->assertInstanceOf(Set::class, $root->clusters());
-        $this->assertSame(GraphInterface::class, $root->clusters()->type());
         $this->assertCount(0, $root->clusters());
 
         $cluster = Graph::directed('foo');
-        $this->assertNull($root->cluster($cluster));
+        $root = $root->cluster($cluster);
         $this->assertCount(1, $root->clusters());
-        $this->assertSame($cluster, first($root->clusters()));
+        $this->assertSame($cluster, $root->clusters()->find(static fn() => true)->match(
+            static fn($cluster) => $cluster,
+            static fn() => null,
+        ));
     }
 
     public function testAttributes()
@@ -95,45 +82,54 @@ class GraphTest extends TestCase
         $graph = Graph::directed();
 
         $this->assertInstanceOf(Map::class, $graph->attributes());
-        $this->assertSame('string', $graph->attributes()->keyType());
-        $this->assertSame('string', $graph->attributes()->valueType());
         $this->assertCount(0, $graph->attributes());
     }
 
     public function testDisplayAs()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->displayAs('watev');
 
-        $this->assertNull($graph->displayAs('watev'));
         $this->assertCount(1, $graph->attributes());
-        $this->assertSame('watev', $graph->attributes()->get('label'));
+        $this->assertSame('watev', $graph->attributes()->get('label')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testFillWithColor()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->fillWithColor(Colour::red->toRGBA());
 
-        $this->assertNull($graph->fillWithColor(Colour::of('red')));
         $this->assertCount(2, $graph->attributes());
-        $this->assertSame('filled', $graph->attributes()->get('style'));
-        $this->assertSame('#ff0000', $graph->attributes()->get('fillcolor'));
+        $this->assertSame('filled', $graph->attributes()->get('style')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
+        $this->assertSame('#ff0000', $graph->attributes()->get('fillcolor')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testColorizeBorderWith()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->colorizeBorderWith(Colour::red->toRGBA());
 
-        $this->assertNull($graph->colorizeBorderWith(Colour::of('red')));
         $this->assertCount(1, $graph->attributes());
-        $this->assertSame('#ff0000', $graph->attributes()->get('color'));
+        $this->assertSame('#ff0000', $graph->attributes()->get('color')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 
     public function testTarget()
     {
-        $graph = Graph::directed();
+        $graph = Graph::directed()->target(Url::of('example.com'));
 
-        $this->assertNull($graph->target(Url::of('example.com')));
         $this->assertCount(1, $graph->attributes());
-        $this->assertSame('example.com', $graph->attributes()->get('URL'));
+        $this->assertSame('example.com', $graph->attributes()->get('URL')->match(
+            static fn($value) => $value,
+            static fn() => null,
+        ));
     }
 }
