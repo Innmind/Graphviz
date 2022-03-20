@@ -16,6 +16,9 @@ use Innmind\Immutable\{
     Maybe,
 };
 
+/**
+ * @psalm-immutable
+ */
 final class Node
 {
     private Name $name;
@@ -26,25 +29,38 @@ final class Node
     /** @var Maybe<Shape> */
     private Maybe $shape;
 
-    private function __construct(Name $name)
-    {
+    /**
+     * @param Set<Edge> $edges
+     * @param Map<string, string> $attributes
+     * @param Maybe<Shape> $shape
+     */
+    private function __construct(
+        Name $name,
+        Set $edges,
+        Map $attributes,
+        Maybe $shape,
+    ) {
         $this->name = $name;
-        /** @var Set<Edge> */
-        $this->edges = Set::of();
-        /** @var Map<string, string> */
-        $this->attributes = Map::of();
-        /** @var Maybe<Shape> */
-        $this->shape = Maybe::nothing();
+        $this->edges = $edges;
+        $this->attributes = $attributes;
+        $this->shape = $shape;
     }
 
     public static function of(Name $name): self
     {
-        return new self($name);
+        /** @var Set<Edge> */
+        $edges = Set::of();
+        /** @var Map<string, string> */
+        $attributes = Map::of();
+        /** @var Maybe<Shape> */
+        $shape = Maybe::nothing();
+
+        return new self($name, $edges, $attributes, $shape);
     }
 
     public static function named(string $name): self
     {
-        return new self(Name::of($name));
+        return self::of(Name::of($name));
     }
 
     public function name(): Name
@@ -61,34 +77,55 @@ final class Node
     }
 
     /**
-     * @param (callable(Edge): Edge)|null $map
+     * @param (pure-callable(Edge): Edge)|null $map
      */
-    public function linkedTo(self $node, callable $map = null): void
+    public function linkedTo(self $node, callable $map = null): self
     {
         $map ??= static fn(Edge $edge): Edge => $edge;
         $edge = Edge::between($this->name, $node->name());
-        $this->edges = ($this->edges)($map($edge));
-    }
 
-    public function target(Url $url): void
-    {
-        $this->attributes = ($this->attributes)(
-            'URL',
-            Value::of($url->toString())->toString(),
+        return new self(
+            $this->name,
+            ($this->edges)($map($edge)),
+            $this->attributes,
+            $this->shape,
         );
     }
 
-    public function displayAs(string $label): void
+    public function target(Url $url): self
     {
-        $this->attributes = ($this->attributes)(
-            'label',
-            Value::of($label)->toString(),
+        return new self(
+            $this->name,
+            $this->edges,
+            ($this->attributes)(
+                'URL',
+                Value::of($url->toString())->toString(),
+            ),
+            $this->shape,
         );
     }
 
-    public function shaped(Shape $shape): void
+    public function displayAs(string $label): self
     {
-        $this->shape = Maybe::just($shape);
+        return new self(
+            $this->name,
+            $this->edges,
+            ($this->attributes)(
+                'label',
+                Value::of($label)->toString(),
+            ),
+            $this->shape,
+        );
+    }
+
+    public function shaped(Shape $shape): self
+    {
+        return new self(
+            $this->name,
+            $this->edges,
+            $this->attributes,
+            Maybe::just($shape),
+        );
     }
 
     /**
