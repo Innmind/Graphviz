@@ -66,7 +66,7 @@ final class Node
     public function linkedTo(self $node, callable $map = null): void
     {
         $map ??= static fn(Edge $edge): Edge => $edge;
-        $edge = Edge::between($this->name, $node);
+        $edge = Edge::between($this->name, $node->name());
         $this->edges = ($this->edges)($map($edge));
     }
 

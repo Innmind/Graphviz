@@ -94,7 +94,7 @@ final class Graph
             ->nodes
             ->map(static fn($node) => $node->edges())
             ->flatMap(static fn($edges) => $edges)
-            ->map(static fn($edge) => $edge->to()->name()->toString());
+            ->map(static fn($edge) => $edge->to()->toString());
 
         return $this->nodes->filter(
             static fn($node) => !$targeted->contains($node->name()->toString()),

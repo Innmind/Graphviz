@@ -49,7 +49,7 @@ class NodeTest extends TestCase
             function($edge) use ($node, $to) {
                 $this->assertInstanceOf(Edge::class, $edge);
                 $this->assertSame($node->name(), $edge->from());
-                $this->assertSame($to, $edge->to());
+                $this->assertSame($to->name(), $edge->to());
 
                 return $edge;
             },

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Innmind\Graphviz;
 
 use Innmind\Graphviz\{
+    Node\Name,
     Edge\Shape,
     Attribute\Value,
 };
@@ -13,22 +14,22 @@ use Innmind\Immutable\Map;
 
 final class Edge
 {
-    private Node\Name $from;
-    private Node $to;
+    private Name $from;
+    private Name $to;
     /** @var Map<string, string> */
     private Map $attributes;
 
     /**
      * @param Map<string, string> $attributes
      */
-    private function __construct(Node\Name $from, Node $to, Map $attributes)
+    private function __construct(Name $from, Name $to, Map $attributes)
     {
         $this->from = $from;
         $this->to = $to;
         $this->attributes = $attributes;
     }
 
-    public static function between(Node\Name $from, Node $to): self
+    public static function between(Name $from, Name $to): self
     {
         /** @var Map<string, string> */
         $attributes = Map::of();
@@ -36,12 +37,12 @@ final class Edge
         return new self($from, $to, $attributes);
     }
 
-    public function from(): Node\Name
+    public function from(): Name
     {
         return $this->from;
     }
 
-    public function to(): Node
+    public function to(): Name
     {
         return $this->to;
     }
