@@ -46,6 +46,9 @@ final class Node
         $this->shape = $shape;
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function of(Name $name): self
     {
         /** @var Set<Edge> */
@@ -58,6 +61,9 @@ final class Node
         return new self($name, $edges, $attributes, $shape);
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function named(string $name): self
     {
         return self::of(Name::of($name));
