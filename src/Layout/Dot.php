@@ -45,6 +45,9 @@ final class Dot
         return Content\Lines::of($lines);
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function of(DPI $dpi = null): self
     {
         return new self($dpi);
