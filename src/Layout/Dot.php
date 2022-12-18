@@ -187,11 +187,11 @@ final class Dot
         }
 
         return Str::of(\sprintf(
-                '    %s %s %s',
-                $edge->from()->toString(),
-                $type,
-                $edge->to()->toString(),
-            ))
+            '    %s %s %s',
+            $edge->from()->toString(),
+            $type,
+            $edge->to()->toString(),
+        ))
             ->append($attributes)
             ->append(';');
     }
