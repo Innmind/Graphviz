@@ -42,7 +42,7 @@ final class Dot
             ->add(Str::of('}'))
             ->map(static fn($line) => Content\Line::of($line));
 
-        return Content\Lines::of($lines);
+        return Content::ofLines($lines);
     }
 
     /**
