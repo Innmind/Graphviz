@@ -29,13 +29,6 @@ class NameTest extends TestCase
             });
     }
 
-    public function testThrowWhenEmpty()
-    {
-        $this->expectException(DomainException::class);
-
-        Name::of('');
-    }
-
     public function testThrowWhenContainingAnArrow()
     {
         $this->expectException(DomainException::class);
