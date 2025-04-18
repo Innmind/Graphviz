@@ -6,6 +6,10 @@
 
 - Use more precise primitive types
 
+### Removed
+
+- Support for `innmind/immutable:~4.0`
+
 ### Fixed
 
 - PHP `8.4` deprecations
