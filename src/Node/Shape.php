@@ -283,6 +283,8 @@ final class Shape
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map

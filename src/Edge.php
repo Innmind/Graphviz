@@ -127,6 +127,8 @@ final class Edge
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map
