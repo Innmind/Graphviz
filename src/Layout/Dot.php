@@ -11,7 +11,6 @@ use Innmind\Graphviz\{
 use Innmind\Filesystem\File\Content;
 use Innmind\Immutable\{
     Str,
-    Set,
     Maybe,
     Sequence,
 };

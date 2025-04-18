@@ -7,7 +7,6 @@ use Innmind\Graphviz\{
     Node\Name,
     Node\Shape,
     Attribute\Value,
-    Exception\DomainException,
 };
 use Innmind\Url\Url;
 use Innmind\Immutable\{
