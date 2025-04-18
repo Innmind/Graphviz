@@ -44,7 +44,7 @@ final class Graph
         Set $nodes,
         Set $clusters,
         Map $attributes,
-        Rankdir $rankdir = null,
+        ?Rankdir $rankdir = null,
     ) {
         $this->directed = $directed;
         $this->name = $name;
@@ -62,7 +62,7 @@ final class Graph
      *
      * @return self<'directed'>
      */
-    public static function directed(string $name = 'G', Rankdir $rankdir = null): self
+    public static function directed(string $name = 'G', ?Rankdir $rankdir = null): self
     {
         /** @var Set<Node> */
         $nodes = Set::of();
@@ -79,7 +79,7 @@ final class Graph
      *
      * @return self<'undirected'>
      */
-    public static function undirected(string $name = 'G', Rankdir $rankdir = null): self
+    public static function undirected(string $name = 'G', ?Rankdir $rankdir = null): self
     {
         /** @var Set<Node> */
         $nodes = Set::of();

@@ -23,7 +23,7 @@ final class Dot
     /** @var Maybe<DPI> */
     private Maybe $dpi;
 
-    private function __construct(DPI $dpi = null)
+    private function __construct(?DPI $dpi = null)
     {
         $this->dpi = Maybe::of($dpi);
     }
@@ -47,7 +47,7 @@ final class Dot
     /**
      * @psalm-pure
      */
-    public static function of(DPI $dpi = null): self
+    public static function of(?DPI $dpi = null): self
     {
         return new self($dpi);
     }
