@@ -9,6 +9,13 @@
 ### Changed
 
 - Use more precise primitive types
+- `Innmind\Graphviz\Attribute\Value` is now internal
+- `Innmind\Graphviz\Node::attributes()` is now internal
+- `Innmind\Graphviz\Node\Shape::attributes()` is now internal
+- `Innmind\Graphviz\Graph::roots()` is now internal
+- `Innmind\Graphviz\Graph::nodes()` is now internal
+- `Innmind\Graphviz\Graph::attributes()` is now internal
+- `Innmind\Graphviz\Edge::attributes()` is now internal
 
 ### Removed
 

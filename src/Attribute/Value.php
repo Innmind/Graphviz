@@ -7,6 +7,7 @@ use Innmind\Graphviz\Exception\DomainException;
 use Innmind\Immutable\Str;
 
 /**
+ * @internal
  * @psalm-immutable
  */
 final class Value

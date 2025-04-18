@@ -144,6 +144,8 @@ final class Graph
     }
 
     /**
+     * @internal
+     *
      * @return Set<Node>
      */
     public function roots(): Set
@@ -160,6 +162,8 @@ final class Graph
     }
 
     /**
+     * @internal
+     *
      * @return Set<Node>
      */
     public function nodes(): Set
@@ -235,6 +239,8 @@ final class Graph
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map
