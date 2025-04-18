@@ -7,9 +7,9 @@ use Innmind\Graphviz\{
     Graph\Name,
     Exception\DomainException
 };
-use PHPUnit\Framework\TestCase;
 use Innmind\BlackBox\{
     PHPUnit\BlackBox,
+    PHPUnit\Framework\TestCase,
     Set,
 };
 
@@ -20,7 +20,7 @@ class NameTest extends TestCase
     public function testInterface()
     {
         $this
-            ->forAll(Set\Strings::any())
+            ->forAll(Set::strings())
             ->filter(static function(string $string): bool {
                 return (bool) \preg_match('~[a-zA-Z0-9_]+~', $string);
             })
@@ -32,7 +32,7 @@ class NameTest extends TestCase
     public function testThrowWhenContainingInvalidCharacters()
     {
         $this
-            ->forAll(Set\Strings::any())
+            ->forAll(Set::strings())
             ->filter(static function(string $string): bool {
                 return !\preg_match('~[a-zA-Z0-9_]+~', $string);
             })

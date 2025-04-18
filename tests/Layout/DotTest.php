@@ -15,7 +15,7 @@ use Innmind\Graphviz\{
 use Innmind\Filesystem\File\Content;
 use Innmind\Url\Url;
 use Innmind\Colour\Colour;
-use PHPUnit\Framework\TestCase;
+use Innmind\BlackBox\PHPUnit\Framework\TestCase;
 
 class DotTest extends TestCase
 {

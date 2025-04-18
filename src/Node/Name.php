@@ -11,33 +11,38 @@ use Innmind\Immutable\Str;
  */
 final class Name
 {
-    private string $value;
-
-    private function __construct(string $name)
-    {
-        $name = Str::of($name);
-
-        if (
-            $name->length() === 0 ||
-            $name->contains('->') ||
-            $name->contains('-') ||
-            $name->contains('.') ||
-            $name->contains("\x00")
-        ) {
-            throw new DomainException($name->toString());
-        }
-
-        $this->value = $name->toString();
+    /**
+     * @param non-empty-string $value
+     */
+    private function __construct(
+        private string $value,
+    ) {
     }
 
     /**
      * @psalm-pure
+     *
+     * @param non-empty-string $name
      */
     public static function of(string $name): self
     {
+        $str = Str::of($name);
+
+        if (
+            $str->contains('->') ||
+            $str->contains('-') ||
+            $str->contains('.') ||
+            $str->contains("\x00")
+        ) {
+            throw new DomainException($name);
+        }
+
         return new self($name);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function toString(): string
     {
         return $this->value;

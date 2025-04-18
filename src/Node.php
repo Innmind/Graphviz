@@ -7,7 +7,6 @@ use Innmind\Graphviz\{
     Node\Name,
     Node\Shape,
     Attribute\Value,
-    Exception\DomainException,
 };
 use Innmind\Url\Url;
 use Innmind\Immutable\{
@@ -21,29 +20,17 @@ use Innmind\Immutable\{
  */
 final class Node
 {
-    private Name $name;
-    /** @var Set<Edge> */
-    private Set $edges;
-    /** @var Map<string, string> */
-    private Map $attributes;
-    /** @var Maybe<Shape> */
-    private Maybe $shape;
-
     /**
      * @param Set<Edge> $edges
      * @param Map<string, string> $attributes
      * @param Maybe<Shape> $shape
      */
     private function __construct(
-        Name $name,
-        Set $edges,
-        Map $attributes,
-        Maybe $shape,
+        private Name $name,
+        private Set $edges,
+        private Map $attributes,
+        private Maybe $shape,
     ) {
-        $this->name = $name;
-        $this->edges = $edges;
-        $this->attributes = $attributes;
-        $this->shape = $shape;
     }
 
     /**
@@ -63,6 +50,8 @@ final class Node
 
     /**
      * @psalm-pure
+     *
+     * @param non-empty-string $name
      */
     public static function named(string $name): self
     {
@@ -85,7 +74,7 @@ final class Node
     /**
      * @param (pure-callable(Edge): Edge)|null $map
      */
-    public function linkedTo(Name $node, callable $map = null): self
+    public function linkedTo(Name $node, ?callable $map = null): self
     {
         $map ??= static fn(Edge $edge): Edge => $edge;
         $edge = Edge::between($this->name, $node);
@@ -111,6 +100,9 @@ final class Node
         );
     }
 
+    /**
+     * @param non-empty-string $label
+     */
     public function displayAs(string $label): self
     {
         return new self(
@@ -135,6 +127,8 @@ final class Node
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map

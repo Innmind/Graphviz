@@ -7,19 +7,14 @@ use Innmind\Graphviz\Exception\DomainException;
 use Innmind\Immutable\Str;
 
 /**
+ * @internal
  * @psalm-immutable
  */
 final class Value
 {
-    private string $value;
-
-    private function __construct(string $value)
-    {
-        if (Str::of($value)->contains("\x00")) {
-            throw new DomainException($value);
-        }
-
-        $this->value = $value;
+    private function __construct(
+        private string $value,
+    ) {
     }
 
     /**
@@ -29,6 +24,10 @@ final class Value
      */
     public static function of(string $value): self
     {
+        if (Str::of($value)->contains("\x00")) {
+            throw new DomainException($value);
+        }
+
         return new self($value);
     }
 

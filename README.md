@@ -72,3 +72,6 @@ Factory::build()
 This example will produce the given svg file: ([source](graph.dot))
 
 ![](graph.svg)
+
+> [!NOTE]
+> This example uses [`innmind/operating-system`](https://packagist.org/packages/innmind/operating-system).

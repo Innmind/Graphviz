@@ -6,28 +6,26 @@ namespace Innmind\Graphviz\Edge;
 /**
  * @psalm-immutable
  */
-final class Shape
+enum Shape
 {
-    private string $value;
-    private string $modifier;
-    private string $side;
-
-    private function __construct(
-        string $value,
-        string $modifier = '',
-        string $side = '',
-    ) {
-        $this->value = $value;
-        $this->modifier = $modifier;
-        $this->side = $side;
-    }
+    case box;
+    case crow;
+    case curve;
+    case icurve;
+    case diamond;
+    case dot;
+    case inv;
+    case none;
+    case normal;
+    case tee;
+    case vee;
 
     /**
      * @psalm-pure
      */
     public static function box(): self
     {
-        return new self('box');
+        return self::box;
     }
 
     /**
@@ -35,7 +33,7 @@ final class Shape
      */
     public static function crow(): self
     {
-        return new self('crow');
+        return self::crow;
     }
 
     /**
@@ -43,7 +41,7 @@ final class Shape
      */
     public static function curve(): self
     {
-        return new self('curve');
+        return self::curve;
     }
 
     /**
@@ -51,7 +49,7 @@ final class Shape
      */
     public static function icurve(): self
     {
-        return new self('icurve');
+        return self::icurve;
     }
 
     /**
@@ -59,7 +57,7 @@ final class Shape
      */
     public static function diamond(): self
     {
-        return new self('diamond');
+        return self::diamond;
     }
 
     /**
@@ -67,7 +65,7 @@ final class Shape
      */
     public static function dot(): self
     {
-        return new self('dot');
+        return self::dot;
     }
 
     /**
@@ -75,7 +73,7 @@ final class Shape
      */
     public static function inv(): self
     {
-        return new self('inv');
+        return self::inv;
     }
 
     /**
@@ -83,7 +81,7 @@ final class Shape
      */
     public static function none(): self
     {
-        return new self('none');
+        return self::none;
     }
 
     /**
@@ -91,7 +89,7 @@ final class Shape
      */
     public static function normal(): self
     {
-        return new self('normal');
+        return self::normal;
     }
 
     /**
@@ -99,7 +97,7 @@ final class Shape
      */
     public static function tee(): self
     {
-        return new self('tee');
+        return self::tee;
     }
 
     /**
@@ -107,38 +105,11 @@ final class Shape
      */
     public static function vee(): self
     {
-        return new self('vee');
-    }
-
-    public function open(): self
-    {
-        return new self(
-            $this->value,
-            'o',
-            $this->side,
-        );
-    }
-
-    public function left(): self
-    {
-        return new self(
-            $this->value,
-            $this->modifier,
-            'l',
-        );
-    }
-
-    public function right(): self
-    {
-        return new self(
-            $this->value,
-            $this->modifier,
-            'r',
-        );
+        return self::vee;
     }
 
     public function toString(): string
     {
-        return $this->modifier.$this->side.$this->value;
+        return $this->name;
     }
 }

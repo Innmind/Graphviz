@@ -11,7 +11,6 @@ use Innmind\Graphviz\{
 use Innmind\Filesystem\File\Content;
 use Innmind\Immutable\{
     Str,
-    Set,
     Maybe,
     Sequence,
 };
@@ -21,12 +20,12 @@ use Innmind\Immutable\{
  */
 final class Dot
 {
-    /** @var Maybe<DPI> */
-    private Maybe $dpi;
-
-    private function __construct(DPI $dpi = null)
-    {
-        $this->dpi = Maybe::of($dpi);
+    /**
+     * @param Maybe<DPI> $dpi
+     */
+    private function __construct(
+        private Maybe $dpi,
+    ) {
     }
 
     public function __invoke(Graph $graph): Content
@@ -48,9 +47,9 @@ final class Dot
     /**
      * @psalm-pure
      */
-    public static function of(DPI $dpi = null): self
+    public static function of(?DPI $dpi = null): self
     {
-        return new self($dpi);
+        return new self(Maybe::of($dpi));
     }
 
     /**

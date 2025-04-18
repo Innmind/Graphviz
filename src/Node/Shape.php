@@ -11,15 +11,12 @@ use Innmind\Immutable\Map;
  */
 final class Shape
 {
-    /** @var Map<string, string> */
-    private Map $attributes;
-
     /**
      * @param Map<string, string> $attributes
      */
-    private function __construct(Map $attributes)
-    {
-        $this->attributes = $attributes;
+    private function __construct(
+        private Map $attributes,
+    ) {
     }
 
     /**
@@ -32,12 +29,15 @@ final class Shape
 
     /**
      * @psalm-pure
+     *
+     * @param ?int<3, max> $sides
+     * @param ?int<1, max> $peripheries
      */
     public static function polygon(
-        int $sides = null,
-        int $peripheries = null,
-        float $distortion = null,
-        float $skew = null,
+        ?int $sides = null,
+        ?int $peripheries = null,
+        ?float $distortion = null,
+        ?float $skew = null,
     ): self {
         /** @var Map<string, string> */
         $attributes = Map::of(['shape', 'polygon']);
@@ -50,14 +50,14 @@ final class Shape
             $attributes = ($attributes)('peripheries', (string) $peripheries);
         }
 
-        if ($distortion) {
+        if (\is_float($distortion)) {
             $attributes = ($attributes)(
                 'distortion',
                 \sprintf('%0.1f', $distortion),
             );
         }
 
-        if ($skew) {
+        if (\is_float($skew)) {
             $attributes = ($attributes)(
                 'skew',
                 \sprintf('%0.1f', $skew),
@@ -280,6 +280,8 @@ final class Shape
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map

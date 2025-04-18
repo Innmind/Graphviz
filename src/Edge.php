@@ -17,19 +17,14 @@ use Innmind\Immutable\Map;
  */
 final class Edge
 {
-    private Name $from;
-    private Name $to;
-    /** @var Map<string, string> */
-    private Map $attributes;
-
     /**
      * @param Map<string, string> $attributes
      */
-    private function __construct(Name $from, Name $to, Map $attributes)
-    {
-        $this->from = $from;
-        $this->to = $to;
-        $this->attributes = $attributes;
+    private function __construct(
+        private Name $from,
+        private Name $to,
+        private Map $attributes,
+    ) {
     }
 
     /**
@@ -65,9 +60,9 @@ final class Edge
 
     public function shaped(
         Shape $shape,
-        Shape $shape2 = null,
-        Shape $shape3 = null,
-        Shape $shape4 = null,
+        ?Shape $shape2 = null,
+        ?Shape $shape3 = null,
+        ?Shape $shape4 = null,
     ): self {
         $shape = $shape->toString();
         $shape2 = $shape2 ? $shape2->toString() : '';
@@ -87,6 +82,9 @@ final class Edge
             );
     }
 
+    /**
+     * @param non-empty-string $label
+     */
     public function displayAs(string $label): self
     {
         return $this->with(
@@ -124,6 +122,8 @@ final class Edge
     }
 
     /**
+     * @internal
+     *
      * @return Map<string, string>
      */
     public function attributes(): Map
