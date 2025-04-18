@@ -13,6 +13,9 @@
 ### Removed
 
 - Support for `innmind/immutable:~4.0`
+- `Innmind\Graphviz\Edge\Shape::open()`
+- `Innmind\Graphviz\Edge\Shape::left()`
+- `Innmind\Graphviz\Edge\Shape::right()`
 
 ### Fixed
 

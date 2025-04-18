@@ -110,35 +110,8 @@ final class Shape
         return new self('vee');
     }
 
-    public function open(): self
-    {
-        return new self(
-            $this->value,
-            'o',
-            $this->side,
-        );
-    }
-
-    public function left(): self
-    {
-        return new self(
-            $this->value,
-            $this->modifier,
-            'l',
-        );
-    }
-
-    public function right(): self
-    {
-        return new self(
-            $this->value,
-            $this->modifier,
-            'r',
-        );
-    }
-
     public function toString(): string
     {
-        return $this->modifier.$this->side.$this->value;
+        return $this->value;
     }
 }
