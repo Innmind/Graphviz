@@ -32,6 +32,9 @@ final class Shape
 
     /**
      * @psalm-pure
+     *
+     * @param ?int<3, max> $sides
+     * @param ?int<1, max> $peripheries
      */
     public static function polygon(
         ?int $sides = null,
@@ -50,14 +53,14 @@ final class Shape
             $attributes = ($attributes)('peripheries', (string) $peripheries);
         }
 
-        if ($distortion) {
+        if (\is_float($distortion)) {
             $attributes = ($attributes)(
                 'distortion',
                 \sprintf('%0.1f', $distortion),
             );
         }
 
-        if ($skew) {
+        if (\is_float($skew)) {
             $attributes = ($attributes)(
                 'skew',
                 \sprintf('%0.1f', $skew),

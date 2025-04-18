@@ -62,6 +62,8 @@ final class Node
 
     /**
      * @psalm-pure
+     *
+     * @param non-empty-string $name
      */
     public static function named(string $name): self
     {
@@ -110,6 +112,9 @@ final class Node
         );
     }
 
+    /**
+     * @param non-empty-string $label
+     */
     public function displayAs(string $label): self
     {
         return new self(
