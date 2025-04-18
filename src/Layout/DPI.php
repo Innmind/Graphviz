@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Innmind\Graphviz\Layout;
 
-use Innmind\Graphviz\Exception\DomainException;
-
 /**
  * @psalm-immutable
  */
@@ -22,16 +20,9 @@ final class DPI
      * @psalm-pure
      *
      * @param int<1, max> $value
-     *
-     * @throws DomainException
      */
     public static function of(int $value): self
     {
-        /** @psalm-suppress DocblockTypeContradiction */
-        if ($value < 1) {
-            throw new DomainException;
-        }
-
         return new self($value);
     }
 

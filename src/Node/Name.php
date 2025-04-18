@@ -29,7 +29,6 @@ final class Name
         $str = Str::of($name);
 
         if (
-            $str->empty() ||
             $str->contains('->') ||
             $str->contains('-') ||
             $str->contains('.') ||
