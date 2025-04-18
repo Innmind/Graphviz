@@ -34,10 +34,10 @@ final class Shape
      * @psalm-pure
      */
     public static function polygon(
-        int $sides = null,
-        int $peripheries = null,
-        float $distortion = null,
-        float $skew = null,
+        ?int $sides = null,
+        ?int $peripheries = null,
+        ?float $distortion = null,
+        ?float $skew = null,
     ): self {
         /** @var Map<string, string> */
         $attributes = Map::of(['shape', 'polygon']);

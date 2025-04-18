@@ -65,9 +65,9 @@ final class Edge
 
     public function shaped(
         Shape $shape,
-        Shape $shape2 = null,
-        Shape $shape3 = null,
-        Shape $shape4 = null,
+        ?Shape $shape2 = null,
+        ?Shape $shape3 = null,
+        ?Shape $shape4 = null,
     ): self {
         $shape = $shape->toString();
         $shape2 = $shape2 ? $shape2->toString() : '';
