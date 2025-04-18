@@ -17,19 +17,14 @@ use Innmind\Immutable\Map;
  */
 final class Edge
 {
-    private Name $from;
-    private Name $to;
-    /** @var Map<string, string> */
-    private Map $attributes;
-
     /**
      * @param Map<string, string> $attributes
      */
-    private function __construct(Name $from, Name $to, Map $attributes)
-    {
-        $this->from = $from;
-        $this->to = $to;
-        $this->attributes = $attributes;
+    private function __construct(
+        private Name $from,
+        private Name $to,
+        private Map $attributes,
+    ) {
     }
 
     /**

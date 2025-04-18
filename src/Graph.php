@@ -22,16 +22,6 @@ use Innmind\Immutable\{
  */
 final class Graph
 {
-    /** @var T */
-    private string $directed;
-    private Name $name;
-    /** @var Set<Node> */
-    private Set $nodes;
-    /** @var Set<self<T>> */
-    private Set $clusters;
-    /** @var Map<string, string> */
-    private Map $attributes;
-
     /**
      * @param T $directed
      * @param Set<Node> $nodes
@@ -39,22 +29,12 @@ final class Graph
      * @param Map<string, string> $attributes
      */
     private function __construct(
-        string $directed,
-        Name $name,
-        Set $nodes,
-        Set $clusters,
-        Map $attributes,
-        ?Rankdir $rankdir = null,
+        private string $directed,
+        private Name $name,
+        private Set $nodes,
+        private Set $clusters,
+        private Map $attributes,
     ) {
-        $this->directed = $directed;
-        $this->name = $name;
-        $this->nodes = $nodes;
-        $this->clusters = $clusters;
-        $this->attributes = $attributes;
-
-        if ($rankdir) {
-            $this->attributes = ($this->attributes)('rankdir', $rankdir->toString());
-        }
     }
 
     /**
@@ -73,7 +53,11 @@ final class Graph
         /** @var Map<string, string> */
         $attributes = Map::of();
 
-        return new self('directed', Name::of($name), $nodes, $clusters, $attributes, $rankdir);
+        if ($rankdir) {
+            $attributes = ($attributes)('rankdir', $rankdir->toString());
+        }
+
+        return new self('directed', Name::of($name), $nodes, $clusters, $attributes);
     }
 
     /**
@@ -92,7 +76,11 @@ final class Graph
         /** @var Map<string, string> */
         $attributes = Map::of();
 
-        return new self('undirected', Name::of($name), $nodes, $clusters, $attributes, $rankdir);
+        if ($rankdir) {
+            $attributes = ($attributes)('rankdir', $rankdir->toString());
+        }
+
+        return new self('undirected', Name::of($name), $nodes, $clusters, $attributes);
     }
 
     public function isDirected(): bool

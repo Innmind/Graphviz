@@ -11,15 +11,12 @@ use Innmind\Immutable\Map;
  */
 final class Shape
 {
-    /** @var Map<string, string> */
-    private Map $attributes;
-
     /**
      * @param Map<string, string> $attributes
      */
-    private function __construct(Map $attributes)
-    {
-        $this->attributes = $attributes;
+    private function __construct(
+        private Map $attributes,
+    ) {
     }
 
     /**

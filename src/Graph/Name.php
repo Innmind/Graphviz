@@ -11,15 +11,12 @@ use Innmind\Immutable\Str;
  */
 final class Name
 {
-    private string $value;
-
-    private function __construct(string $name)
-    {
-        if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
-            throw new DomainException($name);
-        }
-
-        $this->value = $name;
+    /**
+     * @param non-empty-string $value
+     */
+    private function __construct(
+        private string $value,
+    ) {
     }
 
     /**
@@ -31,9 +28,16 @@ final class Name
      */
     public static function of(string $name): self
     {
+        if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
+            throw new DomainException($name);
+        }
+
         return new self($name);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function toString(): string
     {
         return $this->value;

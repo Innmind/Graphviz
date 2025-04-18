@@ -10,16 +10,12 @@ use Innmind\Graphviz\Exception\DomainException;
  */
 final class DPI
 {
-    /** @var int<1, max> */
-    private int $value;
-
-    private function __construct(int $value)
-    {
-        if ($value < 1) {
-            throw new DomainException;
-        }
-
-        $this->value = $value;
+    /**
+     * @param int<1, max> $value
+     */
+    private function __construct(
+        private int $value,
+    ) {
     }
 
     /**
@@ -31,6 +27,11 @@ final class DPI
      */
     public static function of(int $value): self
     {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if ($value < 1) {
+            throw new DomainException;
+        }
+
         return new self($value);
     }
 
