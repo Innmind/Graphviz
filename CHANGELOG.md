@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for `innmind/filesystem:~8.0`
+
 ### Changed
 
 - Use more precise primitive types
