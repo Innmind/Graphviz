@@ -7,9 +7,9 @@ use Innmind\Graphviz\{
     Layout\DPI,
     Exception\DomainException
 };
-use PHPUnit\Framework\TestCase;
 use Innmind\BlackBox\{
     PHPUnit\BlackBox,
+    PHPUnit\Framework\TestCase,
     Set,
 };
 
@@ -20,7 +20,7 @@ class DPITest extends TestCase
     public function testInterface()
     {
         $this
-            ->forAll(Set\Integers::above(1))
+            ->forAll(Set::integers()->above(1))
             ->then(function(int $int): void {
                 $this->assertSame($int, DPI::of($int)->toInt());
             });
@@ -29,7 +29,7 @@ class DPITest extends TestCase
     public function testThrowWhenLowerThanOne()
     {
         $this
-            ->forAll(Set\Integers::below(0))
+            ->forAll(Set::integers()->below(0))
             ->then(function(int $int): void {
                 try {
                     DPI::of($int);

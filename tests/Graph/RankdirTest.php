@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Innmind\Graphviz\Graph;
 
 use Innmind\Graphviz\Graph\Rankdir;
-use PHPUnit\Framework\TestCase;
+use Innmind\BlackBox\PHPUnit\Framework\TestCase;
 
 class RankdirTest extends TestCase
 {

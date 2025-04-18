@@ -4,9 +4,9 @@ declare(strict_types = 1);
 namespace Tests\Innmind\Graphviz\Edge;
 
 use Innmind\Graphviz\Edge\Shape;
-use PHPUnit\Framework\TestCase;
 use Innmind\BlackBox\{
     PHPUnit\BlackBox,
+    PHPUnit\Framework\TestCase,
     Set,
 };
 
@@ -68,8 +68,8 @@ class ShapeTest extends TestCase
         $this
             ->forAll(
                 $this->shapes(),
-                Set\Elements::of('right', 'left'),
-                Set\Elements::of('right', 'left'),
+                Set::of('right', 'left'),
+                Set::of('right', 'left'),
             )
             ->filter(static function(string $shape, string $side1, string $side2): bool {
                 return $side1 !== $side2;
@@ -92,7 +92,7 @@ class ShapeTest extends TestCase
         $this
             ->forAll(
                 $this->shapes(),
-                Set\Elements::of('right', 'left'),
+                Set::of('right', 'left'),
             )
             ->then(function(string $shape, string $side): void {
                 $sideChar = \substr($side, 0, 1);
@@ -109,7 +109,7 @@ class ShapeTest extends TestCase
 
     public function shapes(): Set
     {
-        return Set\Elements::of(
+        return Set::of(
             'box',
             'crow',
             'curve',

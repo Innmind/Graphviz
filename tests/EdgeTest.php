@@ -11,7 +11,7 @@ use Innmind\Graphviz\{
 use Innmind\Colour\Colour;
 use Innmind\Url\Url;
 use Innmind\Immutable\Map;
-use PHPUnit\Framework\TestCase;
+use Innmind\BlackBox\PHPUnit\Framework\TestCase;
 
 class EdgeTest extends TestCase
 {

@@ -31,9 +31,8 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "~10.2",
         "innmind/static-analysis": "^1.2.1",
-        "innmind/black-box": "~5.5",
+        "innmind/black-box": "~6.1",
         "innmind/coding-standard": "~2.0"
     }
 }
