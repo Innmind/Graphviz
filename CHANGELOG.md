@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for `innmind/filesystem:~8.0`
+
 ### Changed
 
 - Use more precise primitive types
+
+### Removed
+
+- Support for `innmind/immutable:~4.0`
 
 ### Fixed
 
