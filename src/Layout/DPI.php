@@ -10,6 +10,7 @@ use Innmind\Graphviz\Exception\DomainException;
  */
 final class DPI
 {
+    /** @var int<1, max> */
     private int $value;
 
     private function __construct(int $value)
@@ -24,6 +25,8 @@ final class DPI
     /**
      * @psalm-pure
      *
+     * @param int<1, max> $value
+     *
      * @throws DomainException
      */
     public static function of(int $value): self
@@ -31,6 +34,9 @@ final class DPI
         return new self($value);
     }
 
+    /**
+     * @return int<1, max>
+     */
     public function toInt(): int
     {
         return $this->value;
