@@ -6,7 +6,7 @@ namespace Tests\Innmind\Graphviz\Node;
 use Innmind\Graphviz\Node\Shape;
 use Innmind\Colour\Colour;
 use Innmind\Immutable\Map;
-use PHPUnit\Framework\TestCase;
+use Innmind\BlackBox\PHPUnit\Framework\TestCase;
 
 class ShapeTest extends TestCase
 {

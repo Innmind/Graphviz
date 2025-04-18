@@ -7,9 +7,9 @@ use Innmind\Graphviz\{
     Attribute\Value,
     Exception\DomainException
 };
-use PHPUnit\Framework\TestCase;
 use Innmind\BlackBox\{
     PHPUnit\BlackBox,
+    PHPUnit\Framework\TestCase,
     Set,
 };
 
@@ -20,12 +20,11 @@ class ValueTest extends TestCase
     public function testInterface()
     {
         $this
-            ->forAll(Set\Decorate::immutable(
-                static fn($chars) => \implode('', $chars),
-                Set\Sequence::of(
-                    Set\Unicode::any()->filter(static fn($s) => $s !== "\x00"),
-                ),
-            ))
+            ->forAll(
+                Set::sequence(
+                    Set::strings()->unicode()->char()->filter(static fn($s) => $s !== "\x00"),
+                )->map(static fn($chars) => \implode('', $chars)),
+            )
             ->then(function(string $string): void {
                 $this->assertSame($string, Value::of($string)->toString());
             });
