@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Use more precise primitive types
+
 ### Fixed
 
 - PHP `8.4` deprecations

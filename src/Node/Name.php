@@ -11,6 +11,7 @@ use Innmind\Immutable\Str;
  */
 final class Name
 {
+    /** @var non-empty-string */
     private string $value;
 
     private function __construct(string $name)
@@ -18,7 +19,7 @@ final class Name
         $name = Str::of($name);
 
         if (
-            $name->length() === 0 ||
+            $name->empty() ||
             $name->contains('->') ||
             $name->contains('-') ||
             $name->contains('.') ||
@@ -27,17 +28,23 @@ final class Name
             throw new DomainException($name->toString());
         }
 
+        /** @var non-empty-string */
         $this->value = $name->toString();
     }
 
     /**
      * @psalm-pure
+     *
+     * @param non-empty-string $name
      */
     public static function of(string $name): self
     {
         return new self($name);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function toString(): string
     {
         return $this->value;

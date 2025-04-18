@@ -25,6 +25,8 @@ final class Name
     /**
      * @psalm-pure
      *
+     * @param non-empty-string $name
+     *
      * @throws DomainException
      */
     public static function of(string $name): self

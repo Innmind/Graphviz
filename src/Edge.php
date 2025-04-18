@@ -87,6 +87,9 @@ final class Edge
             );
     }
 
+    /**
+     * @param non-empty-string $label
+     */
     public function displayAs(string $label): self
     {
         return $this->with(

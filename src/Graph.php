@@ -60,6 +60,8 @@ final class Graph
     /**
      * @psalm-pure
      *
+     * @param non-empty-string $name
+     *
      * @return self<'directed'>
      */
     public static function directed(string $name = 'G', ?Rankdir $rankdir = null): self
@@ -76,6 +78,8 @@ final class Graph
 
     /**
      * @psalm-pure
+     *
+     * @param non-empty-string $name
      *
      * @return self<'undirected'>
      */
@@ -164,6 +168,9 @@ final class Graph
     }
 
     /**
+     *
+     * @param non-empty-string $label
+     *
      * @return self<T>
      */
     public function displayAs(string $label): self
