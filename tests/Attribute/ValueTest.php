@@ -17,24 +17,24 @@ class ValueTest extends TestCase
 {
     use BlackBox;
 
-    public function testInterface()
+    public function testInterface(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll(
                 Set::sequence(
                     Set::strings()->unicode()->char()->filter(static fn($s) => $s !== "\x00"),
                 )->map(static fn($chars) => \implode('', $chars)),
             )
-            ->then(function(string $string): void {
+            ->prove(function(string $string): void {
                 $this->assertSame($string, Value::of($string)->toString());
             });
     }
 
     public function testThrowWhenItContainsANullCharacter()
     {
-        $this->expectException(DomainException::class);
-        $this->expectExceptionMessage("foo\x00bar");
-
-        Value::of("foo\x00bar");
+        $this->assert()->throws(
+            static fn() => Value::of("foo\x00bar"),
+            DomainException::class,
+        );
     }
 }

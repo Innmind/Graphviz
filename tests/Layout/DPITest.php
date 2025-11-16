@@ -14,11 +14,11 @@ class DPITest extends TestCase
 {
     use BlackBox;
 
-    public function testInterface()
+    public function testInterface(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll(Set::integers()->above(1))
-            ->then(function(int $int): void {
+            ->prove(function(int $int): void {
                 $this->assertSame($int, DPI::of($int)->toInt());
             });
     }

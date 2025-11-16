@@ -17,43 +17,47 @@ class NameTest extends TestCase
 {
     use BlackBox;
 
-    public function testInterface()
+    public function testInterface(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll(Set::strings())
             ->filter(static function(string $string): bool {
                 return \strlen($string) > 0 && \strpos($string, '->') === false && \strpos($string, '-') === false && \strpos($string, '.') === false && \strpos($string, "\x00") === false;
             })
-            ->then(function(string $string): void {
+            ->prove(function(string $string): void {
                 $this->assertSame($string, Name::of($string)->toString());
             });
     }
 
     public function testThrowWhenContainingAnArrow()
     {
-        $this->expectException(DomainException::class);
-
-        Name::of('->');
+        $this->assert()->throws(
+            static fn() => Name::of('->'),
+            DomainException::class,
+        );
     }
 
     public function testThrowWhenContainingAnDash()
     {
-        $this->expectException(DomainException::class);
-
-        Name::of('-');
+        $this->assert()->throws(
+            static fn() => Name::of('-'),
+            DomainException::class,
+        );
     }
 
     public function testThrowWhenContainingADot()
     {
-        $this->expectException(DomainException::class);
-
-        Name::of('.');
+        $this->assert()->throws(
+            static fn() => Name::of('.'),
+            DomainException::class,
+        );
     }
 
     public function testThrowWhenContainingANullCharacter()
     {
-        $this->expectException(DomainException::class);
-
-        Name::of("\x00");
+        $this->assert()->throws(
+            static fn() => Name::of("\x00"),
+            DomainException::class,
+        );
     }
 }
