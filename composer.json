@@ -15,10 +15,15 @@
     },
     "require": {
         "php": "~8.4",
-        "innmind/immutable": "~5.0",
-        "innmind/url": "~4.0",
-        "innmind/colour": "~4.0",
-        "innmind/filesystem": "~7.0|~8.0"
+        "innmind/immutable": "dev-next",
+        "innmind/url": "dev-next",
+        "innmind/colour": "dev-next",
+        "innmind/filesystem": "dev-next",
+        "innmind/io": "dev-next",
+        "innmind/media-type": "dev-next",
+        "innmind/validation": "dev-next",
+        "innmind/ip": "dev-next",
+        "innmind/time-continuum": "dev-next"
     },
     "autoload": {
         "psr-4": {
