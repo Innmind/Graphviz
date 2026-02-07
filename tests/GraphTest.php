@@ -39,9 +39,9 @@ class GraphTest extends TestCase
         $graph = Graph::directed();
 
         $this->assertInstanceOf(Set::class, $graph->roots());
-        $this->assertCount(0, $graph->roots());
+        $this->assertSame(0, $graph->roots()->size());
         $this->assertInstanceOf(Set::class, $graph->nodes());
-        $this->assertCount(0, $graph->nodes());
+        $this->assertSame(0, $graph->nodes()->size());
 
         $third = Node::named('third');
         $root = Node::named('main')->linkedTo(Node\Name::of('second'));
@@ -52,12 +52,12 @@ class GraphTest extends TestCase
             ->add($second)
             ->add($third);
 
-        $this->assertCount(1, $graph->roots());
+        $this->assertSame(1, $graph->roots()->size());
         $this->assertSame($root, $graph->roots()->find(static fn() => true)->match(
             static fn($root) => $root,
             static fn() => null,
         ));
-        $this->assertCount(3, $graph->nodes());
+        $this->assertSame(3, $graph->nodes()->size());
         $this->assertSame([$root, $second, $third], $graph->nodes()->toList());
     }
 
@@ -66,11 +66,11 @@ class GraphTest extends TestCase
         $root = Graph::directed();
 
         $this->assertInstanceOf(Set::class, $root->clusters());
-        $this->assertCount(0, $root->clusters());
+        $this->assertSame(0, $root->clusters()->size());
 
         $cluster = Graph::directed('foo');
         $root = $root->cluster($cluster);
-        $this->assertCount(1, $root->clusters());
+        $this->assertSame(1, $root->clusters()->size());
         $this->assertSame($cluster, $root->clusters()->find(static fn() => true)->match(
             static fn($cluster) => $cluster,
             static fn() => null,
@@ -82,14 +82,14 @@ class GraphTest extends TestCase
         $graph = Graph::directed();
 
         $this->assertInstanceOf(Map::class, $graph->attributes());
-        $this->assertCount(0, $graph->attributes());
+        $this->assertSame(0, $graph->attributes()->size());
     }
 
     public function testDisplayAs()
     {
         $graph = Graph::directed()->displayAs('watev');
 
-        $this->assertCount(1, $graph->attributes());
+        $this->assertSame(1, $graph->attributes()->size());
         $this->assertSame('watev', $graph->attributes()->get('label')->match(
             static fn($value) => $value,
             static fn() => null,
@@ -100,7 +100,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed()->fillWithColor(Colour::red->toRGBA());
 
-        $this->assertCount(2, $graph->attributes());
+        $this->assertSame(2, $graph->attributes()->size());
         $this->assertSame('filled', $graph->attributes()->get('style')->match(
             static fn($value) => $value,
             static fn() => null,
@@ -115,7 +115,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed()->colorizeBorderWith(Colour::red->toRGBA());
 
-        $this->assertCount(1, $graph->attributes());
+        $this->assertSame(1, $graph->attributes()->size());
         $this->assertSame('#ff0000', $graph->attributes()->get('color')->match(
             static fn($value) => $value,
             static fn() => null,
@@ -126,7 +126,7 @@ class GraphTest extends TestCase
     {
         $graph = Graph::directed()->target(Url::of('example.com'));
 
-        $this->assertCount(1, $graph->attributes());
+        $this->assertSame(1, $graph->attributes()->size());
         $this->assertSame('example.com', $graph->attributes()->get('URL')->match(
             static fn($value) => $value,
             static fn() => null,
