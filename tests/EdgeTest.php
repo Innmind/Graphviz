@@ -71,10 +71,10 @@ class EdgeTest extends TestCase
             Name::of('b'),
         )
             ->shaped(
-                Shape::box(),
-                Shape::vee(),
-                Shape::tee(),
-                Shape::dot(),
+                Shape::box,
+                Shape::vee,
+                Shape::tee,
+                Shape::dot,
             );
 
         $this->assertSame(1, $edge->attributes()->size());
@@ -92,10 +92,10 @@ class EdgeTest extends TestCase
         )
             ->asBidirectional()
             ->shaped(
-                Shape::box(),
-                Shape::vee(),
-                Shape::tee(),
-                Shape::dot(),
+                Shape::box,
+                Shape::vee,
+                Shape::tee,
+                Shape::dot,
             );
 
         $this->assertSame(3, $edge->attributes()->size());
