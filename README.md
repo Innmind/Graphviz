@@ -1,6 +1,6 @@
 # Graphviz
 
-[![Build Status](https://github.com/innmind/graphviz/workflows/CI/badge.svg?branch=master)](https://github.com/innmind/graphviz/actions?query=workflow%3ACI)
+[![CI](https://github.com/Innmind/Graphviz/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Innmind/Graphviz/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/innmind/graphviz/branch/develop/graph/badge.svg)](https://codecov.io/gh/innmind/graphviz)
 [![Type Coverage](https://shepherd.dev/github/innmind/graphviz/coverage.svg)](https://shepherd.dev/github/innmind/graphviz)
 
