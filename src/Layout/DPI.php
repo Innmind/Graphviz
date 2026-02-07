@@ -21,6 +21,7 @@ final class DPI
      *
      * @param int<1, max> $value
      */
+    #[\NoDiscard]
     public static function of(int $value): self
     {
         return new self($value);
@@ -29,6 +30,7 @@ final class DPI
     /**
      * @return int<1, max>
      */
+    #[\NoDiscard]
     public function toInt(): int
     {
         return $this->value;

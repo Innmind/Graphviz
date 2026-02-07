@@ -26,6 +26,7 @@ final class Name
      *
      * @throws DomainException
      */
+    #[\NoDiscard]
     public static function of(string $name): self
     {
         if (!Str::of($name)->matches('~[a-zA-Z0-9_]+~')) {
@@ -38,6 +39,7 @@ final class Name
     /**
      * @return non-empty-string
      */
+    #[\NoDiscard]
     public function toString(): string
     {
         return $this->value;

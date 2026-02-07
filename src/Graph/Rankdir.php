@@ -11,6 +11,7 @@ enum Rankdir
     case leftToRight;
     case topToBottom;
 
+    #[\NoDiscard]
     public function toString(): string
     {
         return match ($this) {

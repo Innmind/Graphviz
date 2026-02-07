@@ -23,6 +23,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function box(): self
     {
         return self::box;
@@ -31,6 +32,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function crow(): self
     {
         return self::crow;
@@ -39,6 +41,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function curve(): self
     {
         return self::curve;
@@ -47,6 +50,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function icurve(): self
     {
         return self::icurve;
@@ -55,6 +59,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function diamond(): self
     {
         return self::diamond;
@@ -63,6 +68,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function dot(): self
     {
         return self::dot;
@@ -71,6 +77,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function inv(): self
     {
         return self::inv;
@@ -79,6 +86,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function none(): self
     {
         return self::none;
@@ -87,6 +95,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function normal(): self
     {
         return self::normal;
@@ -95,6 +104,7 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function tee(): self
     {
         return self::tee;
@@ -103,11 +113,13 @@ enum Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function vee(): self
     {
         return self::vee;
     }
 
+    #[\NoDiscard]
     public function toString(): string
     {
         return $this->name;

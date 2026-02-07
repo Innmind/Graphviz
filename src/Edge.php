@@ -30,6 +30,7 @@ final class Edge
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function between(Name $from, Name $to): self
     {
         /** @var Map<string, string> */
@@ -38,26 +39,31 @@ final class Edge
         return new self($from, $to, $attributes);
     }
 
+    #[\NoDiscard]
     public function from(): Name
     {
         return $this->from;
     }
 
+    #[\NoDiscard]
     public function to(): Name
     {
         return $this->to;
     }
 
+    #[\NoDiscard]
     public function asBidirectional(): self
     {
         return $this->with('dir', 'both');
     }
 
+    #[\NoDiscard]
     public function withoutDirection(): self
     {
         return $this->with('dir', 'none');
     }
 
+    #[\NoDiscard]
     public function shaped(
         Shape $shape,
         ?Shape $shape2 = null,
@@ -85,6 +91,7 @@ final class Edge
     /**
      * @param non-empty-string $label
      */
+    #[\NoDiscard]
     public function displayAs(string $label): self
     {
         return $this->with(
@@ -93,11 +100,13 @@ final class Edge
         );
     }
 
+    #[\NoDiscard]
     public function useColor(RGBA $color): self
     {
         return $this->with('color', $color->toString());
     }
 
+    #[\NoDiscard]
     public function target(Url $url): self
     {
         return $this->with(
@@ -106,16 +115,19 @@ final class Edge
         );
     }
 
+    #[\NoDiscard]
     public function dotted(): self
     {
         return $this->with('style', 'dotted');
     }
 
+    #[\NoDiscard]
     public function bold(): self
     {
         return $this->with('style', 'bold');
     }
 
+    #[\NoDiscard]
     public function filled(): self
     {
         return $this->with('style', 'filled');
@@ -126,6 +138,7 @@ final class Edge
      *
      * @return Map<string, string>
      */
+    #[\NoDiscard]
     public function attributes(): Map
     {
         return $this->attributes;
