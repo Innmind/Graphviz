@@ -8,7 +8,8 @@ Graphviz model to help build graphs. This model goal is to express the possibili
 
 All objects of this package are immutable.
 
-**Important**: you must use [`vimeo/psalm`](https://packagist.org/packages/vimeo/psalm) to make sure you use this library correctly.
+> [!IMPORTANT]
+> You must use [`vimeo/psalm`](https://packagist.org/packages/vimeo/psalm) to make sure you use this library correctly.
 
 ## Installation
 
@@ -66,6 +67,7 @@ Factory::build()
             ->withShortOption('o', 'graph.svg')
             ->withInput($output),
     )
+    ->unwrap()
     ->wait();
 ```
 
