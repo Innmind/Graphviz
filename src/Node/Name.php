@@ -24,6 +24,7 @@ final class Name
      *
      * @param non-empty-string $name
      */
+    #[\NoDiscard]
     public static function of(string $name): self
     {
         $str = Str::of($name);
@@ -43,6 +44,7 @@ final class Name
     /**
      * @return non-empty-string
      */
+    #[\NoDiscard]
     public function toString(): string
     {
         return $this->value;

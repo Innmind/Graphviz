@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   blackbox:
     uses: innmind/github-workflows/.github/workflows/black-box-matrix.yml@main
-    with:
-      scenarii: 20 # optional
   coverage:
     uses: innmind/github-workflows/.github/workflows/coverage-matrix.yml@main
     secrets: inherit
@@ -14,5 +12,3 @@ jobs:
     uses: innmind/github-workflows/.github/workflows/psalm-matrix.yml@main
   cs:
     uses: innmind/github-workflows/.github/workflows/cs.yml@main
-    with:
-      php-version: '8.2'

@@ -14,13 +14,13 @@ class ShapeTest extends TestCase
 {
     use BlackBox;
 
-    public function testShape()
+    public function testShape(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll($this->shapes())
-            ->then(function(string $shape): void {
-                $this->assertInstanceOf(Shape::class, Shape::$shape());
-                $this->assertSame($shape, Shape::$shape()->toString());
+            ->prove(function(string $shape): void {
+                $this->assertInstanceOf(Shape::class, Shape::{$shape});
+                $this->assertSame($shape, Shape::{$shape}->toString());
             });
     }
 

@@ -36,6 +36,7 @@ final class Node
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function of(Name $name): self
     {
         /** @var Set<Edge> */
@@ -53,11 +54,13 @@ final class Node
      *
      * @param non-empty-string $name
      */
+    #[\NoDiscard]
     public static function named(string $name): self
     {
         return self::of(Name::of($name));
     }
 
+    #[\NoDiscard]
     public function name(): Name
     {
         return $this->name;
@@ -66,6 +69,7 @@ final class Node
     /**
      * @return Set<Edge>
      */
+    #[\NoDiscard]
     public function edges(): Set
     {
         return $this->edges;
@@ -74,6 +78,7 @@ final class Node
     /**
      * @param (pure-callable(Edge): Edge)|null $map
      */
+    #[\NoDiscard]
     public function linkedTo(Name $node, ?callable $map = null): self
     {
         $map ??= static fn(Edge $edge): Edge => $edge;
@@ -87,6 +92,7 @@ final class Node
         );
     }
 
+    #[\NoDiscard]
     public function target(Url $url): self
     {
         return new self(
@@ -103,6 +109,7 @@ final class Node
     /**
      * @param non-empty-string $label
      */
+    #[\NoDiscard]
     public function displayAs(string $label): self
     {
         return new self(
@@ -116,6 +123,7 @@ final class Node
         );
     }
 
+    #[\NoDiscard]
     public function shaped(Shape $shape): self
     {
         return new self(
@@ -131,6 +139,7 @@ final class Node
      *
      * @return Map<string, string>
      */
+    #[\NoDiscard]
     public function attributes(): Map
     {
         return $this

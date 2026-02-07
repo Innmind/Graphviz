@@ -17,29 +17,29 @@ class NameTest extends TestCase
 {
     use BlackBox;
 
-    public function testInterface()
+    public function testInterface(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll(Set::strings())
             ->filter(static function(string $string): bool {
                 return (bool) \preg_match('~[a-zA-Z0-9_]+~', $string);
             })
-            ->then(function(string $string): void {
+            ->prove(function(string $string): void {
                 $this->assertSame($string, Name::of($string)->toString());
             });
     }
 
-    public function testThrowWhenContainingInvalidCharacters()
+    public function testThrowWhenContainingInvalidCharacters(): BlackBox\Proof
     {
-        $this
+        return $this
             ->forAll(Set::strings())
             ->filter(static function(string $string): bool {
                 return !\preg_match('~[a-zA-Z0-9_]+~', $string);
             })
-            ->then(function(string $string): void {
+            ->prove(function(string $string): void {
                 $this->expectException(DomainException::class);
 
-                Name::of($string);
+                $_ = Name::of($string);
             });
     }
 }

@@ -1,5 +1,16 @@
 # Changelog
 
+## 5.0.0 - 2026-02-07
+
+### Changed
+
+- Requires PHP `8.4`
+- Requires `innmind/filesystem:~9.0`
+
+### Removed
+
+- `Innmind\Graphviz\Edge\Shape` named constructors, use the cases directly
+
 ## 4.0.0 - 2025-04-18
 
 ### Added
