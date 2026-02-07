@@ -22,6 +22,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function box(): self
     {
         return self::shape('box');
@@ -33,6 +34,7 @@ final class Shape
      * @param ?int<3, max> $sides
      * @param ?int<1, max> $peripheries
      */
+    #[\NoDiscard]
     public static function polygon(
         ?int $sides = null,
         ?int $peripheries = null,
@@ -70,6 +72,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function ellipse(float $width = .75, float $height = .5): self
     {
         return new self(Map::of(
@@ -82,6 +85,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function circle(): self
     {
         return self::shape('circle');
@@ -90,6 +94,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function point(): self
     {
         return self::shape('point');
@@ -98,6 +103,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function egg(): self
     {
         return self::shape('egg');
@@ -106,6 +112,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function triangle(): self
     {
         return self::shape('triangle');
@@ -114,6 +121,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function plaintext(): self
     {
         return self::shape('plaintext');
@@ -122,6 +130,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function diamond(): self
     {
         return self::shape('diamond');
@@ -130,6 +139,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function trapezium(): self
     {
         return self::shape('trapezium');
@@ -138,6 +148,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function parallelogram(): self
     {
         return self::shape('parallelogram');
@@ -146,6 +157,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function house(): self
     {
         return self::shape('house');
@@ -154,6 +166,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function hexagon(): self
     {
         return self::shape('hexagon');
@@ -162,6 +175,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function octagon(): self
     {
         return self::shape('octagon');
@@ -170,6 +184,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function doublecircle(): self
     {
         return self::shape('doublecircle');
@@ -178,6 +193,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function doubleoctagon(): self
     {
         return self::shape('doubleoctagon');
@@ -186,6 +202,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function tripleoctagon(): self
     {
         return self::shape('tripleoctagon');
@@ -194,6 +211,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function invtriangle(): self
     {
         return self::shape('invtriangle');
@@ -202,6 +220,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function invtrapezium(): self
     {
         return self::shape('invtrapezium');
@@ -210,6 +229,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function invhouse(): self
     {
         return self::shape('invhouse');
@@ -218,6 +238,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function Mdiamond(): self
     {
         return self::shape('Mdiamond');
@@ -226,6 +247,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function Msquare(): self
     {
         return self::shape('Msquare');
@@ -234,6 +256,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function Mcircle(): self
     {
         return self::shape('Mcircle');
@@ -242,6 +265,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function none(): self
     {
         return self::shape('none');
@@ -250,6 +274,7 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function record(): self
     {
         return self::shape('record');
@@ -258,11 +283,13 @@ final class Shape
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function Mrecord(): self
     {
         return self::shape('Mrecord');
     }
 
+    #[\NoDiscard]
     public function withColor(RGBA $color): self
     {
         return new self(
@@ -270,6 +297,7 @@ final class Shape
         );
     }
 
+    #[\NoDiscard]
     public function fillWithColor(RGBA $color): self
     {
         return new self(
@@ -284,6 +312,7 @@ final class Shape
      *
      * @return Map<string, string>
      */
+    #[\NoDiscard]
     public function attributes(): Map
     {
         return $this->attributes;

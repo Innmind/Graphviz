@@ -39,7 +39,7 @@ class NameTest extends TestCase
             ->prove(function(string $string): void {
                 $this->expectException(DomainException::class);
 
-                Name::of($string);
+                $_ = Name::of($string);
             });
     }
 }

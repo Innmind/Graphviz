@@ -44,6 +44,7 @@ final class Graph
      *
      * @return self<'directed'>
      */
+    #[\NoDiscard]
     public static function directed(string $name = 'G', ?Rankdir $rankdir = null): self
     {
         /** @var Set<Node> */
@@ -67,6 +68,7 @@ final class Graph
      *
      * @return self<'undirected'>
      */
+    #[\NoDiscard]
     public static function undirected(string $name = 'G', ?Rankdir $rankdir = null): self
     {
         /** @var Set<Node> */
@@ -83,11 +85,13 @@ final class Graph
         return new self('undirected', Name::of($name), $nodes, $clusters, $attributes);
     }
 
+    #[\NoDiscard]
     public function isDirected(): bool
     {
         return $this->directed === 'directed';
     }
 
+    #[\NoDiscard]
     public function name(): Name
     {
         return $this->name;
@@ -98,6 +102,7 @@ final class Graph
      *
      * @return self<T>
      */
+    #[\NoDiscard]
     public function cluster(self $cluster): self
     {
         return new self(
@@ -112,6 +117,7 @@ final class Graph
     /**
      * @return Set<self<T>>
      */
+    #[\NoDiscard]
     public function clusters(): Set
     {
         return $this->clusters;
@@ -120,6 +126,7 @@ final class Graph
     /**
      * @return self<T>
      */
+    #[\NoDiscard]
     public function add(Node $node): self
     {
         return new self(
@@ -136,6 +143,7 @@ final class Graph
      *
      * @return Set<Node>
      */
+    #[\NoDiscard]
     public function roots(): Set
     {
         $targeted = $this
@@ -154,6 +162,7 @@ final class Graph
      *
      * @return Set<Node>
      */
+    #[\NoDiscard]
     public function nodes(): Set
     {
         return $this->nodes;
@@ -165,6 +174,7 @@ final class Graph
      *
      * @return self<T>
      */
+    #[\NoDiscard]
     public function displayAs(string $label): self
     {
         return new self(
@@ -182,6 +192,7 @@ final class Graph
     /**
      * @return self<T>
      */
+    #[\NoDiscard]
     public function fillWithColor(RGBA $color): self
     {
         return new self(
@@ -198,6 +209,7 @@ final class Graph
     /**
      * @return self<T>
      */
+    #[\NoDiscard]
     public function colorizeBorderWith(RGBA $color): self
     {
         return new self(
@@ -212,6 +224,7 @@ final class Graph
     /**
      * @return self<T>
      */
+    #[\NoDiscard]
     public function target(Url $url): self
     {
         return new self(
@@ -231,6 +244,7 @@ final class Graph
      *
      * @return Map<string, string>
      */
+    #[\NoDiscard]
     public function attributes(): Map
     {
         return $this->attributes;

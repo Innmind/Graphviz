@@ -28,6 +28,7 @@ final class Dot
     ) {
     }
 
+    #[\NoDiscard]
     public function __invoke(Graph $graph): Content
     {
         $type = $graph->isDirected() ? 'digraph' : 'graph';
@@ -47,6 +48,7 @@ final class Dot
     /**
      * @psalm-pure
      */
+    #[\NoDiscard]
     public static function of(?DPI $dpi = null): self
     {
         return new self(Maybe::of($dpi));
