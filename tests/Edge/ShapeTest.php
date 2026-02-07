@@ -19,8 +19,8 @@ class ShapeTest extends TestCase
         return $this
             ->forAll($this->shapes())
             ->prove(function(string $shape): void {
-                $this->assertInstanceOf(Shape::class, Shape::$shape());
-                $this->assertSame($shape, Shape::$shape()->toString());
+                $this->assertInstanceOf(Shape::class, Shape::{$shape});
+                $this->assertSame($shape, Shape::{$shape}->toString());
             });
     }
 
